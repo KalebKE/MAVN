@@ -1,6 +1,6 @@
 /*
- ParserFactory -- a class within the Open Queueing Model (OQM).
- Copyright (C) 2011  Kircher Engineering, LLC (http://www.kircherEngineering.com)
+ ParserFactory -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network).
+ Copyright (C) 2012, Kaleb Kircher.
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License

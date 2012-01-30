@@ -1,6 +1,6 @@
 /*
- File Opener -- a class within the Open Queueing Model (OQM).
- Copyright (C) 2011  Kircher Engineering, LLC (http://www.kircherEngineering.com)
+ BufferedReaderModel -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network).
+ Copyright (C) 2012, Kaleb Kircher
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -29,9 +29,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * A convenience class that creates a BufferedReader from an external file that
- * can then be parsed by an external class. A concrete implementation of the Openable
- * interface.
+ * A convenience class that creates a BufferedReader from an external file. This class
+ * can then be used to read the file by other classes. This is concrete implementation of the
+ * BufferedReaderModelInterface.
  * 
  */
 public class BufferedReaderModel implements BufferedReaderModelInterface

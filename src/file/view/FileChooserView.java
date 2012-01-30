@@ -1,6 +1,20 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ FileChooserView -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+ Copyright (C) 2012, Kaleb Kircher.
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package file.view;
 
@@ -23,10 +37,10 @@ public class FileChooserView extends JFileChooser
      * Initialize the FileChooserView a FileControllerInterface. This class
      * should be initialized by the implementation of the FileControllerInterface.
      * Example implementation: fcv = new FileChoserView(this);
-     * In a standard MVC, the model would also be passed to this class and implement
+     * In a standard MVC, the Model would also be passed to this class and implement
      * an Observer Interface. However, this View is only concerned with finding the
-     * file where the model is contained, and not the model itself, it doesn't need to
-     * be updated of anything.
+     * file where the Model is contained, and not the Model data itself. Thus,
+     * it doesn't need to be updated of anything.
      * @param fileController
      */
     public FileChooserView(final FileControllerInterface fileController)
@@ -43,6 +57,7 @@ public class FileChooserView extends JFileChooser
             public void actionPerformed(ActionEvent e)
             {
                 {
+                    // Update the controller
                     FileChooserView.this.fileController.setModel(FileChooserView.this.getSelectedFile().getPath());             
                 }
             }

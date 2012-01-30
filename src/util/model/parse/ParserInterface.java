@@ -1,6 +1,6 @@
 /*
- MultiColumnParse -- a class within the Open Queueing Model (OQM).
- Copyright (C) 2011  Kircher Engineering, LLC (http://www.kircherEngineering.com)
+ ParserInterface -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network).
+ Copyright (C) 2012, Kaleb Kircher.
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@ package util.model.parse;
 
 import java.io.BufferedReader;
 import java.util.Iterator;
-import ann.util.ArrayList2d;
+import mavn.util.TwoDimensionalArrayList;
 
 /**
  * This class exists to define the type of data structure the parser should use.
@@ -41,7 +41,7 @@ public abstract class ParserInterface
     // Data from the file gets stored in here.
     // ArrayList is used because we don't know how long the data file is.
     // Implementation is hidden through use of an interator, but we want child classes to have access
-    protected ArrayList2d<String> list;
+    protected TwoDimensionalArrayList<String> list;
 
 
     /**

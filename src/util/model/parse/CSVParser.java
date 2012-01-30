@@ -1,6 +1,6 @@
 /*
- CSVMatrixReader -- a class within the Open Queueing Model (OQM).
- Copyright (C) 2011  Kircher Engineering, LLC (http://www.kircherEngineering.com)
+ CSVParser -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network).
+ Copyright (C) 2012, Kaleb Kircher.
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-import ann.util.ArrayList2d;
+import mavn.util.TwoDimensionalArrayList;
 
 /**
  * A concrete implementation of a file parser; implements MultipColumnParse.
@@ -42,7 +42,7 @@ public class CSVParser extends ParserInterface
 
                 // Call to the parent class data structure.
                 // We use a list because we don't know how big the matrix is.
-		super.list = new ArrayList2d<String>();
+		super.list = new TwoDimensionalArrayList<String>();
 	}
 
 	/**

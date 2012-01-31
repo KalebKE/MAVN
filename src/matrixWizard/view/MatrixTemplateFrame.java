@@ -16,29 +16,29 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package mavn.view;
+package matrixWizard.view;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import matrixWizard.model.MatrixWizardModelInterface;
 import mavn.util.Transpose;
 
 /**
  *
  * @author Kaleb
  */
-public abstract class MatrixTemplatePanel extends JFrame implements ActionListener
+public class MatrixTemplateFrame extends JFrame
 {
-    protected JPanel main = new JPanel();
-    protected JSpinner[][] spinner;
-    protected ControlFrame controlFrame;
-    protected SpinnerNumberModel[][] model;
+
+    private JPanel main = new JPanel();
+    private JSpinner[][] spinner;
+    protected MatrixWizardModelInterface matrixModel;
+    private SpinnerNumberModel[][] model;
 
     /**
      *
@@ -46,10 +46,9 @@ public abstract class MatrixTemplatePanel extends JFrame implements ActionListen
      * @param n
      * @param controlFrame
      */
-    public MatrixTemplatePanel(int m, int n, ControlFrame controlFrame)
+    public MatrixTemplateFrame(int m, int n, MatrixWizardModelInterface matrixModel)
     {
-
-        this.controlFrame = controlFrame;
+        this.matrixModel = matrixModel;
 
         setContentPane(main);
         setSize(400, 400);
@@ -57,7 +56,7 @@ public abstract class MatrixTemplatePanel extends JFrame implements ActionListen
         spinner = new JSpinner[m][n];
         model = new SpinnerNumberModel[m][n];
 
-        initSpinners(m,n);
+        initSpinners(m, n);
 
         // init grid layout for matrix spinners
         main.setLayout(new GridBagLayout());
@@ -83,7 +82,7 @@ public abstract class MatrixTemplatePanel extends JFrame implements ActionListen
         c.gridy = 2;
         c.weighty = .1;
 
-        main.add(new MatrixTemplateControlPanel(this, this), c);
+        main.add(new MatrixTemplateControlPanel(matrixModel, this, model), c);
 
         setVisible(true);
     }
@@ -145,37 +144,19 @@ public abstract class MatrixTemplatePanel extends JFrame implements ActionListen
         return template;
     }
 
-    /**
-     *
-     * @return
-     */
-    public double[][] getMatrix()
-    {
-        double[][] matrix = new double[spinner.length][spinner[0].length];
 
-        for (int i = 0; i < matrix.length; i++)
+
+    public void initSpinners(int m, int n)
+    {
+        // init spinners
+        for (int i = 0; i < m; i++)
         {
-            for (int j = 0; j < matrix[0].length; j++)
+            for (int j = 0; j < n; j++)
             {
-                matrix[i][j] = model[i][j].getNumber().doubleValue();
+                model[i][j] = new SpinnerNumberModel(0.0, -99.0, 99.0, 1.0);
+                spinner[i][j] = new JSpinner(model[i][j]);
+                ((JSpinner.DefaultEditor) spinner[i][j].getEditor()).getTextField().setColumns(3);
             }
         }
-
-        Transpose trans = new Transpose();
-        double[][] transposeMatrix = trans.tranposeMatrix(matrix);
-
-        return transposeMatrix;
-    }
-
-    public abstract void initSpinners(int m, int n);
-    /**
-     *
-     */
-    public abstract void updateMatrix();
-
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

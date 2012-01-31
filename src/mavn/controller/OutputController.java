@@ -20,10 +20,6 @@ package mavn.controller;
 
 import mavn.model.MatrixModelInterface;
 import mavn.view.ControlFrame;
-import file.controller.FileController;
-import file.controller.FileControllerInterface;
-import file.model.CSVFileModel;
-import file.model.FileModelInterface;
 import file.observer.FileObserver;
 import mavn.math.MavnAlgorithmModelInterface;
 import mavn.math.MavnSinglePointModel;
@@ -32,34 +28,23 @@ import mavn.math.MavnSinglePointModel;
  *
  * @author Kaleb
  */
-public class Controller implements FileObserver, ControllerInterface
+public class OutputController implements FileObserver, OutputControllerInterface
 {
-
     private ControlFrame mainView;
-    private FileControllerInterface fileController;
-    private FileModelInterface fileModel;
     private MatrixModelInterface model;
     private MavnAlgorithmModelInterface mavn;
 
-    public Controller(ControlFrame mainView, MatrixModelInterface model)
+    public OutputController(ControlFrame mainView, MatrixModelInterface model)
     {
         this.mainView = mainView;
         this.model = model;
-        fileModel = new CSVFileModel();
-        fileModel.registerFileObserver(this);
-        fileController = new FileController(fileModel);
     }
 
     @Override
-    public void importMatrix()
-    {
-        fileController.getFileChooser();
-    }
-
     public void runMavnAlgorithm()
     {
         mavn = new MavnSinglePointModel(mainView);
-
+        mavn.registerObserver(mainView);
         mavn.calculate();
     }
 

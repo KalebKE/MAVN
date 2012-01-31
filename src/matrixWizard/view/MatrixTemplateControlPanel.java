@@ -17,13 +17,15 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package mavn.view;
+package matrixWizard.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SpinnerNumberModel;
+import matrixWizard.model.MatrixWizardModelInterface;
 
 /**
  *
@@ -33,21 +35,24 @@ public class MatrixTemplateControlPanel extends JPanel implements ActionListener
 {
 
     private JButton create = new JButton("Create!");
-    private MatrixTemplatePanel matrix;
+    private MatrixWizardModelInterface matrixModel;
     private JFrame parent;
+    private SpinnerNumberModel[][] model;
 
 
-    public MatrixTemplateControlPanel(MatrixTemplatePanel matrix, JFrame parent)
+    public MatrixTemplateControlPanel(MatrixWizardModelInterface matrixModel, JFrame parent, SpinnerNumberModel[][] model)
     {
-        this.matrix = matrix;
+        this.matrixModel = matrixModel;
         this.parent = parent;
         create.addActionListener(this);
+        this.model = model;
         add(create);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e)
     {
         parent.dispose();
-        matrix.updateMatrix();
+        matrixModel.getMatrix(model);
     }
 }

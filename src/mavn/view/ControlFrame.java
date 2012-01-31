@@ -10,14 +10,16 @@
  */
 package mavn.view;
 
-import mavn.controller.Controller;
-import mavn.controller.ControllerInterface;
+import matrixWizard.view.MatrixTemplateFrame;
+import mavn.controller.InputController;
+import mavn.controller.InputControllerInterface;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
 import java.text.DecimalFormat;
 import javax.swing.JFrame;
 import javax.swing.SpinnerNumberModel;
+import mavn.controller.OutputControllerInterface;
 import mavn.model.MatrixModelInterface;
 import mavn.model.TargetModel;
 import mavn.model.ThetaModel;
@@ -37,13 +39,12 @@ import mavn.observer.W2Observer;
  */
 public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Observer, ThetaObserver, TargetObserver, ResultsObserver
 {
-
-    private ControllerInterface w2Controller;
-    private ControllerInterface w1Controller;
-    private ControllerInterface w0Controller;
-    private ControllerInterface thetaController;
-    private ControllerInterface targetController;
-    private ControllerInterface resultsController;
+    private InputControllerInterface w2Controller;
+    private InputControllerInterface w1Controller;
+    private InputControllerInterface w0Controller;
+    private InputControllerInterface thetaController;
+    private InputControllerInterface targetController;
+    private OutputControllerInterface resultsController;
     private DecimalFormat decFormat;
     private double[][] currentMatrixTheta;
     private double[][] currentMatrixW2;
@@ -56,7 +57,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
     private MatrixModelInterface w0Model;
     private MatrixModelInterface thetaModel;
     private MatrixModelInterface targetModel;
-    private MatrixTemplatePanel matrix;
+    private MatrixTemplateFrame matrix;
     private SpinnerNumberModel modelPoints;
     private SpinnerNumberModel modelMW2;
     private SpinnerNumberModel modelNW2;
@@ -322,11 +323,11 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
     private void initControllers()
     {
         // get a new instance of a controller
-        w2Controller = new Controller(this, w2Model);
-        w1Controller = new Controller(this, w1Model);
-        w0Controller = new Controller(this, w0Model);
-        thetaController = new Controller(this, thetaModel);
-        targetController = new Controller(this, targetModel);
+        w2Controller = new InputController(this, w2Model);
+        w1Controller = new InputController(this, w1Model);
+        w0Controller = new InputController(this, w0Model);
+        thetaController = new InputController(this, thetaModel);
+        targetController = new InputController(this, targetModel);
     }
 
     private void initDecimalFormat()
@@ -351,8 +352,8 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         jLabelValidW1.setFont(font1);
         jLabelValidW0.setForeground(Color.red);
         jLabelValidW0.setFont(font1);
-        targetMatrixLabel.setForeground(Color.red);
-        targetMatrixLabel.setFont(font1);
+        //targetMatrixLabel.setForeground(Color.red);
+        //targetMatrixLabel.setFont(font1);
         jLabelValidTheta.setForeground(Color.red);
         jLabelValidTheta.setFont(font1);
         jLabelHeaderTheta.setText("Theta Matrix:  " + "\u0398" + "\u2082");
@@ -452,7 +453,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable()
         {
-
+            @Override
             public void run()
             {
                 new ControlFrame().setVisible(true);
@@ -580,7 +581,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         });
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 3, 11));
-        jLabel15.setText("W2 Matrix: Defines Image Vector Directions");
+        jLabel15.setText("W2 Matrix: Defines Shape Vector Directions");
 
         jLabelValidW2.setText("Valid W2 Import:");
 
@@ -692,12 +693,11 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
             .addGroup(jPanelW0Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelW0Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel22)
-                    .addComponent(jLabelValidW0)
-                    .addComponent(w0TextAreaLabel)
-                    .addGroup(jPanelW0Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelW0Layout.createSequentialGroup()
+                    .addGroup(jPanelW0Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel22)
+                        .addComponent(jLabelValidW0)
+                        .addComponent(jScrollPane6)
+                        .addGroup(jPanelW0Layout.createSequentialGroup()
                             .addComponent(newW0MatrixButton)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(importW0MatrixButton)
@@ -706,8 +706,9 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(saveW0MatrixButton)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(clearW0MatrixButton)))
-                    .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(clearW0MatrixButton))
+                        .addComponent(jSeparator13))
+                    .addComponent(w0TextAreaLabel))
                 .addContainerGap(69, Short.MAX_VALUE))
         );
 
@@ -1001,6 +1002,8 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
 
         jTextAreaMatrixW1.setColumns(20);
         jTextAreaMatrixW1.setRows(5);
+        jTextAreaMatrixW1.setPreferredSize(new java.awt.Dimension(165, 120));
+        jTextAreaMatrixW1.setRequestFocusEnabled(false);
         jScrollPane5.setViewportView(jTextAreaMatrixW1);
 
         newW1MatrixButton.setText("New Matrix");
@@ -1201,7 +1204,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
 
     private void jMenuItemImportModelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemImportModelActionPerformed
     {//GEN-HEADEREND:event_jMenuItemImportModelActionPerformed
-        ///controller.importMatrix();
+        //controller.importMatrix();
 
         jLabelValidW0.setForeground(Color.green);
         jLabelValidW1.setForeground(Color.green);

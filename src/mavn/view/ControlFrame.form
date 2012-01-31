@@ -241,7 +241,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="3"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="W2 Matrix: Defines Image Vector Directions"/>
+                    <Property name="text" type="java.lang.String" value="W2 Matrix: Defines Shape Vector Directions"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabelValidW2">
@@ -282,10 +282,9 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel22" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabelValidW0" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="w0TextAreaLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jLabel22" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelValidW0" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jScrollPane6" alignment="0" max="32767" attributes="1"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="newW0MatrixButton" linkSize="9" min="-2" max="-2" attributes="0"/>
@@ -298,8 +297,9 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="clearW0MatrixButton" linkSize="9" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <Component id="jSeparator13" alignment="0" max="32767" attributes="1"/>
                               </Group>
-                              <Component id="jSeparator13" alignment="0" min="-2" max="-2" attributes="1"/>
+                              <Component id="w0TextAreaLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="69" max="32767" attributes="0"/>
                       </Group>
@@ -878,6 +878,10 @@
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[165, 120]"/>
+                        </Property>
+                        <Property name="requestFocusEnabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                   </SubComponents>

@@ -8,9 +8,7 @@ package mavn.controller;
  *
  * @author Kaleb
  */
-public interface ControllerInterface
+public interface OutputControllerInterface
 {
-    public void importMatrix();
-
     public void runMavnAlgorithm();
 }

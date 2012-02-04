@@ -18,20 +18,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.controller;
 
-import mavn.model.MatrixModelInterface;
+import mavn.model.InputModelInterface;
 import mavn.view.ControlFrame;
 import file.controller.FileController;
 import file.controller.FileControllerInterface;
 import file.model.CSVFileModel;
 import file.model.FileModelInterface;
 import file.observer.FileObserver;
-import javax.swing.SpinnerNumberModel;
-import matrixWizard.controller.MatrixWizardController;
+import matrixWizard.controller.EditMatrixWizardController;
+import matrixWizard.controller.NewMatrixWizardController;
 import matrixWizard.controller.MatrixWizardControllerInterface;
 import matrixWizard.model.MatrixWizardModel;
 import matrixWizard.model.MatrixWizardModelInterface;
 import matrixWizard.observer.MatrixWizardObserver;
-import mavn.math.MavnAlgorithmModelInterface;
+import mavn.math.model.MavnAlgorithmModelInterface;
 
 /**
  *
@@ -42,12 +42,13 @@ public class InputController implements FileObserver, InputControllerInterface, 
     private ControlFrame mainView;
     private FileControllerInterface fileController;
     private FileModelInterface fileModel;
-    private MatrixModelInterface model;
+    private InputModelInterface model;
     private MavnAlgorithmModelInterface mavn;
-    private MatrixWizardControllerInterface matrixWizardController;
+    private MatrixWizardControllerInterface newMatrixWizardController;
+    private MatrixWizardControllerInterface editMatrixWizardControler;
     private MatrixWizardModelInterface matrixWizardModel;
 
-    public InputController(ControlFrame mainView, MatrixModelInterface model)
+    public InputController(ControlFrame mainView, InputModelInterface model)
     {
         this.mainView = mainView;
         this.model = model;
@@ -56,7 +57,7 @@ public class InputController implements FileObserver, InputControllerInterface, 
         fileController = new FileController(fileModel);
         matrixWizardModel = new MatrixWizardModel();
         matrixWizardModel.registerMatrixWizardObserver(this);
-        matrixWizardController = new MatrixWizardController(matrixWizardModel);
+        newMatrixWizardController = new NewMatrixWizardController(matrixWizardModel);
     }
 
     @Override
@@ -66,14 +67,21 @@ public class InputController implements FileObserver, InputControllerInterface, 
     }
 
     @Override
-    public void newMatrix(SpinnerNumberModel spinnerModel)
+    public void newMatrix()
     {
-        matrixWizardController.getMatrixWizard(spinnerModel);
+        newMatrixWizardController.getMatrixWizard();
     }
 
     @Override
     public void updateMatrix(double[][] matrix)
     {
         model.setMatrix(matrix);
+    }
+
+    @Override
+    public void editMatrix(double[][] matrix)
+    {
+        editMatrixWizardControler = new EditMatrixWizardController(matrixWizardModel, matrix);
+        editMatrixWizardControler.getMatrixWizard();
     }
 }

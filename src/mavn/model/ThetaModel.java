@@ -14,11 +14,26 @@ import mavn.observer.W0Observer;
  * and provide them with the new model. 
  * @author Kaleb
  */
-public class ThetaModel extends MatrixModelInterface
+public class ThetaModel extends InputModelInterface
 {
+
     public ThetaModel()
     {
         matrixObservers = new ArrayList<ThetaObserver>();
+    }
+
+    public void registerObserver(ThetaObserver o)
+    {
+        matrixObservers.add(o);
+    }
+
+    public void removeObserver(ThetaObserver o)
+    {
+        int i = matrixObservers.indexOf(o);
+        if (i >= 0)
+        {
+            matrixObservers.remove(i);
+        }
     }
 
     @Override

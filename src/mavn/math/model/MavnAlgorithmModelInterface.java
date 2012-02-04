@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mavn.math;
+package mavn.math.model;
 
 import mavn.observer.ResultsObserver;
 

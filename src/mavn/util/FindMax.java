@@ -15,7 +15,7 @@ public class FindMax
         double maxValue = numbers[0][0];
         for (int i = 0; i < numbers.length; i++)
         {
-            for (int j = 0; j < numbers.length; j++)
+            for (int j = 0; j < numbers[i].length; j++)
             {
                 if (numbers[i][j] > maxValue)
                 {

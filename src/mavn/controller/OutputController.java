@@ -18,39 +18,42 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.controller;
 
-import mavn.model.MatrixModelInterface;
+import mavn.math.model.DartModelInterface;
 import mavn.view.ControlFrame;
-import file.observer.FileObserver;
-import mavn.math.MavnAlgorithmModelInterface;
-import mavn.math.MavnSinglePointModel;
+import mavn.math.model.MavnAlgorithmModelInterface;
+import mavn.math.model.MavnMultiplePointModel;
+import mavn.math.model.MavnSinglePointModel;
 
 /**
  *
  * @author Kaleb
  */
-public class OutputController implements FileObserver, OutputControllerInterface
+public class OutputController implements OutputControllerInterface
 {
+
     private ControlFrame mainView;
-    private MatrixModelInterface model;
     private MavnAlgorithmModelInterface mavn;
 
-    public OutputController(ControlFrame mainView, MatrixModelInterface model)
+    public OutputController(ControlFrame mainView)
     {
         this.mainView = mainView;
-        this.model = model;
     }
 
     @Override
     public void runMavnAlgorithm()
     {
-        mavn = new MavnSinglePointModel(mainView);
-        mavn.registerObserver(mainView);
-        mavn.calculate();
-    }
-
-    @Override
-    public void updateMatrix(double[][] matrix)
-    {
-        model.setMatrix(matrix);
+        if (!mainView.isDartGunState())
+        {
+            mavn = new MavnSinglePointModel(mainView);
+            mavn.registerObserver(mainView);
+            mavn.calculate();
+        }
+        if (mainView.isDartGunState())
+        {
+            mavn = new MavnMultiplePointModel(mainView);
+            mavn.registerObserver(mainView);
+            ((DartModelInterface) mavn).registerObserver(mainView);
+            mavn.calculate();
+        }
     }
 }

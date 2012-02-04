@@ -13,11 +13,26 @@ import mavn.observer.W2Observer;
  * and provide them with the new model. 
  * @author Kaleb
  */
-public class W2Model extends MatrixModelInterface
+public class W2Model extends InputModelInterface
 {
+
     public W2Model()
     {
         matrixObservers = new ArrayList<W2Observer>();
+    }
+
+    public void registerObserver(W2Observer o)
+    {
+        matrixObservers.add(o);
+    }
+
+    public void removeObserver(W2Observer o)
+    {
+        int i = matrixObservers.indexOf(o);
+        if (i >= 0)
+        {
+            matrixObservers.remove(i);
+        }
     }
 
     @Override

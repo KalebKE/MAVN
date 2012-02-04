@@ -26,7 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import matrixWizard.model.MatrixWizardModelInterface;
-import mavn.util.Transpose;
 
 /**
  *
@@ -144,8 +143,6 @@ public class MatrixTemplateFrame extends JFrame
         return template;
     }
 
-
-
     public void initSpinners(int m, int n)
     {
         // init spinners
@@ -156,6 +153,21 @@ public class MatrixTemplateFrame extends JFrame
                 model[i][j] = new SpinnerNumberModel(0.0, -99.0, 99.0, 1.0);
                 spinner[i][j] = new JSpinner(model[i][j]);
                 ((JSpinner.DefaultEditor) spinner[i][j].getEditor()).getTextField().setColumns(3);
+            }
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public void setMatrix(double[][] newMatrix)
+    {
+        for (int i = 0; i < newMatrix.length; i++)
+        {
+            for (int j = 0; j < newMatrix[0].length; j++)
+            {
+                spinner[i][j].getModel().setValue(new Double(newMatrix[i][j]));
             }
         }
     }

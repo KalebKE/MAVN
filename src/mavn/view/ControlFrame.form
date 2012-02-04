@@ -42,6 +42,9 @@
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="formPropertyChange"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -121,7 +124,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanelResults" linkSize="12" pref="324" max="32767" attributes="1"/>
+                          <Component id="jPanelResults" linkSize="12" max="32767" attributes="1"/>
                           <Component id="jPanelTargets" linkSize="12" alignment="0" min="-2" pref="324" max="-2" attributes="1"/>
                       </Group>
                       <EmptySpace pref="22" max="32767" attributes="0"/>
@@ -142,25 +145,22 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabelValidW2" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="jSeparator3" alignment="1" max="32767" attributes="1"/>
-                                  <Component id="jLabel15" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabelHeaderW2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="newW2MatrixButton" linkSize="3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="importMatrixW2Button" linkSize="3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="editW2MatrixButton" linkSize="3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="saveW2MatrixButton" linkSize="3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="clearW2MatrixButton" linkSize="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="1"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="jSeparator3" alignment="1" max="32767" attributes="1"/>
+                              <Component id="jLabel15" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelHeaderW2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="newW2MatrixButton" linkSize="3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="importMatrixW2Button" linkSize="3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="editW2MatrixButton" linkSize="3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="saveW2MatrixButton" linkSize="3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="clearW2MatrixButton" linkSize="3" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="jScrollPane1" alignment="0" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace pref="58" max="32767" attributes="0"/>
                       </Group>
@@ -186,9 +186,7 @@
                           <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jScrollPane1" min="-2" pref="207" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabelValidW2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Component id="jSeparator3" pref="13" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -225,6 +223,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="importMatrixW2ButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Import Matrix&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="newW2MatrixButton">
                   <Properties>
@@ -233,6 +234,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newW2MatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;New Matrix&quot;, &quot;Green&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSeparator" name="jSeparator3">
                 </Component>
@@ -244,11 +248,6 @@
                     <Property name="text" type="java.lang.String" value="W2 Matrix: Defines Shape Vector Directions"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabelValidW2">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Valid W2 Import:"/>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JButton" name="editW2MatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Edit Matrix"/>
@@ -256,16 +255,25 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editW2MatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Edit Matrix&quot;, &quot;Orange&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="saveW2MatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Save Matrix"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Save Matrix&quot;, &quot;Green&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="clearW2MatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Matrix"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Matrix&quot;, &quot;Red&quot;)"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -279,12 +287,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="w0TextAreaLabel" alignment="0" min="-2" pref="380" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jLabel22" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabelValidW0" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jScrollPane6" alignment="0" max="32767" attributes="1"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="newW0MatrixButton" linkSize="9" min="-2" max="-2" attributes="0"/>
@@ -299,7 +307,6 @@
                                   </Group>
                                   <Component id="jSeparator13" alignment="0" max="32767" attributes="1"/>
                               </Group>
-                              <Component id="w0TextAreaLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="69" max="32767" attributes="0"/>
                       </Group>
@@ -321,9 +328,7 @@
                           <Component id="w0TextAreaLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                           <Component id="jScrollPane6" min="-2" pref="207" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabelValidW0" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="7" max="32767" attributes="0"/>
+                          <EmptySpace pref="27" max="32767" attributes="0"/>
                           <Component id="jSeparator13" min="-2" pref="13" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -368,6 +373,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="importW0MatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Import Matrix&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="newW0MatrixButton">
                   <Properties>
@@ -376,13 +384,11 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newW0MatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;New Matrix&quot;, &quot;Green&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSeparator" name="jSeparator13">
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabelValidW0">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Valid W0 Import:"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="editW0MatrixButton">
                   <Properties>
@@ -391,16 +397,25 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editW0MatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Edit Matrix&quot;, &quot;Orange&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="saveW0MatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Save Matrix"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Save Matrix&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="clearW0MatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Matrix"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Matrix&quot;, &quot;Red&quot;)"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -425,10 +440,6 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="clearThetaMatrixButton" linkSize="2" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                                  <Component id="jLabelValidTheta" min="-2" max="-2" attributes="0"/>
-                              </Group>
                               <Component id="jScrollPane2" alignment="0" max="32767" attributes="1"/>
                               <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -452,9 +463,7 @@
                           <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                           <Component id="jScrollPane2" min="-2" pref="206" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabelValidTheta" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Component id="jSeparator4" min="-2" pref="10" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                       </Group>
@@ -492,6 +501,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="importThetaMatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Import Matrix&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="newThetaMatrixButton">
                   <Properties>
@@ -500,6 +512,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newThetaMatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;New Matrix&quot;, &quot;Green&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSeparator" name="jSeparator4">
                 </Component>
@@ -511,11 +526,6 @@
                     <Property name="text" type="java.lang.String" value="Theta Matrix: Defines Vector Boundaries"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabelValidTheta">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Valid Theta Import:"/>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JButton" name="editThetaMatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Edit Matrix"/>
@@ -523,16 +533,25 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editThetaMatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Edit Matrix&quot;, &quot;Orange&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="saveThetaMatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Save Matrix"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Save Matrix&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="clearThetaMatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Matrix"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Matrix&quot;, &quot;Red&quot;)"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -551,7 +570,7 @@
                                   <Component id="jLabelResults" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="1">
-                                  <Component id="runPropertiesButton" linkSize="10" min="-2" max="-2" attributes="0"/>
+                                  <Component id="propertiesButton" linkSize="10" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="runButton" linkSize="10" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -559,7 +578,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="saveResultsButton" linkSize="10" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="clearResultsMatrix" linkSize="10" min="-2" max="-2" attributes="0"/>
+                                  <Component id="clearResultsMatrixButton" linkSize="10" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jSeparator11" alignment="0" max="32767" attributes="1"/>
                               <Component id="jLabel29" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -580,11 +599,11 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="runPropertiesButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="propertiesButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="runButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="viewResultsButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="saveResultsButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="clearResultsMatrix" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="clearResultsMatrixButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
@@ -638,6 +657,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="runButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Run!&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabelResults">
                 </Component>
@@ -645,24 +667,39 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Save Result"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Save Result&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
-                <Component class="javax.swing.JButton" name="clearResultsMatrix">
+                <Component class="javax.swing.JButton" name="clearResultsMatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Results"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Results&quot;, &quot;Red&quot;)"/>
+                  </AuxValues>
                 </Component>
-                <Component class="javax.swing.JButton" name="runPropertiesButton">
+                <Component class="javax.swing.JButton" name="propertiesButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value=" Properties"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="runPropertiesButtonActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="propertiesButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Properties&quot;, &quot;Green&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="viewResultsButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="View Results"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewResultsButtonActionPerformed"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;View Results&quot;, &quot;Orange&quot;)"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -740,6 +777,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="importTargetMatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Import Matrix&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSeparator" name="jSeparator7">
                 </Component>
@@ -758,6 +798,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newTargetMatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;New Matrix&quot;, &quot;Green&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="targetMatrixLabel">
                   <Properties>
@@ -774,16 +817,25 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editTargetMatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Edit Matrix&quot;, &quot;Orange&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="saveTargetMatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Save Matrix"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Save Matrix&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="clearTargetMatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Matrix"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Matrix&quot;, &quot;Red&quot;)"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -804,8 +856,6 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabelValidW1" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="w1TextAreaLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                   <Component id="jSeparator9" alignment="0" max="32767" attributes="1"/>
                                   <Component id="jScrollPane5" alignment="0" max="32767" attributes="0"/>
@@ -821,6 +871,7 @@
                                       <Component id="clearW1MatrixButton" linkSize="4" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
+                              <Component id="w1TextAreaLabel" alignment="0" min="-2" pref="389" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="58" max="32767" attributes="0"/>
                       </Group>
@@ -842,9 +893,7 @@
                           <Component id="w1TextAreaLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                           <Component id="jScrollPane5" min="-2" pref="207" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabelValidW1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                           <Component id="jSeparator9" pref="13" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -866,6 +915,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="importW1MatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Import Matrix&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Container class="javax.swing.JScrollPane" name="jScrollPane5">
                   <AuxValues>
@@ -893,6 +945,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newW1MatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;New Matrix&quot;, &quot;Green&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="w1TextAreaLabel">
                   <Properties>
@@ -904,11 +959,6 @@
                 </Component>
                 <Component class="javax.swing.JSeparator" name="jSeparator9">
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabelValidW1">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Valid W1 Import:"/>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JButton" name="editW1MatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Edit Matrix"/>
@@ -916,16 +966,25 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editW1MatrixButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Edit Matrix&quot;, &quot;Orange&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="saveW1MatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Save Matrix"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Save Matrix&quot;, &quot;Blue&quot;)"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="clearW1MatrixButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Matrix"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Matrix&quot;, &quot;Red&quot;)"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>

@@ -5,14 +5,13 @@
 package mavn.model;
 
 import java.util.ArrayList;
-import mavn.observer.W2Observer;
 
 /**
  * An abstract class interface where all of the key implementation is shared by
  * the child classes. Child classes can add special functionality if needed.
  * @author Kaleb
  */
-public abstract class MatrixModelInterface
+public abstract class InputModelInterface
 {
     protected ArrayList matrixObservers;
     protected double[][] matrix;
@@ -23,19 +22,5 @@ public abstract class MatrixModelInterface
     {
         this.matrix = matrix;
         notifyObservers();
-    }
-
-    public void registerObserver(W2Observer o)
-    {
-        matrixObservers.add(o);
-    }
-
-    public void removeObserver(W2Observer o)
-    {
-        int i = matrixObservers.indexOf(o);
-        if (i >= 0)
-        {
-            matrixObservers.remove(i);
-        }
     }
 }

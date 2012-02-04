@@ -4,8 +4,6 @@
  */
 package mavn.controller;
 
-import javax.swing.SpinnerNumberModel;
-
 /**
  *
  * @author Kaleb
@@ -13,5 +11,6 @@ import javax.swing.SpinnerNumberModel;
 public interface InputControllerInterface
 {
     public void importMatrix();
-    public void newMatrix(SpinnerNumberModel spinnerModel);
+    public void editMatrix(double[][] matrix);
+    public void newMatrix();
 }

@@ -32,7 +32,8 @@ public class CreateMatrixWizardFrame extends javax.swing.JFrame
     // Get an instance of the controller
 
     MatrixWizardModelInterface matrixModel;
-    private SpinnerNumberModel spinnerModel;
+    private SpinnerNumberModel mSpinnerModel;
+    private SpinnerNumberModel nSpinnerModel;
     private String mSpinnerToolTipText = "Use this spinner box to enter the "
             + "desired dimension of the matrix.";
     private String nSpinnerToolTipText = "Use this spinner box to enter the "
@@ -41,16 +42,15 @@ public class CreateMatrixWizardFrame extends javax.swing.JFrame
     /** 
      * Creates new form TransitionMatrixWizardFrame
      */
-    public CreateMatrixWizardFrame(MatrixWizardModelInterface matrixModel, SpinnerNumberModel spinnerModel)
+    public CreateMatrixWizardFrame(MatrixWizardModelInterface matrixModel)
     {
         this.matrixModel = matrixModel;
         initComponents();
 
-        // Initialize the JSpinners.
-        // You can set the format and name of the JSpinners here.
-        this.spinnerModel = spinnerModel;
-        mSpinner.setModel(spinnerModel);
-        nSpinner.setModel(spinnerModel);
+        mSpinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
+        nSpinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
+        mSpinner.setModel(mSpinnerModel);
+        nSpinner.setModel(nSpinnerModel);
         mSpinner.setName("mSpinner");
         nSpinner.setName("nSpinner");
         mSpinner.setToolTipText(mSpinnerToolTipText);
@@ -59,6 +59,8 @@ public class CreateMatrixWizardFrame extends javax.swing.JFrame
         // make sure the JFrame only closes itself
         // Overrides default behavior. Must be called after initComponents.
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.pack();
+        this.setVisible(true);
     }
 
     /** This method is called from within the constructor to
@@ -213,7 +215,7 @@ public class CreateMatrixWizardFrame extends javax.swing.JFrame
 
     private void generateMatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_generateMatrixButtonActionPerformed
     {//GEN-HEADEREND:event_generateMatrixButtonActionPerformed
-        new MatrixTemplateFrame((((SpinnerNumberModel) mSpinner.getModel()).getNumber()).intValue(), (((SpinnerNumberModel) mSpinner.getModel()).getNumber()).intValue(), matrixModel);
+        new MatrixTemplateFrame((((SpinnerNumberModel) mSpinner.getModel()).getNumber()).intValue(), (((SpinnerNumberModel) nSpinner.getModel()).getNumber()).intValue(), matrixModel);
         this.dispose();
 }//GEN-LAST:event_generateMatrixButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables

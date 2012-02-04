@@ -2,10 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mavn.math;
+package mavn.math.model;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import mavn.math.algorithm.CalcTheta;
+import mavn.math.algorithm.Matrix;
+import mavn.math.algorithm.SHL;
 import mavn.observer.ResultsObserver;
 import mavn.view.ControlFrame;
 
@@ -157,7 +160,7 @@ public class MavnSinglePointModel implements MavnAlgorithmModelInterface
 
     private void appendResults(String message)
     {
-        results = "\n" + message;
+        results += "\n" + message;
     }
 
     private void appendResults(double[][] matrix, String message)

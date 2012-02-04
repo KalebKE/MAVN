@@ -2,35 +2,51 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mavn.math;
+package mavn.math.model;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
+import mavn.math.algorithm.CalcTheta;
+import mavn.math.algorithm.Matrix;
+import mavn.math.algorithm.SHL;
+import mavn.observer.DartsObserver;
 import mavn.observer.ResultsObserver;
 import mavn.util.FindMax;
 import mavn.view.ControlFrame;
+import org.uncommons.maths.random.GaussianGenerator;
 
 /**
  *
  * @author Kaleb
  */
-public class MavnMultiplePointModel implements MavnAlgorithmModelInterface
+public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, DartModelInterface
 {
-    private ArrayList<ResultsObserver> observers;
+
+    private ArrayList<ResultsObserver> resultObservers;
+    private ArrayList<DartsObserver> dartObservers;
+    private ArrayList<double[][]> hit;
+    private ArrayList<double[][]> miss;
     private ControlFrame controlView;
     private DecimalFormat decimalFormater;
     private String decimalFormat;
     private String results;
+    private Random random;
+    private GaussianGenerator gaussianDart;
+    private double bounds;
 
     public MavnMultiplePointModel(ControlFrame controlView)
     {
         this.controlView = controlView;
-        observers = new ArrayList<ResultsObserver>();
+        resultObservers = new ArrayList<ResultsObserver>();
+        dartObservers = new ArrayList<DartsObserver>();
         results = "";
-        
-        // Set the desired decimal format here.
-        // *This can be overridden by the User Preferances panel!*
+        random = new Random();
+
+        bounds = FindMax.getMaxValue(controlView.getCurrentMatrixTheta());
+
+        gaussianDart = new GaussianGenerator(bounds/2, bounds/0.5, new Random()); // Set the desired decimal format here.
+                // *This can be overridden by the User Preferances panel!*
         decimalFormat = ("0.0000");
 
         // Creates a new DecimalFormatter for the text fields so we can
@@ -52,34 +68,65 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface
         double[][] uniqueHitsRatio = new double[controlView.getCurrentMatrixW1().length][1];
 
         // Used to count the number of hits in a spot where two or more images overlap
-        int sharedHits = 0;
+        int imageHits = 0;
 
         // Used to calculate the ratio of hits to misses in a spot where two or more images overlap
         double sharedHitsRatio = 0;
 
         // The number of darts fired at the image
-        double darts = 100000;
+        double darts = controlView.getNumDarts();
 
-        double bounds = FindMax.getMaxValue(controlView.getCurrentMatrixTheta());
+
+        hit = new ArrayList<double[][]>();
+        miss = new ArrayList<double[][]>();
 
         // For loop to fire the darts
         for (int i = 0; i < darts; i++)
         {
-            // Random number generator for the points
-            Random random = new Random();
-
-            // Create a double array for the random points
-            double[][] points =
+            double[][] points;
+            if (controlView.isUniformDistribution())
             {
-                {
-                    // A random double no larger than 5 (the outer bounds of the image)
-                    random.nextDouble() * bounds
-                },
-                {
-                    // A random double no larger than 5 (the outer bounds of the image)
-                    random.nextDouble() * bounds
-                }
-            };
+                // Create a double array for the random points
+                points = new double[][]
+                        {
+                            {
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                random.nextDouble() * bounds
+                            },
+                            {
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                random.nextDouble() * bounds
+                            }
+                        };
+            }
+
+            if (controlView.isNormalDistribution())
+            {
+                // Create a double array for the random points
+                points = new double[][]
+                        {
+                            {
+                                Math.abs(gaussianDart.nextValue())
+                            },
+                            {
+                                Math.abs(gaussianDart.nextValue())
+                            }
+                        };
+            } else
+            {
+                // Create a double array for the random points
+                points = new double[][]
+                        {
+                            {
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                random.nextDouble() * bounds
+                            },
+                            {
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                random.nextDouble() * bounds
+                            }
+                        };
+            }
 
             // SHL[(W2*P)+Theta2]
             double[][] matrix0 = matrixMath.multiply(controlView.getCurrentMatrixW2(), points);
@@ -117,12 +164,19 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface
                 {
                     if (matrix8[k][l] == 1)
                     {
-                        sharedHits++;
+                        imageHits++;
                     }
                 }
             }
 
-            appendResults(matrix8, "Shape #:");
+            if (matrix8[0][0] == 1)
+            {
+                hit.add(points);
+            }
+            if (matrix8[0][0] != 1)
+            {
+                miss.add(points);
+            }
         }
 
         // Calculate the ratio of unique hits
@@ -135,7 +189,7 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface
         }
 
         // Calculate the ratio of shared hits
-        sharedHitsRatio = sharedHits / darts;
+        sharedHitsRatio = imageHits / darts;
 
         appendResults(uniqueHitsRatio, "Input #:");
 
@@ -147,33 +201,54 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface
     @Override
     public void registerObserver(ResultsObserver o)
     {
-        observers.add(o);
+        resultObservers.add(o);
     }
 
     @Override
     public void removeObserver(ResultsObserver o)
     {
-        int i = observers.indexOf(o);
+        int i = resultObservers.indexOf(o);
         if (i >= 0)
         {
-            observers.remove(o);
+            resultObservers.remove(o);
+        }
+    }
+
+    @Override
+    public void registerObserver(DartsObserver o)
+    {
+        dartObservers.add(o);
+    }
+
+    @Override
+    public void removeObserver(DartsObserver o)
+    {
+        int i = dartObservers.indexOf(o);
+        if (i >= 0)
+        {
+            dartObservers.remove(o);
         }
     }
 
     @Override
     public void notifyObservers()
     {
-        for (int i = 0; i < observers.size(); i++)
+        for (int i = 0; i < resultObservers.size(); i++)
         {
-            ResultsObserver observer = (ResultsObserver) observers.get(i);
-            observer.updateResultsMatrix(results);
+            ResultsObserver resultObserver = (ResultsObserver) resultObservers.get(i);
+            resultObserver.updateResultsMatrix(results);
+        }
+        for (int i = 0; i < dartObservers.size(); i++)
+        {
+            DartsObserver dartObserver = (DartsObserver) dartObservers.get(i);
+            dartObserver.updateDartResults(hit, miss);
         }
     }
 
     private void appendResults(double value, String message)
     {
-        results = "\n" + value;
-        results = "\n" + message;
+        results += "\n" + value;
+        results += "\n" + message;
     }
 
     private void appendResults(double[][] matrix, String message)

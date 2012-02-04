@@ -5,13 +5,11 @@
 
 package matrixWizard.controller;
 
-import javax.swing.SpinnerNumberModel;
-
 /**
  *
  * @author Kaleb
  */
 public interface MatrixWizardControllerInterface
 {
-    public void getMatrixWizard(SpinnerNumberModel spinnerModel);
+    public void getMatrixWizard();
 }

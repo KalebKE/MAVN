@@ -84,4 +84,10 @@ public class InputController implements FileObserver, InputControllerInterface, 
         editMatrixWizardControler = new EditMatrixWizardController(matrixWizardModel, matrix);
         editMatrixWizardControler.getMatrixWizard();
     }
+
+    @Override
+    public FileModelInterface getFileModel()
+    {
+        return fileModel;
+    }
 }

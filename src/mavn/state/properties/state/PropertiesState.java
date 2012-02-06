@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mavn.state.properties;
+package mavn.state.properties.state;
 
 import javax.swing.SpinnerNumberModel;
-import mavn.view.PropertiesFrame;
+import mavn.state.properties.view.PropertiesFrame;
 
 /**
  *
@@ -20,9 +20,11 @@ public class PropertiesState implements PropertiesStateInterface
     private boolean target;
     private boolean dart;
     private boolean randomSeed;
-    private boolean uniformDistribution;
-    private boolean normalDistribution;
-    private boolean gridDistribution;
+    private boolean xORRng;
+    private boolean randomRng;
+    private boolean caRng;
+    private boolean cmwcRng;
+    private boolean mtRng;
 
     public PropertiesState(PropertiesFrame propertiesView)
     {
@@ -52,15 +54,27 @@ public class PropertiesState implements PropertiesStateInterface
     }
 
     @Override
-    public boolean isGridDistribution()
+    public boolean isCaRng()
     {
-        return gridDistribution;
+        return caRng;
     }
 
     @Override
-    public boolean isNormalDistribution()
+    public boolean isCmwcRng()
     {
-        return normalDistribution;
+        return cmwcRng;
+    }
+
+    @Override
+    public boolean isMtRng()
+    {
+        return mtRng;
+    }
+
+    @Override
+    public boolean isRandomRng()
+    {
+        return randomRng;
     }
 
     @Override
@@ -76,9 +90,9 @@ public class PropertiesState implements PropertiesStateInterface
     }
 
     @Override
-    public boolean isUniformDistribution()
+    public boolean isXORRng()
     {
-        return uniformDistribution;
+        return xORRng;
     }
 
     @Override
@@ -86,9 +100,9 @@ public class PropertiesState implements PropertiesStateInterface
     {
         propertiesView.getDartGunCheckBox().setSelected(false);
         propertiesView.getDartGunLabel().setEnabled(false);
-        propertiesView.getGridRadio().setEnabled(false);
+        propertiesView.getMTRngRadio().setEnabled(false);
         propertiesView.getInputsLabel().setEnabled(false);
-        propertiesView.getNormalRadio().setEnabled(false);
+        propertiesView.getRandomRadio().setEnabled(false);
         propertiesView.getNumDartsLabel().setEnabled(false);
         propertiesView.getNumDartsSpinner().setEnabled(false);
         propertiesView.getRandomSeedRadio().setEnabled(false);
@@ -96,7 +110,9 @@ public class PropertiesState implements PropertiesStateInterface
         propertiesView.getSeedSpinner().setEnabled(false);
         propertiesView.getSeedSpinnerLabel().setEnabled(false);
         propertiesView.getSpecifiedSeedRadio().setEnabled(false);
-        propertiesView.getUniformRadio().setEnabled(false);
+        propertiesView.getXORShiftRngRadio().setEnabled(false);
+        propertiesView.getCmwcRngRadio().setEnabled(false);
+        propertiesView.getCaRngRadio().setEnabled(false);
 
         target = true;
         dart = false;
@@ -107,15 +123,19 @@ public class PropertiesState implements PropertiesStateInterface
     {
         propertiesView.getTargetCheckBox().setSelected(false);
         propertiesView.getDartGunLabel().setEnabled(true);
-        propertiesView.getGridRadio().setEnabled(true);
+        propertiesView.getMTRngRadio().setEnabled(true);
         propertiesView.getInputsLabel().setEnabled(true);
-        propertiesView.getNormalRadio().setEnabled(true);
+        propertiesView.getRandomRadio().setEnabled(true);
         propertiesView.getNumDartsLabel().setEnabled(true);
         propertiesView.getNumDartsSpinner().setEnabled(true);
         propertiesView.getRandomSeedRadio().setEnabled(true);
         propertiesView.getSeedLabel().setEnabled(true);
+        propertiesView.getSeedSpinner().setEnabled(true);
+        propertiesView.getSeedSpinnerLabel().setEnabled(true);
         propertiesView.getSpecifiedSeedRadio().setEnabled(true);
-        propertiesView.getUniformRadio().setEnabled(true);
+        propertiesView.getXORShiftRngRadio().setEnabled(true);
+        propertiesView.getCmwcRngRadio().setEnabled(true);
+        propertiesView.getCaRngRadio().setEnabled(true);
 
         target = false;
         dart = true;
@@ -142,35 +162,76 @@ public class PropertiesState implements PropertiesStateInterface
     }
 
     @Override
-    public void gridDistribution()
+    public void caRng()
     {
-        propertiesView.getUniformRadio().setSelected(false);
-        propertiesView.getNormalRadio().setSelected(false);
+        propertiesView.getCmwcRngRadio().setSelected(false);
+        propertiesView.getMTRngRadio().setSelected(false);
+        propertiesView.getXORShiftRngRadio().setSelected(false);
+        propertiesView.getRandomRadio().setSelected(false);
 
-        gridDistribution = true;
-        normalDistribution = false;
-        uniformDistribution = false;
+        caRng = true;
+        randomRng = false;
+        xORRng = false;
+        cmwcRng = false;
+        mtRng = false;
     }
 
     @Override
-    public void normalDistribution()
+    public void randomRng()
     {
-        propertiesView.getUniformRadio().setSelected(false);
-        propertiesView.getGridRadio().setSelected(false);
+        propertiesView.getCmwcRngRadio().setSelected(false);
+        propertiesView.getMTRngRadio().setSelected(false);
+        propertiesView.getXORShiftRngRadio().setSelected(false);
+        propertiesView.getCaRngRadio().setSelected(false);
 
-        gridDistribution = false;
-        normalDistribution = true;
-        uniformDistribution = false;
+        caRng = false;
+        randomRng = true;
+        xORRng = false;
+        mtRng = false;
     }
 
     @Override
-    public void uniformDistribution()
+    public void xORRng()
     {
-        propertiesView.getNormalRadio().setSelected(false);
-        propertiesView.getGridRadio().setSelected(false);
+        propertiesView.getCmwcRngRadio().setSelected(false);
+        propertiesView.getMTRngRadio().setSelected(false);
+        propertiesView.getRandomRadio().setSelected(false);
+        propertiesView.getCaRngRadio().setSelected(false);
 
-        gridDistribution = false;
-        normalDistribution = false;
-        uniformDistribution = true;
+        caRng = false;
+        randomRng = false;
+        xORRng = true;
+        cmwcRng = false;
+        mtRng = false;
+    }
+
+    @Override
+    public void cmwcRng()
+    {
+        propertiesView.getXORShiftRngRadio().setSelected(false);
+        propertiesView.getMTRngRadio().setSelected(false);
+        propertiesView.getRandomRadio().setSelected(false);
+        propertiesView.getCaRngRadio().setSelected(false);
+
+        caRng = false;
+        randomRng = false;
+        xORRng = false;
+        cmwcRng = true;
+        mtRng = false;
+    }
+
+    @Override
+    public void mtRng()
+    {
+        propertiesView.getCmwcRngRadio().setSelected(false);
+        propertiesView.getXORShiftRngRadio().setSelected(false);
+        propertiesView.getRandomRadio().setSelected(false);
+        propertiesView.getCaRngRadio().setSelected(false);
+
+        caRng = false;
+        randomRng = false;
+        xORRng = false;
+        cmwcRng = false;
+        mtRng = true;
     }
 }

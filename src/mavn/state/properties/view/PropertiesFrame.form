@@ -25,12 +25,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jPanel1" alignment="0" pref="398" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -40,147 +40,165 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="propertiesHeaderLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="171" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="inputsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="dartGunLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Group type="102" alignment="0" attributes="1">
-                              <Component id="seedSpinnerLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="seedSpinner" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="seedLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="numDartsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="randomSeedRadio" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
+                          <Component id="propertiesHeaderLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="gridRadio" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="normalRadio" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="uniformRadio" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace pref="67" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
+                          <Component id="acceptButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                          <Component id="cancelButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="dartGunCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="targetCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="randomRadio" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cmwcRngRadio" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="caRngRadio" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="mtRngRadio" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="xORShiftRngRadio" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="inputsLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="dartGunCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="targetCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Group type="102" alignment="0" attributes="1">
+                                              <Component id="seedSpinnerLabel" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="seedSpinner" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Component id="seedLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="numDartsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="specifiedSeedRadio" max="32767" attributes="1"/>
+                                              <Component id="randomSeedRadio" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="169" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="numDartsSpinner" min="-2" max="-2" attributes="1"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="numDartsSpinner" alignment="0" max="32767" attributes="1"/>
-                              <Component id="specifiedSeedRadio" alignment="0" max="32767" attributes="1"/>
-                          </Group>
                           <EmptySpace max="-2" attributes="0"/>
+                          <Component id="dartGunLabel" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="jSeparator1" alignment="0" max="32767" attributes="1"/>
+                          <Component id="jSeparator2" alignment="0" pref="397" max="32767" attributes="1"/>
                       </Group>
                   </Group>
-              </Group>
-              <Component id="jSeparator1" alignment="0" pref="388" max="32767" attributes="1"/>
-              <Component id="jSeparator2" alignment="0" pref="388" max="32767" attributes="1"/>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
-                  <Component id="acceptButton" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
-                  <Component id="cancelButton" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="113" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="propertiesHeaderLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="targetCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="targetCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="dartGunCheckBox" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="dartGunLabel" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <Component id="uniformRadio" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="normalRadio" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="gridRadio" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                  <Component id="dartGunLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="randomSeedRadio" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="randomRadio" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="mtRngRadio" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="xORShiftRngRadio" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cmwcRngRadio" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="caRngRadio" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="seedLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="randomSeedRadio" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="specifiedSeedRadio" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="seedSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="specifiedSeedRadio" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="seedSpinnerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="numDartsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="numDartsSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="numDartsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="acceptButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="11" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JRadioButton" name="uniformRadio">
+        <Component class="javax.swing.JRadioButton" name="randomRadio">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Uniform Distribution"/>
+            <Property name="text" type="java.lang.String" value="java.util.Random"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="uniformRadioActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="randomRadioActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="normalRadio">
+        <Component class="javax.swing.JRadioButton" name="mtRngRadio">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Normal Distribution"/>
+            <Property name="text" type="java.lang.String" value="MersenneTwisterRNG"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="normalRadioActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mtRngRadioActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="gridRadio">
+        <Component class="javax.swing.JRadioButton" name="xORShiftRngRadio">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Grid Distribution"/>
+            <Property name="text" type="java.lang.String" value="XORShiftRNG"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="gridRadioActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="xORShiftRngRadioActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="targetCheckBox">
@@ -217,7 +235,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="dartGunLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="What Dart Gun distribution is desired?"/>
+            <Property name="text" type="java.lang.String" value="What random number generator (Dart Gun) is desired?"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
@@ -284,6 +302,24 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="cmwcRngRadio">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="CMWC4096RNG"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmwcRngRadioActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="caRngRadio">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="CellularAutomatonRNG"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="caRngRadioActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

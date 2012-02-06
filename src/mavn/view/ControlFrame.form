@@ -124,7 +124,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanelResults" linkSize="12" max="32767" attributes="1"/>
+                          <Component id="jPanelResults" linkSize="12" pref="324" max="32767" attributes="1"/>
                           <Component id="jPanelTargets" linkSize="12" alignment="0" min="-2" pref="324" max="-2" attributes="1"/>
                       </Group>
                       <EmptySpace pref="22" max="32767" attributes="0"/>
@@ -200,7 +200,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="jTextAreaMatrixW2">
+                    <Component class="javax.swing.JTextArea" name="w2MatrixTextArea">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
@@ -271,6 +271,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Matrix"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearW2MatrixButtonActionPerformed"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Matrix&quot;, &quot;Red&quot;)"/>
                   </AuxValues>
@@ -342,7 +345,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="jTextAreaMatrixW0">
+                    <Component class="javax.swing.JTextArea" name="w0MatrixTextArea">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
@@ -413,6 +416,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Matrix"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearW0MatrixButtonActionPerformed"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Matrix&quot;, &quot;Red&quot;)"/>
                   </AuxValues>
@@ -440,8 +446,8 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="clearThetaMatrixButton" linkSize="2" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jScrollPane2" alignment="0" max="32767" attributes="1"/>
                               <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jScrollPane2" alignment="0" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace pref="69" max="32767" attributes="0"/>
                       </Group>
@@ -549,6 +555,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Matrix"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearThetaMatrixButtonActionPerformed"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Matrix&quot;, &quot;Red&quot;)"/>
                   </AuxValues>
@@ -632,7 +641,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="jTextAreaMatrixResults">
+                    <Component class="javax.swing.JTextArea" name="resultsTextArea">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
@@ -675,6 +684,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Results"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearResultsMatrixButtonActionPerformed"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Results&quot;, &quot;Red&quot;)"/>
                   </AuxValues>
@@ -762,7 +774,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="jTextAreaMatrixTarget">
+                    <Component class="javax.swing.JTextArea" name="targetMatrixTextArea">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
@@ -833,6 +845,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Matrix"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearTargetMatrixButtonActionPerformed"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Matrix&quot;, &quot;Red&quot;)"/>
                   </AuxValues>
@@ -926,7 +941,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="jTextAreaMatrixW1">
+                    <Component class="javax.swing.JTextArea" name="w1MatrixTextArea">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
@@ -982,6 +997,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Matrix"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearW1MatrixButtonActionPerformed"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BlinkerButton(&quot;Clear Matrix&quot;, &quot;Red&quot;)"/>
                   </AuxValues>

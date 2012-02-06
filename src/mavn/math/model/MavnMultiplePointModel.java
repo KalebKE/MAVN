@@ -14,7 +14,10 @@ import mavn.observer.DartsObserver;
 import mavn.observer.ResultsObserver;
 import mavn.util.FindMax;
 import mavn.view.ControlFrame;
-import org.uncommons.maths.random.GaussianGenerator;
+import org.uncommons.maths.random.CMWC4096RNG;
+import org.uncommons.maths.random.CellularAutomatonRNG;
+import org.uncommons.maths.random.MersenneTwisterRNG;
+import org.uncommons.maths.random.XORShiftRNG;
 
 /**
  *
@@ -31,8 +34,11 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
     private DecimalFormat decimalFormater;
     private String decimalFormat;
     private String results;
-    private Random random;
-    private GaussianGenerator gaussianDart;
+    private Random javaRng;
+    private MersenneTwisterRNG mtRng;
+    private CMWC4096RNG cmwcRng;
+    private CellularAutomatonRNG caRng;
+    private XORShiftRNG xOrRng;
     private double bounds;
 
     public MavnMultiplePointModel(ControlFrame controlView)
@@ -41,12 +47,16 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         resultObservers = new ArrayList<ResultsObserver>();
         dartObservers = new ArrayList<DartsObserver>();
         results = "";
-        random = new Random();
+        javaRng = new Random();
+        mtRng = new MersenneTwisterRNG();
+        cmwcRng = new CMWC4096RNG();
+        caRng = new CellularAutomatonRNG();
+        xOrRng = new XORShiftRNG();
 
         bounds = FindMax.getMaxValue(controlView.getCurrentMatrixTheta());
 
-        gaussianDart = new GaussianGenerator(bounds/2, bounds/0.5, new Random()); // Set the desired decimal format here.
-                // *This can be overridden by the User Preferances panel!*
+
+        // *This can be overridden by the User Preferances panel!*
         decimalFormat = ("0.0000");
 
         // Creates a new DecimalFormatter for the text fields so we can
@@ -84,32 +94,78 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         for (int i = 0; i < darts; i++)
         {
             double[][] points;
-            if (controlView.isUniformDistribution())
+            if (controlView.isRandomRng())
             {
                 // Create a double array for the random points
                 points = new double[][]
                         {
                             {
                                 // A random double no larger than 5 (the outer bounds of the image)
-                                random.nextDouble() * bounds
+                                javaRng.nextDouble() * bounds
                             },
                             {
                                 // A random double no larger than 5 (the outer bounds of the image)
-                                random.nextDouble() * bounds
+                                javaRng.nextDouble() * bounds
                             }
                         };
             }
-
-            if (controlView.isNormalDistribution())
+            if (controlView.isMtRng())
             {
                 // Create a double array for the random points
                 points = new double[][]
                         {
                             {
-                                Math.abs(gaussianDart.nextValue())
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                mtRng.nextDouble() * bounds
                             },
                             {
-                                Math.abs(gaussianDart.nextValue())
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                mtRng.nextDouble() * bounds
+                            }
+                        };
+            }
+            if (controlView.isCmwcRng())
+            {
+                // Create a double array for the random points
+                points = new double[][]
+                        {
+                            {
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                cmwcRng.nextDouble() * bounds
+                            },
+                            {
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                cmwcRng.nextDouble() * bounds
+                            }
+                        };
+            }
+            if (controlView.isCaRng())
+            {
+                // Create a double array for the random points
+                points = new double[][]
+                        {
+                            {
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                caRng.nextDouble() * bounds
+                            },
+                            {
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                caRng.nextDouble() * bounds
+                            }
+                        };
+            }
+            if (controlView.isxORRng())
+            {
+                // Create a double array for the random points
+                points = new double[][]
+                        {
+                            {
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                xOrRng.nextDouble() * bounds
+                            },
+                            {
+                                // A random double no larger than 5 (the outer bounds of the image)
+                                xOrRng.nextDouble() * bounds
                             }
                         };
             } else
@@ -119,14 +175,15 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
                         {
                             {
                                 // A random double no larger than 5 (the outer bounds of the image)
-                                random.nextDouble() * bounds
+                                javaRng.nextDouble() * bounds
                             },
                             {
                                 // A random double no larger than 5 (the outer bounds of the image)
-                                random.nextDouble() * bounds
+                                javaRng.nextDouble() * bounds
                             }
                         };
             }
+
 
             // SHL[(W2*P)+Theta2]
             double[][] matrix0 = matrixMath.multiply(controlView.getCurrentMatrixW2(), points);
@@ -191,9 +248,9 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         // Calculate the ratio of shared hits
         sharedHitsRatio = imageHits / darts;
 
-        appendResults(uniqueHitsRatio, "Input #:");
+        appendResults(uniqueHitsRatio, "Shape (hits/darts):");
 
-        appendResults(sharedHitsRatio, "Shape:");
+        appendResults(sharedHitsRatio, "Image ((sum: shape hits)/darts):");
 
         notifyObservers();
     }
@@ -247,8 +304,8 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
 
     private void appendResults(double value, String message)
     {
-        results += "\n" + value;
         results += "\n" + message;
+        results += "\n" + value;
     }
 
     private void appendResults(double[][] matrix, String message)

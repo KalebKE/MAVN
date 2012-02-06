@@ -4,6 +4,8 @@
  */
 package mavn.controller;
 
+import file.model.FileModelInterface;
+
 /**
  *
  * @author Kaleb
@@ -11,6 +13,7 @@ package mavn.controller;
 public interface InputControllerInterface
 {
     public void importMatrix();
+    public FileModelInterface getFileModel();
     public void editMatrix(double[][] matrix);
     public void newMatrix();
 }

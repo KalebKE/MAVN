@@ -64,6 +64,8 @@ public class ResultsState implements OutputStateInterface
     @Override
     public void propertiesUnloaded()
     {
+        view.getPropertiesButton().setEnabled(true);
+        ((BlinkerButton) view.getPropertiesButton()).setBlink(true);
         // Disable these buttons
         view.getRunButton().setEnabled(false);
         ((BlinkerButton) view.getRunButton()).setBlink(false);

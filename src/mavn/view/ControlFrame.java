@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.view;
 
+import file.controller.DirectoryController;
+import mavn.state.properties.view.PropertiesFrame;
 import java.awt.Color;
 import javax.swing.JButton;
 import matrixWizard.view.MatrixTemplateFrame;
@@ -34,8 +36,9 @@ import java.awt.Frame;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingWorker;
 import mavn.controller.OutputController;
 import mavn.controller.OutputControllerInterface;
 import mavn.model.InputModelInterface;
@@ -61,6 +64,7 @@ import mavn.state.W1State;
 import mavn.state.W2State;
 import org.math.plot.Plot2DPanel;
 import util.components.BlinkerButton;
+import util.components.InfiniteProgressPanel;
 
 /**
  *
@@ -71,11 +75,14 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
 
     private ArrayList<double[][]> hit;
     private ArrayList<double[][]> miss;
-    private boolean normalDistribution;
-    private boolean uniformDistribution;
-    private boolean gridDistribution;
+    private boolean randomRng;
+    private boolean caRng;
+    private boolean cmwcRng;
+    private boolean mtRng;
+    private boolean xORRng;
     private boolean dartGunState;
     private DecimalFormat decFormat;
+    private DirectoryController directoryController;
     private double numDarts;
     private double seed;
     private double[][] currentMatrixTheta;
@@ -90,24 +97,13 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
     private InputControllerInterface thetaController;
     private InputControllerInterface targetController;
     private OutputControllerInterface resultsController;
+    private InfiniteProgressPanel progressPanel;
     private InputModelInterface w2Model;
     private InputModelInterface w1Model;
     private InputModelInterface w0Model;
     private InputModelInterface thetaModel;
     private InputModelInterface targetModel;
     private MatrixTemplateFrame matrix;
-    private SpinnerNumberModel modelPoints;
-    private SpinnerNumberModel modelMW2;
-    private SpinnerNumberModel modelNW2;
-    private SpinnerNumberModel modelMW1;
-    private SpinnerNumberModel modelNW1;
-    private SpinnerNumberModel modelMW0;
-    private SpinnerNumberModel modelNW0;
-    private SpinnerNumberModel modelMTheta;
-    private SpinnerNumberModel modelNTheta;
-    private SpinnerNumberModel modelMTarget;
-    private SpinnerNumberModel modelNTarget;
-    private SpinnerNumberModel modelXY;
     private InputStateInterface w0State;
     private InputStateInterface w1State;
     private InputStateInterface w2State;
@@ -124,12 +120,16 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         initDecimalFormat();
         initModels();
         initControllers();
-        initSpinners();
         initLabels();
 
-        normalDistribution = false;
-        uniformDistribution = false;
-        gridDistribution = false;
+        progressPanel = new InfiniteProgressPanel();
+        this.setGlassPane(progressPanel);
+
+        randomRng = false;
+        caRng = false;
+        cmwcRng = false;
+        mtRng = false;
+        xORRng = false;
 
         numDarts = 10000;
         seed = 0;
@@ -153,6 +153,12 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
 
         hit = new ArrayList<double[][]>();
         miss = new ArrayList<double[][]>();
+
+        InputControllerInterface[] controllers =
+        {
+            targetController, thetaController, w0Controller, w1Controller, w2Controller
+        };
+        directoryController = new DirectoryController(controllers);
     }
 
     public JButton getClearResultsMatrixButton()
@@ -360,24 +366,59 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         return viewResultsButton;
     }
 
+    public boolean isCaRng()
+    {
+        return caRng;
+    }
+
+    public boolean isCmwcRng()
+    {
+        return cmwcRng;
+    }
+
     public boolean isDartGunState()
     {
         return dartGunState;
     }
 
-    public boolean isGridDistribution()
+    public boolean isMtRng()
     {
-        return gridDistribution;
+        return mtRng;
     }
 
-    public boolean isNormalDistribution()
+    public boolean isRandomRng()
     {
-        return normalDistribution;
+        return randomRng;
     }
 
-    public boolean isUniformDistribution()
+    public boolean isxORRng()
     {
-        return uniformDistribution;
+        return xORRng;
+    }
+
+    public void setCaRng(boolean caRng)
+    {
+        this.caRng = caRng;
+    }
+
+    public void setCmwcRng(boolean cmwcRng)
+    {
+        this.cmwcRng = cmwcRng;
+    }
+
+    public void setMtRng(boolean mtRng)
+    {
+        this.mtRng = mtRng;
+    }
+
+    public void setRandomRng(boolean randomRng)
+    {
+        this.randomRng = randomRng;
+    }
+
+    public void setxORRng(boolean xORRng)
+    {
+        this.xORRng = xORRng;
     }
 
     /**
@@ -439,16 +480,6 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         this.dartGunState = dartGunState;
     }
 
-    public void setGridDistribution(boolean gridDistribution)
-    {
-        this.gridDistribution = gridDistribution;
-    }
-
-    public void setNormalDistribution(boolean normalDistribution)
-    {
-        this.normalDistribution = normalDistribution;
-    }
-
     public void setNumDarts(double numDarts)
     {
         this.numDarts = numDarts;
@@ -459,15 +490,9 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         this.seed = seed;
     }
 
-    public void setUniformDistribution(boolean uniformDistribution)
-    {
-        this.uniformDistribution = uniformDistribution;
-    }
-
     @Override
     public void updateDartResults(ArrayList<double[][]> hit, ArrayList<double[][]> miss)
     {
-        System.out.println("true");
         this.hit = hit;
         this.miss = miss;
     }
@@ -481,7 +506,8 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
     public void updateResultsMatrix(String results)
     {
         resultsState.run();
-        jTextAreaMatrixResults.append(results);
+        resultsTextArea.append(results);
+        algorithmWorker.cancel(true);
     }
 
     /**
@@ -508,7 +534,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
 
         targetState.matrixLoaded();
         this.firePropertyChange("propertiesChanged", !targetState.isMatrixLoaded(), targetState.isMatrixLoaded());
-        jTextAreaMatrixTarget.setText(stringMatrix);
+        targetMatrixTextArea.setText(stringMatrix);
     }
 
     /**
@@ -561,7 +587,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
 
         w0State.matrixLoaded();
         this.firePropertyChange("propertiesChanged", !w0State.isMatrixLoaded(), w0State.isMatrixLoaded());
-        jTextAreaMatrixW0.setText(stringMatrix);
+        w0MatrixTextArea.setText(stringMatrix);
     }
 
     /**
@@ -589,7 +615,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         }
         w1State.matrixLoaded();
         this.firePropertyChange("propertiesChanged", !w1State.isMatrixLoaded(), w1State.isMatrixLoaded());
-        jTextAreaMatrixW1.setText(stringMatrix);
+        w1MatrixTextArea.setText(stringMatrix);
     }
 
     /**
@@ -617,7 +643,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
 
         w2State.matrixLoaded();
         this.firePropertyChange("propertiesChanged", !w2State.isMatrixLoaded(), w2State.isMatrixLoaded());
-        jTextAreaMatrixW2.setText(stringMatrix);
+        w2MatrixTextArea.setText(stringMatrix);
     }
 
     private void initControllers()
@@ -685,25 +711,23 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         // register with the W2Moel observer
         ((TargetModel) targetModel).registerObserver(this);
     }
-
-    private void initSpinners()
+    private SwingWorker algorithmWorker = new SwingWorker<Void, Void>()
     {
-        // Initialize the JSpinners.
-        // You can set the format and name of the JSpinners here.
-        modelPoints = new SpinnerNumberModel(1000.0, 0.0, 100000.0, 1);
 
-        modelXY = new SpinnerNumberModel(5.0, 0.0, 100.0, .5);
-        modelMW2 = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
-        modelNW2 = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
-        modelMW1 = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
-        modelNW1 = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
-        modelMW0 = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
-        modelNW0 = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
-        modelMTheta = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
-        modelNTheta = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
-        modelMTarget = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
-        modelNTarget = new SpinnerNumberModel(0.0, 0.0, 100.0, 1);
-    }
+        @Override
+        public Void doInBackground()
+        {
+            progressPanel.start();
+            resultsController.runMavnAlgorithm();
+            return null;
+        }
+
+        @Override
+        public void done()
+        {
+            progressPanel.stop();
+        }
+    };
 
     /**
      * @param args the command line arguments
@@ -722,8 +746,21 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
                 if ("Nimbus".equals(info.getName()))
                 {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
+
+
+
+
                     break;
+
+
+
+
+
+
+
+
                 }
+
             }
         } catch (ClassNotFoundException ex)
         {
@@ -765,7 +802,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         mainPanel = new javax.swing.JPanel();
         jPanelW2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextAreaMatrixW2 = new javax.swing.JTextArea();
+        w2MatrixTextArea = new javax.swing.JTextArea();
         jLabelHeaderW2 = new javax.swing.JLabel();
         importMatrixW2Button = new BlinkerButton("Import Matrix", "Blue");
         newW2MatrixButton = new BlinkerButton("New Matrix", "Green");
@@ -776,7 +813,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         clearW2MatrixButton = new BlinkerButton("Clear Matrix", "Red");
         jPanelW0 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTextAreaMatrixW0 = new javax.swing.JTextArea();
+        w0MatrixTextArea = new javax.swing.JTextArea();
         jLabel22 = new javax.swing.JLabel();
         w0TextAreaLabel = new javax.swing.JLabel();
         importW0MatrixButton = new BlinkerButton("Import Matrix", "Blue");
@@ -799,7 +836,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         jPanelResults = new javax.swing.JPanel();
         jLabel28 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTextAreaMatrixResults = new javax.swing.JTextArea();
+        resultsTextArea = new javax.swing.JTextArea();
         jLabel29 = new javax.swing.JLabel();
         jSeparator11 = new javax.swing.JSeparator();
         runButton = new BlinkerButton("Run!", "Blue");
@@ -810,7 +847,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         viewResultsButton = new BlinkerButton("View Results", "Orange");
         jPanelTargets = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextAreaMatrixTarget = new javax.swing.JTextArea();
+        targetMatrixTextArea = new javax.swing.JTextArea();
         importTargetMatrixButton = new BlinkerButton("Import Matrix", "Blue");
         jSeparator7 = new javax.swing.JSeparator();
         jLabel17 = new javax.swing.JLabel();
@@ -823,7 +860,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         jLabel18 = new javax.swing.JLabel();
         importW1MatrixButton = new BlinkerButton("Import Matrix", "Blue");
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTextAreaMatrixW1 = new javax.swing.JTextArea();
+        w1MatrixTextArea = new javax.swing.JTextArea();
         newW1MatrixButton = new BlinkerButton("New Matrix", "Green");
         w1TextAreaLabel = new javax.swing.JLabel();
         jSeparator9 = new javax.swing.JSeparator();
@@ -851,9 +888,9 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
 
         jPanelW2.setPreferredSize(new java.awt.Dimension(650, 215));
 
-        jTextAreaMatrixW2.setColumns(20);
-        jTextAreaMatrixW2.setRows(5);
-        jScrollPane1.setViewportView(jTextAreaMatrixW2);
+        w2MatrixTextArea.setColumns(20);
+        w2MatrixTextArea.setRows(5);
+        jScrollPane1.setViewportView(w2MatrixTextArea);
 
         jLabelHeaderW2.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabelHeaderW2.setText("Weight Matrix: W2");
@@ -885,6 +922,11 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         saveW2MatrixButton.setText("Save Matrix");
 
         clearW2MatrixButton.setText("Clear Matrix");
+        clearW2MatrixButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearW2MatrixButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelW2Layout = new javax.swing.GroupLayout(jPanelW2);
         jPanelW2.setLayout(jPanelW2Layout);
@@ -935,9 +977,9 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
 
         jPanelW0.setPreferredSize(new java.awt.Dimension(650, 215));
 
-        jTextAreaMatrixW0.setColumns(20);
-        jTextAreaMatrixW0.setRows(5);
-        jScrollPane6.setViewportView(jTextAreaMatrixW0);
+        w0MatrixTextArea.setColumns(20);
+        w0MatrixTextArea.setRows(5);
+        jScrollPane6.setViewportView(w0MatrixTextArea);
 
         jLabel22.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel22.setText("Weight Matrix: W0");
@@ -969,6 +1011,11 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         saveW0MatrixButton.setText("Save Matrix");
 
         clearW0MatrixButton.setText("Clear Matrix");
+        clearW0MatrixButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearW0MatrixButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelW0Layout = new javax.swing.GroupLayout(jPanelW0);
         jPanelW0.setLayout(jPanelW0Layout);
@@ -1050,6 +1097,11 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         saveThetaMatrixButton.setText("Save Matrix");
 
         clearThetaMatrixButton.setText("Clear Matrix");
+        clearThetaMatrixButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearThetaMatrixButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelThetaLayout = new javax.swing.GroupLayout(jPanelTheta);
         jPanelTheta.setLayout(jPanelThetaLayout);
@@ -1070,8 +1122,8 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
                         .addComponent(saveThetaMatrixButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(clearThetaMatrixButton))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap(69, Short.MAX_VALUE))
         );
 
@@ -1100,9 +1152,9 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         jLabel28.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel28.setText("Run Simulator:");
 
-        jTextAreaMatrixResults.setColumns(20);
-        jTextAreaMatrixResults.setRows(5);
-        jScrollPane7.setViewportView(jTextAreaMatrixResults);
+        resultsTextArea.setColumns(20);
+        resultsTextArea.setRows(5);
+        jScrollPane7.setViewportView(resultsTextArea);
 
         jLabel29.setFont(new java.awt.Font("Tahoma", 3, 11));
         jLabel29.setText("Results: The Outcomes of the Simulation");
@@ -1117,6 +1169,11 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         saveResultsButton.setText("Save Result");
 
         clearResultsMatrixButton.setText("Clear Results");
+        clearResultsMatrixButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearResultsMatrixButtonActionPerformed(evt);
+            }
+        });
 
         propertiesButton.setText(" Properties");
         propertiesButton.addActionListener(new java.awt.event.ActionListener() {
@@ -1185,9 +1242,9 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
                 .addGap(19, 19, 19))
         );
 
-        jTextAreaMatrixTarget.setColumns(20);
-        jTextAreaMatrixTarget.setRows(5);
-        jScrollPane3.setViewportView(jTextAreaMatrixTarget);
+        targetMatrixTextArea.setColumns(20);
+        targetMatrixTextArea.setRows(5);
+        jScrollPane3.setViewportView(targetMatrixTextArea);
 
         importTargetMatrixButton.setText("Import Matrix");
         importTargetMatrixButton.addActionListener(new java.awt.event.ActionListener() {
@@ -1219,6 +1276,11 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         saveTargetMatrixButton.setText("Save Matrix");
 
         clearTargetMatrixButton.setText("Clear Matrix");
+        clearTargetMatrixButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearTargetMatrixButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelTargetsLayout = new javax.swing.GroupLayout(jPanelTargets);
         jPanelTargets.setLayout(jPanelTargetsLayout);
@@ -1279,11 +1341,11 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
             }
         });
 
-        jTextAreaMatrixW1.setColumns(20);
-        jTextAreaMatrixW1.setRows(5);
-        jTextAreaMatrixW1.setPreferredSize(new java.awt.Dimension(165, 120));
-        jTextAreaMatrixW1.setRequestFocusEnabled(false);
-        jScrollPane5.setViewportView(jTextAreaMatrixW1);
+        w1MatrixTextArea.setColumns(20);
+        w1MatrixTextArea.setRows(5);
+        w1MatrixTextArea.setPreferredSize(new java.awt.Dimension(165, 120));
+        w1MatrixTextArea.setRequestFocusEnabled(false);
+        jScrollPane5.setViewportView(w1MatrixTextArea);
 
         newW1MatrixButton.setText("New Matrix");
         newW1MatrixButton.addActionListener(new java.awt.event.ActionListener() {
@@ -1305,6 +1367,11 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         saveW1MatrixButton.setText("Save Matrix");
 
         clearW1MatrixButton.setText("Clear Matrix");
+        clearW1MatrixButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearW1MatrixButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelW1Layout = new javax.swing.GroupLayout(jPanelW1);
         jPanelW1.setLayout(jPanelW1Layout);
@@ -1381,7 +1448,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
                     .addComponent(jPanelW1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelResults, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelResults, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
                     .addComponent(jPanelTargets, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
@@ -1434,60 +1501,50 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
     private void importMatrixW2ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importMatrixW2ButtonActionPerformed
         w2Controller.importMatrix();
     }//GEN-LAST:event_importMatrixW2ButtonActionPerformed
-
     private void newThetaMatrixButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newThetaMatrixButtonActionPerformed
         thetaController.newMatrix();
     }//GEN-LAST:event_newThetaMatrixButtonActionPerformed
-
     private void importTargetMatrixButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importTargetMatrixButtonActionPerformed
         targetController.importMatrix();
     }//GEN-LAST:event_importTargetMatrixButtonActionPerformed
-
     private void importW1MatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_importW1MatrixButtonActionPerformed
     {//GEN-HEADEREND:event_importW1MatrixButtonActionPerformed
         w1Controller.importMatrix();
     }//GEN-LAST:event_importW1MatrixButtonActionPerformed
-
     private void newW1MatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newW1MatrixButtonActionPerformed
     {//GEN-HEADEREND:event_newW1MatrixButtonActionPerformed
         w1Controller.newMatrix();
     }//GEN-LAST:event_newW1MatrixButtonActionPerformed
-
     private void importW0MatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_importW0MatrixButtonActionPerformed
     {//GEN-HEADEREND:event_importW0MatrixButtonActionPerformed
         w0Controller.importMatrix();
     }//GEN-LAST:event_importW0MatrixButtonActionPerformed
-
     private void importThetaMatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_importThetaMatrixButtonActionPerformed
     {//GEN-HEADEREND:event_importThetaMatrixButtonActionPerformed
         thetaController.importMatrix();
 }//GEN-LAST:event_importThetaMatrixButtonActionPerformed
-
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_runButtonActionPerformed
     {//GEN-HEADEREND:event_runButtonActionPerformed
-        resultsController.runMavnAlgorithm();
+        algorithmWorker.execute();
+        
     }//GEN-LAST:event_runButtonActionPerformed
-
     private void jMenuItemImportModelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemImportModelActionPerformed
     {//GEN-HEADEREND:event_jMenuItemImportModelActionPerformed
-        //controller.importMatrix();
-    }//GEN-LAST:event_jMenuItemImportModelActionPerformed
 
+        directoryController.getDirectoryChooser();
+    }//GEN-LAST:event_jMenuItemImportModelActionPerformed
     private void newW2MatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newW2MatrixButtonActionPerformed
     {//GEN-HEADEREND:event_newW2MatrixButtonActionPerformed
         w2Controller.newMatrix();
     }//GEN-LAST:event_newW2MatrixButtonActionPerformed
-
     private void newW0MatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newW0MatrixButtonActionPerformed
     {//GEN-HEADEREND:event_newW0MatrixButtonActionPerformed
         w0Controller.newMatrix();
     }//GEN-LAST:event_newW0MatrixButtonActionPerformed
-
     private void newTargetMatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newTargetMatrixButtonActionPerformed
     {//GEN-HEADEREND:event_newTargetMatrixButtonActionPerformed
         targetController.newMatrix();
     }//GEN-LAST:event_newTargetMatrixButtonActionPerformed
-
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
         //controller.importMatrix();
@@ -1497,32 +1554,26 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
     {//GEN-HEADEREND:event_editW2MatrixButtonActionPerformed
         w2Controller.editMatrix(currentMatrixW2);
     }//GEN-LAST:event_editW2MatrixButtonActionPerformed
-
     private void editThetaMatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editThetaMatrixButtonActionPerformed
     {//GEN-HEADEREND:event_editThetaMatrixButtonActionPerformed
         thetaController.editMatrix(currentMatrixTheta);
     }//GEN-LAST:event_editThetaMatrixButtonActionPerformed
-
     private void editW1MatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editW1MatrixButtonActionPerformed
     {//GEN-HEADEREND:event_editW1MatrixButtonActionPerformed
         w1Controller.editMatrix(currentMatrixW1);
     }//GEN-LAST:event_editW1MatrixButtonActionPerformed
-
     private void editTargetMatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editTargetMatrixButtonActionPerformed
     {//GEN-HEADEREND:event_editTargetMatrixButtonActionPerformed
         targetController.editMatrix(currentMatrixTarget);
     }//GEN-LAST:event_editTargetMatrixButtonActionPerformed
-
     private void editW0MatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editW0MatrixButtonActionPerformed
     {//GEN-HEADEREND:event_editW0MatrixButtonActionPerformed
         w0Controller.editMatrix(currentMatrixW0);
     }//GEN-LAST:event_editW0MatrixButtonActionPerformed
-
     private void propertiesButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_propertiesButtonActionPerformed
     {//GEN-HEADEREND:event_propertiesButtonActionPerformed
         PropertiesFrame frame = new PropertiesFrame(this);
     }//GEN-LAST:event_propertiesButtonActionPerformed
-
     private void formPropertyChange(java.beans.PropertyChangeEvent evt)//GEN-FIRST:event_formPropertyChange
     {//GEN-HEADEREND:event_formPropertyChange
         if (evt.getPropertyName().equals("propertiesChanged"))
@@ -1542,6 +1593,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
         double[] yHit = new double[hit.size()];
 
         Iterator misses = miss.iterator();
+
         double[] xMisses = new double[miss.size()];
         double[] yMisses = new double[miss.size()];
 
@@ -1553,27 +1605,61 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
             xHit[hitCount] = tempHit[0][0];
             yHit[hitCount] = tempHit[1][0];
             hitCount++;
-        }
 
+        }
         int missCount = 0;
         while (misses.hasNext())
         {
             double[][] tempHit = (double[][]) misses.next();
-
             xMisses[missCount] = tempHit[0][0];
             yMisses[missCount] = tempHit[1][0];
             missCount++;
-        }
 
+        }
         Plot2DPanel plot = new Plot2DPanel();
         plot.addScatterPlot("Hit", Color.red, xHit, yHit);
         plot.addScatterPlot("Miss", Color.black, xMisses, yMisses);
-
         JFrame frame = new JFrame("a plot panel");
         frame.setSize(400, 400);
         frame.setContentPane(plot);
         frame.setVisible(true);
     }//GEN-LAST:event_viewResultsButtonActionPerformed
+    private void clearW2MatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_clearW2MatrixButtonActionPerformed
+    {//GEN-HEADEREND:event_clearW2MatrixButtonActionPerformed
+        w2MatrixTextArea.setText("");
+        this.currentMatrixW2 = null;
+        this.w2State.matrixUnloaded();
+    }//GEN-LAST:event_clearW2MatrixButtonActionPerformed
+    private void clearThetaMatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_clearThetaMatrixButtonActionPerformed
+    {//GEN-HEADEREND:event_clearThetaMatrixButtonActionPerformed
+        jTextAreaMatrixTheta.setText("");
+        this.currentMatrixTheta = null;
+        this.thetaState.matrixUnloaded();
+    }//GEN-LAST:event_clearThetaMatrixButtonActionPerformed
+    private void clearW1MatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_clearW1MatrixButtonActionPerformed
+    {//GEN-HEADEREND:event_clearW1MatrixButtonActionPerformed
+        w1MatrixTextArea.setText("");
+        this.currentMatrixW1 = null;
+        this.w1State.matrixUnloaded();
+    }//GEN-LAST:event_clearW1MatrixButtonActionPerformed
+    private void clearW0MatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_clearW0MatrixButtonActionPerformed
+    {//GEN-HEADEREND:event_clearW0MatrixButtonActionPerformed
+        w0MatrixTextArea.setText("");
+        this.currentMatrixW0 = null;
+        this.w0State.matrixUnloaded();
+    }//GEN-LAST:event_clearW0MatrixButtonActionPerformed
+    private void clearTargetMatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_clearTargetMatrixButtonActionPerformed
+    {//GEN-HEADEREND:event_clearTargetMatrixButtonActionPerformed
+        targetMatrixTextArea.setText("");
+        this.currentMatrixTarget = null;
+        this.targetState.matrixUnloaded();
+    }//GEN-LAST:event_clearTargetMatrixButtonActionPerformed
+    private void clearResultsMatrixButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_clearResultsMatrixButtonActionPerformed
+    {//GEN-HEADEREND:event_clearResultsMatrixButtonActionPerformed
+        resultsTextArea.setText("");
+        this.resultsState.simulationUnloaded();
+        this.resultsState.propertiesUnloaded();
+    }//GEN-LAST:event_clearResultsMatrixButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearResultsMatrixButton;
     private javax.swing.JButton clearTargetMatrixButton;
@@ -1624,12 +1710,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator9;
-    private javax.swing.JTextArea jTextAreaMatrixResults;
-    private javax.swing.JTextArea jTextAreaMatrixTarget;
     private javax.swing.JTextArea jTextAreaMatrixTheta;
-    private javax.swing.JTextArea jTextAreaMatrixW0;
-    private javax.swing.JTextArea jTextAreaMatrixW1;
-    private javax.swing.JTextArea jTextAreaMatrixW2;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JScrollPane mainScrollPane;
     private javax.swing.JButton newTargetMatrixButton;
@@ -1638,6 +1719,7 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
     private javax.swing.JButton newW1MatrixButton;
     private javax.swing.JButton newW2MatrixButton;
     private javax.swing.JButton propertiesButton;
+    private javax.swing.JTextArea resultsTextArea;
     private javax.swing.JButton runButton;
     private javax.swing.JButton saveResultsButton;
     private javax.swing.JButton saveTargetMatrixButton;
@@ -1646,8 +1728,12 @@ public class ControlFrame extends JFrame implements W2Observer, W1Observer, W0Ob
     private javax.swing.JButton saveW1MatrixButton;
     private javax.swing.JButton saveW2MatrixButton;
     private javax.swing.JLabel targetMatrixLabel;
+    private javax.swing.JTextArea targetMatrixTextArea;
     private javax.swing.JButton viewResultsButton;
+    private javax.swing.JTextArea w0MatrixTextArea;
     private javax.swing.JLabel w0TextAreaLabel;
+    private javax.swing.JTextArea w1MatrixTextArea;
     private javax.swing.JLabel w1TextAreaLabel;
+    private javax.swing.JTextArea w2MatrixTextArea;
     // End of variables declaration//GEN-END:variables
 }

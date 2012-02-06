@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mavn.state.properties;
+package mavn.state.properties.state;
 
 import javax.swing.SpinnerNumberModel;
 
@@ -17,23 +17,31 @@ public interface PropertiesStateInterface
 
     public SpinnerNumberModel getSeedModel();
 
-    public void gridDistribution();
+    public void caRng();
+
+    public void cmwcRng();
 
     public boolean isDart();
 
-    public boolean isGridDistribution();
+    public boolean isCaRng();
 
-    public boolean isNormalDistribution();
+    public boolean isCmwcRng();
+
+    public boolean isMtRng();
+
+    public boolean isRandomRng();
 
     public boolean isRandomSeed();
 
     public boolean isTarget();
 
-    public boolean isUniformDistribution();
+    public boolean isXORRng();
 
-    public void normalDistribution();
+    public void mtRng();
 
-    public void uniformDistribution();
+    public void randomRng();
+
+    public void xORRng();
 
     public void useTargets();
 

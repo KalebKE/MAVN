@@ -1,60 +1,70 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+MavenMultiplePointModel -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+Copyright (C) 2012, Kaleb Kircher, Dennis Steele.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.math.model;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Random;
+import mavn.controller.InputControllerInterface;
+import mavn.dartGun.DartGunInterface;
+import mavn.globals.Globals;
 import mavn.math.algorithm.CalcTheta;
-import mavn.math.algorithm.Matrix;
+import mavn.math.algorithm.MatrixMultiply;
 import mavn.math.algorithm.SHL;
 import mavn.observer.DartsObserver;
 import mavn.observer.ResultsObserver;
-import mavn.util.FindMax;
-import mavn.view.ControlFrame;
-import org.uncommons.maths.random.CMWC4096RNG;
-import org.uncommons.maths.random.CellularAutomatonRNG;
-import org.uncommons.maths.random.MersenneTwisterRNG;
-import org.uncommons.maths.random.XORShiftRNG;
+import mavn.util.math.FindMax;
 
 /**
- *
+ * A implementation of MavnAlgorithmModelInterface and DartModelInterface
+ * that runs a full simulation. A full simulation consists of firing many
+ * random darts in a Monte Carlo type simulation. The number of hits (darts that
+ * hit a shape in the image) versus the number of misses (darts that hit nothing)
+ * are recorded and made availble to observers using an Observer pattern.
  * @author Kaleb
  */
 public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, DartModelInterface
 {
-
     private ArrayList<ResultsObserver> resultObservers;
     private ArrayList<DartsObserver> dartObservers;
     private ArrayList<double[][]> hit;
     private ArrayList<double[][]> miss;
-    private ControlFrame controlView;
+    private DartGunInterface dartGun;
+    private ArrayList<InputControllerInterface> controllers;
     private DecimalFormat decimalFormater;
     private String decimalFormat;
     private String results;
-    private Random javaRng;
-    private MersenneTwisterRNG mtRng;
-    private CMWC4096RNG cmwcRng;
-    private CellularAutomatonRNG caRng;
-    private XORShiftRNG xOrRng;
     private double bounds;
 
-    public MavnMultiplePointModel(ControlFrame controlView)
+    /**
+     * Initialize a new MavnMultiplePointModel. This class will run a full
+     * simulation based on user inputs by firing multiple darts at the image
+     * and returning the results.
+     * @param controlView the View so the class can pull state
+     * @param dartGun the DartGun that will be used to generate the darts
+     */
+    public MavnMultiplePointModel(ArrayList<InputControllerInterface> controllers, DartGunInterface dartGun)
     {
-        this.controlView = controlView;
+        this.controllers = controllers;
+        this.dartGun = dartGun;
         resultObservers = new ArrayList<ResultsObserver>();
         dartObservers = new ArrayList<DartsObserver>();
         results = "";
-        javaRng = new Random();
-        mtRng = new MersenneTwisterRNG();
-        cmwcRng = new CMWC4096RNG();
-        caRng = new CellularAutomatonRNG();
-        xOrRng = new XORShiftRNG();
-
-        bounds = FindMax.getMaxValue(controlView.getCurrentMatrixTheta());
-
 
         // *This can be overridden by the User Preferances panel!*
         decimalFormat = ("0.0000");
@@ -64,18 +74,22 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         decimalFormater = new DecimalFormat(decimalFormat);
     }
 
+    /**
+     * Calculate the results of the simulation.
+     */
     @Override
     public void calculate()
     {
-        Matrix matrixMath = new Matrix();
+        bounds = FindMax.getMaxValue(this.controllers.get(Globals.THETA_CONTROLLER).getMatrix());
+        MatrixMultiply matrixMath = new MatrixMultiply();
         SHL shl = new SHL();
         CalcTheta theta = new CalcTheta();
 
         // Used to count the number of hits on a individual shape in the image
-        int[][] uniqueHits = new int[controlView.getCurrentMatrixW1().length][1];
+        int[][] uniqueHits = new int[this.controllers.get(Globals.W1_CONTROLLER).getMatrix().length][1];
 
         // Used to calculate the ratio of hits to misses on a individual shape in the image
-        double[][] uniqueHitsRatio = new double[controlView.getCurrentMatrixW1().length][1];
+        double[][] uniqueHitsRatio = new double[this.controllers.get(Globals.W1_CONTROLLER).getMatrix().length][1];
 
         // Used to count the number of hits in a spot where two or more images overlap
         int imageHits = 0;
@@ -84,8 +98,7 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         double sharedHitsRatio = 0;
 
         // The number of darts fired at the image
-        double darts = controlView.getNumDarts();
-
+        double darts = Globals.NUM_DARTS;
 
         hit = new ArrayList<double[][]>();
         miss = new ArrayList<double[][]>();
@@ -93,106 +106,16 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         // For loop to fire the darts
         for (int i = 0; i < darts; i++)
         {
-            double[][] points;
-            if (controlView.isRandomRng())
-            {
-                // Create a double array for the random points
-                points = new double[][]
-                        {
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                javaRng.nextDouble() * bounds
-                            },
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                javaRng.nextDouble() * bounds
-                            }
-                        };
-            }
-            if (controlView.isMtRng())
-            {
-                // Create a double array for the random points
-                points = new double[][]
-                        {
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                mtRng.nextDouble() * bounds
-                            },
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                mtRng.nextDouble() * bounds
-                            }
-                        };
-            }
-            if (controlView.isCmwcRng())
-            {
-                // Create a double array for the random points
-                points = new double[][]
-                        {
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                cmwcRng.nextDouble() * bounds
-                            },
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                cmwcRng.nextDouble() * bounds
-                            }
-                        };
-            }
-            if (controlView.isCaRng())
-            {
-                // Create a double array for the random points
-                points = new double[][]
-                        {
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                caRng.nextDouble() * bounds
-                            },
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                caRng.nextDouble() * bounds
-                            }
-                        };
-            }
-            if (controlView.isxORRng())
-            {
-                // Create a double array for the random points
-                points = new double[][]
-                        {
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                xOrRng.nextDouble() * bounds
-                            },
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                xOrRng.nextDouble() * bounds
-                            }
-                        };
-            } else
-            {
-                // Create a double array for the random points
-                points = new double[][]
-                        {
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                javaRng.nextDouble() * bounds
-                            },
-                            {
-                                // A random double no larger than 5 (the outer bounds of the image)
-                                javaRng.nextDouble() * bounds
-                            }
-                        };
-            }
-
+            double[][] points = dartGun.fireDart(bounds);
 
             // SHL[(W2*P)+Theta2]
-            double[][] matrix0 = matrixMath.multiply(controlView.getCurrentMatrixW2(), points);
-            double[][] matrix1 = matrixMath.addMatrix(matrix0, controlView.getCurrentMatrixTheta());
+            double[][] matrix0 = matrixMath.multiply(this.controllers.get(Globals.W2_CONTROLLER).getMatrix(), points);
+            double[][] matrix1 = matrixMath.addMatrix(matrix0, this.controllers.get(Globals.THETA_CONTROLLER).getMatrix());
             double[][] matrix2 = shl.calculate(matrix1);
 
             // SHL[(W1*P)+Theta1]
-            double[][] matrix3 = matrixMath.multiply(controlView.getCurrentMatrixW1(), matrix2);
-            double[][] theta1 = theta.calculateAnd(controlView.getCurrentMatrixW1());
+            double[][] matrix3 = matrixMath.multiply(this.controllers.get(Globals.W1_CONTROLLER).getMatrix(), matrix2);
+            double[][] theta1 = theta.calculateAnd(this.controllers.get(Globals.W1_CONTROLLER).getMatrix());
             double[][] matrix4 = matrixMath.addMatrix(matrix3, theta1);
             double[][] matrix5 = shl.calculate(matrix4);
 
@@ -209,8 +132,8 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
             }
 
             // SHL[(W0*P)+Theta0]
-            double[][] theta2 = theta.calculateOr(controlView.getCurrentMatrixW0());
-            double[][] matrix6 = matrixMath.multiply(controlView.getCurrentMatrixW0(), matrix5);
+            double[][] theta2 = theta.calculateOr(this.controllers.get(Globals.W0_CONTROLLER).getMatrix());
+            double[][] matrix6 = matrixMath.multiply(this.controllers.get(Globals.W0_CONTROLLER).getMatrix(), matrix5);
             double[][] matrix7 = matrixMath.addMatrix(matrix6, theta2);
             double[][] matrix8 = shl.calculate(matrix7);
 
@@ -255,12 +178,20 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         notifyObservers();
     }
 
+    /**
+     * Register a new Results Observer.
+     * @param o the observer.
+     */
     @Override
     public void registerObserver(ResultsObserver o)
     {
         resultObservers.add(o);
     }
 
+    /**
+     * Remove a Results Observer.
+     * @param o the observer.
+     */
     @Override
     public void removeObserver(ResultsObserver o)
     {
@@ -271,12 +202,20 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         }
     }
 
+    /**
+     * Register a new DartsObserver.
+     * @param o the DartsObserver.
+     */
     @Override
     public void registerObserver(DartsObserver o)
     {
         dartObservers.add(o);
     }
 
+    /**
+     * Remove a DartsObserver.
+     * @param o the DartsObserver.
+     */
     @Override
     public void removeObserver(DartsObserver o)
     {
@@ -287,6 +226,9 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         }
     }
 
+    /**
+     * Notify all Observers.
+     */
     @Override
     public void notifyObservers()
     {

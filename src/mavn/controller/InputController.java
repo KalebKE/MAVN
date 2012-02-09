@@ -1,5 +1,5 @@
 /*
-Controller -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+InputController -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -19,11 +19,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.controller;
 
 import mavn.model.InputModelInterface;
-import mavn.view.ControlFrame;
 import file.controller.FileController;
 import file.controller.FileControllerInterface;
-import file.model.CSVFileModel;
-import file.model.FileModelInterface;
+import file.model.OpenCSVFileModel;
+import file.model.OpenFileModelInterface;
+import file.model.SaveCSVFileModel;
+import file.model.SaveFileModelInterface;
 import file.observer.FileObserver;
 import matrixWizard.controller.EditMatrixWizardController;
 import matrixWizard.controller.NewMatrixWizardController;
@@ -34,27 +35,39 @@ import matrixWizard.observer.MatrixWizardObserver;
 import mavn.math.model.MavnAlgorithmModelInterface;
 
 /**
+ * A special Controller that manages all of the input related to the files
+ * that the application works with. It essentially concerned with observing
+ * classes that import data from external files and classes that create their own data locally.
+ * When an observer is notified of a change, the class provides implementations to foward
+ * the data to the rest of the application. 
  *
  * @author Kaleb
  */
 public class InputController implements FileObserver, InputControllerInterface, MatrixWizardObserver
 {
-    private ControlFrame mainView;
+
     private FileControllerInterface fileController;
-    private FileModelInterface fileModel;
+    private OpenFileModelInterface openFileModel;
+    private SaveFileModelInterface saveFileModel;
     private InputModelInterface model;
     private MavnAlgorithmModelInterface mavn;
     private MatrixWizardControllerInterface newMatrixWizardController;
     private MatrixWizardControllerInterface editMatrixWizardControler;
     private MatrixWizardModelInterface matrixWizardModel;
+    private boolean matrixSet;
+    private double[][] matrix;
 
-    public InputController(ControlFrame mainView, InputModelInterface model)
+    /**
+     * Initialize the class.
+     * @param model the model that will be updated when new data is available.
+     */
+    public InputController(InputModelInterface model)
     {
-        this.mainView = mainView;
         this.model = model;
-        fileModel = new CSVFileModel();
-        fileModel.registerFileObserver(this);
-        fileController = new FileController(fileModel);
+        openFileModel = new OpenCSVFileModel();
+        openFileModel.registerFileObserver(this);
+        saveFileModel = new SaveCSVFileModel();
+        fileController = new FileController(openFileModel, saveFileModel);
         matrixWizardModel = new MatrixWizardModel();
         matrixWizardModel.registerMatrixWizardObserver(this);
         newMatrixWizardController = new NewMatrixWizardController(matrixWizardModel);
@@ -63,7 +76,7 @@ public class InputController implements FileObserver, InputControllerInterface, 
     @Override
     public void importMatrix()
     {
-        fileController.getFileChooser();
+        fileController.getOpenFileChooser();
     }
 
     @Override
@@ -75,19 +88,57 @@ public class InputController implements FileObserver, InputControllerInterface, 
     @Override
     public void updateMatrix(double[][] matrix)
     {
+        this.matrix = matrix;
+        model.setMatrix(matrix);
+        this.setMatrixSet(true);
+    }
+
+    @Override
+    public void editMatrix()
+    {
+        if (this.isMatrixSet())
+        {
+            editMatrixWizardControler = new EditMatrixWizardController(matrixWizardModel, this.getMatrix());
+            editMatrixWizardControler.getMatrixWizard();
+        }
+    }
+
+    @Override
+    public OpenFileModelInterface getOpenFileModel()
+    {
+        return openFileModel;
+    }
+
+    @Override
+    public void saveMatrix()
+    {
+        if (this.isMatrixSet())
+        {
+            fileController.getSaveFileChooser(this.getMatrix());
+        }
+    }
+
+    @Override
+    public void setMatrix(double[][] matrix)
+    {
         model.setMatrix(matrix);
     }
 
     @Override
-    public void editMatrix(double[][] matrix)
+    public double[][] getMatrix()
     {
-        editMatrixWizardControler = new EditMatrixWizardController(matrixWizardModel, matrix);
-        editMatrixWizardControler.getMatrixWizard();
+        return matrix;
     }
 
     @Override
-    public FileModelInterface getFileModel()
+    public boolean isMatrixSet()
     {
-        return fileModel;
+        return matrixSet;
+    }
+
+    @Override
+    public void setMatrixSet(boolean matrixSet)
+    {
+        this.matrixSet = matrixSet;
     }
 }

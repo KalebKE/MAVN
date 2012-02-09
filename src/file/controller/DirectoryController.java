@@ -31,7 +31,7 @@ import mavn.controller.InputControllerInterface;
  * and loaded by the Model. An Implementation of FileModelInterface needs to be
  * intitaized, registered with the observer,and then passed into the contructor.
  *
- * @author Kaleb
+ * @author Kaleb Kircher
  */
 public class DirectoryController implements DirectoryControllerInterface
 {
@@ -70,7 +70,7 @@ public class DirectoryController implements DirectoryControllerInterface
     {
         for (int i = 0; i < files.length; i++)
         {
-            controllers[i].getFileModel().setModel(files[i].getPath());
+            controllers[i].getOpenFileModel().setModel(files[i].getPath());
         }
     }
 }

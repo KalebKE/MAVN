@@ -1,6 +1,20 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+PropertiesState -- an class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+Copyright (C) 2012, Kaleb Kircher.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.state.properties.state;
 
@@ -8,24 +22,30 @@ import javax.swing.SpinnerNumberModel;
 import mavn.state.properties.view.PropertiesFrame;
 
 /**
- *
+ * A implentation of the applications State pattern. This class is responsible
+ * for managing the state of the applications properties. It helps make the
+ * GUI more intuitive and helps other classes in the application decide what to do.
  * @author Kaleb
  */
 public class PropertiesState implements PropertiesStateInterface
 {
 
+    private boolean caRng;
+    private boolean cmwcRng;
+    private boolean dart;
+    private boolean mtRng;
+    private boolean target;
+    private boolean randomSeed;
+    private boolean randomRng;
+    private boolean xORRng;
     private PropertiesFrame propertiesView;
     private SpinnerNumberModel seedModel;
     private SpinnerNumberModel dartModel;
-    private boolean target;
-    private boolean dart;
-    private boolean randomSeed;
-    private boolean xORRng;
-    private boolean randomRng;
-    private boolean caRng;
-    private boolean cmwcRng;
-    private boolean mtRng;
 
+    /**
+     * Initialize the state.
+     * @param propertiesView the View this class is reponsible for.
+     */
     public PropertiesState(PropertiesFrame propertiesView)
     {
         this.propertiesView = propertiesView;
@@ -35,66 +55,183 @@ public class PropertiesState implements PropertiesStateInterface
         propertiesView.getNumDartsSpinner().setModel(dartModel);
     }
 
+    /**
+     * Use the CA RNG.
+     */
+    @Override
+    public void caRng()
+    {
+        propertiesView.getCmwcRngRadio().setSelected(false);
+        propertiesView.getMTRngRadio().setSelected(false);
+        propertiesView.getXORShiftRngRadio().setSelected(false);
+        propertiesView.getRandomRadio().setSelected(false);
+
+        caRng = true;
+        randomRng = false;
+        xORRng = false;
+        cmwcRng = false;
+        mtRng = false;
+    }
+
+    /**
+     * Use the CMWC RNG.
+     */
+    @Override
+    public void cmwcRng()
+    {
+        propertiesView.getXORShiftRngRadio().setSelected(false);
+        propertiesView.getMTRngRadio().setSelected(false);
+        propertiesView.getRandomRadio().setSelected(false);
+        propertiesView.getCaRngRadio().setSelected(false);
+
+        caRng = false;
+        randomRng = false;
+        xORRng = false;
+        cmwcRng = true;
+        mtRng = false;
+    }
+
+    /**
+     * Get the Dart Model.
+     * @return SpinnerNumberModel representing the number of darts to be fired
+     * during the simulation.
+     */
     @Override
     public SpinnerNumberModel getDartModel()
     {
         return dartModel;
     }
 
+    /**
+     * Get the Seed Model.
+     * @return SpinnerNumberModel representing the random number seed that should
+     * be used during the simulation.
+     */
     @Override
     public SpinnerNumberModel getSeedModel()
     {
         return seedModel;
     }
 
-    @Override
-    public boolean isDart()
-    {
-        return dart;
-    }
-
+    /**
+     * Check if CA RNG is desired.
+     * @return boolean indicating CA RNG is desired.
+     */
     @Override
     public boolean isCaRng()
     {
         return caRng;
     }
 
+    /**
+     * Check if CMWC RNG is desired.
+     * @return boolean indicating CMWC RNG  is desired.
+     */
     @Override
     public boolean isCmwcRng()
     {
         return cmwcRng;
     }
 
+    /**
+     * Check to see if the DartGun is desired.
+     * @return boolean indicating if a DartGun is desired.
+     */
+    @Override
+    public boolean isDart()
+    {
+        return dart;
+    }
+
+    /**
+     * Check if Mt Rng is desired.
+     * @return boolean indicating Mt Rng is desired.
+     */
     @Override
     public boolean isMtRng()
     {
         return mtRng;
     }
 
+    /**
+     * Check if java.util.random RNG is desired.
+     * @return boolean indicating java.util.random RNG is desired.
+     */
     @Override
     public boolean isRandomRng()
     {
         return randomRng;
     }
 
+    /**
+     * Check if a random seed is desired.
+     * @return boolean indicating if a random seed is desired.
+     */
     @Override
     public boolean isRandomSeed()
     {
         return randomSeed;
     }
 
+    /**
+     * Check to see if a single dart target is desired.
+     * @return boolean indicating if a single dart target is desired.
+     */
     @Override
     public boolean isTarget()
     {
         return target;
     }
 
+    /**
+     * Check if XORRng is desired.
+     * @return boolean indicating XORRng is desired.
+     */
     @Override
     public boolean isXORRng()
     {
         return xORRng;
     }
 
+    /**
+     * Indicate that mtRNG is desired.
+     */
+    @Override
+    public void mtRng()
+    {
+        propertiesView.getCmwcRngRadio().setSelected(false);
+        propertiesView.getXORShiftRngRadio().setSelected(false);
+        propertiesView.getRandomRadio().setSelected(false);
+        propertiesView.getCaRngRadio().setSelected(false);
+
+        caRng = false;
+        randomRng = false;
+        xORRng = false;
+        cmwcRng = false;
+        mtRng = true;
+    }
+
+    /**
+     * Indicate that java.util.random RNG is desired.
+     */
+    @Override
+    public void randomRng()
+    {
+        propertiesView.getCmwcRngRadio().setSelected(false);
+        propertiesView.getMTRngRadio().setSelected(false);
+        propertiesView.getXORShiftRngRadio().setSelected(false);
+        propertiesView.getCaRngRadio().setSelected(false);
+
+        caRng = false;
+        randomRng = true;
+        xORRng = false;
+        mtRng = false;
+    }
+
+    /**
+     * Indicate that the Target Model should be used instead of the
+     * DartGun.
+     */
     @Override
     public void useTargets()
     {
@@ -118,6 +255,9 @@ public class PropertiesState implements PropertiesStateInterface
         dart = false;
     }
 
+    /**
+     * Indicate that the DartGun should be used instead of the Target Model.
+     */
     @Override
     public void useDarts()
     {
@@ -141,6 +281,9 @@ public class PropertiesState implements PropertiesStateInterface
         dart = true;
     }
 
+    /**
+     * Indicate that the RNG should use a specific seed.
+     */
     @Override
     public void useSpecifiedSeed()
     {
@@ -151,6 +294,9 @@ public class PropertiesState implements PropertiesStateInterface
         randomSeed = false;
     }
 
+    /**
+     * Indicate that the RNG should use a random seed.
+     */
     @Override
     public void useRandomSeed()
     {
@@ -161,35 +307,9 @@ public class PropertiesState implements PropertiesStateInterface
         randomSeed = true;
     }
 
-    @Override
-    public void caRng()
-    {
-        propertiesView.getCmwcRngRadio().setSelected(false);
-        propertiesView.getMTRngRadio().setSelected(false);
-        propertiesView.getXORShiftRngRadio().setSelected(false);
-        propertiesView.getRandomRadio().setSelected(false);
-
-        caRng = true;
-        randomRng = false;
-        xORRng = false;
-        cmwcRng = false;
-        mtRng = false;
-    }
-
-    @Override
-    public void randomRng()
-    {
-        propertiesView.getCmwcRngRadio().setSelected(false);
-        propertiesView.getMTRngRadio().setSelected(false);
-        propertiesView.getXORShiftRngRadio().setSelected(false);
-        propertiesView.getCaRngRadio().setSelected(false);
-
-        caRng = false;
-        randomRng = true;
-        xORRng = false;
-        mtRng = false;
-    }
-
+    /**
+     * Inidcate that XORSHIFT RNG should be used.
+     */
     @Override
     public void xORRng()
     {
@@ -203,35 +323,5 @@ public class PropertiesState implements PropertiesStateInterface
         xORRng = true;
         cmwcRng = false;
         mtRng = false;
-    }
-
-    @Override
-    public void cmwcRng()
-    {
-        propertiesView.getXORShiftRngRadio().setSelected(false);
-        propertiesView.getMTRngRadio().setSelected(false);
-        propertiesView.getRandomRadio().setSelected(false);
-        propertiesView.getCaRngRadio().setSelected(false);
-
-        caRng = false;
-        randomRng = false;
-        xORRng = false;
-        cmwcRng = true;
-        mtRng = false;
-    }
-
-    @Override
-    public void mtRng()
-    {
-        propertiesView.getCmwcRngRadio().setSelected(false);
-        propertiesView.getXORShiftRngRadio().setSelected(false);
-        propertiesView.getRandomRadio().setSelected(false);
-        propertiesView.getCaRngRadio().setSelected(false);
-
-        caRng = false;
-        randomRng = false;
-        xORRng = false;
-        cmwcRng = false;
-        mtRng = true;
     }
 }

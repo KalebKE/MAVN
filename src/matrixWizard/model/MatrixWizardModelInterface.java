@@ -23,7 +23,7 @@ import matrixWizard.observer.MatrixWizardObserver;
 
 /**
  * FileModelInterface defines a framework for different types of file
- * parsers to be hooked into the ANN application. In the future,
+ * parsers to be hooked into the application. In the future,
  * functionality for parsing different file types can be added by implementing
  * setModel(String path). An observer pattern is used so new observers can easily
  * register for Model updates. 

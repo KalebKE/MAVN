@@ -1,25 +1,28 @@
 /*
- FileControllerInterface -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
- Copyright (C) 2012, Kaleb Kircher.
+FileControllerInterface -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+Copyright (C) 2012, Kaleb Kircher.
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package file.controller;
 
 /**
- *
+ * Implementations of FileControllerInterface define what File Chooser to use
+ * (JFileChooser would be a typically choice) and how to parse the file with a
+ * file parser Model. The parser models are classes that know how to parse
+ * different file types into a data type that the application can use. 
  * @author Kaleb
  */
 public interface FileControllerInterface
@@ -36,11 +39,17 @@ public interface FileControllerInterface
      * should call setFile(String file).
      * Example:
      * {
-     * implementation.setFile(FileChooserView.this.getSelectedFile().getPath());
+     * implementation.setFile(JFileChooserView.this.getSelectedFile().getPath());
      * {
      *
      */
-    public void getFileChooser();
+    public void getOpenFileChooser();
+
+    public void getSaveFileChooser(double[][] matrix);
+
+    public void getSaveFileChooser(String results);
+
+    public void setModel(String path, String results);
 
     /**
      * The desired implemenation of FileModelInterface should be initialized here.
@@ -55,4 +64,6 @@ public interface FileControllerInterface
      * @param path the path of the file
      */
     public void setModel(String path);
+
+    public void setModel(String path, double[][] matrix);
 }

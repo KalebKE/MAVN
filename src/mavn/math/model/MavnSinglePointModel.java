@@ -1,16 +1,31 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+MavenSinglePointModel -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+Copyright (C) 2012, Kaleb Kircher, Dennis Steele.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.math.model;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import mavn.controller.InputControllerInterface;
+import mavn.globals.Globals;
 import mavn.math.algorithm.CalcTheta;
-import mavn.math.algorithm.Matrix;
+import mavn.math.algorithm.MatrixMultiply;
 import mavn.math.algorithm.SHL;
 import mavn.observer.ResultsObserver;
-import mavn.view.ControlFrame;
 
 /**
  *
@@ -18,15 +33,21 @@ import mavn.view.ControlFrame;
  */
 public class MavnSinglePointModel implements MavnAlgorithmModelInterface
 {
+
     private ArrayList<ResultsObserver> observers;
-    private ControlFrame view;
+    private ArrayList<InputControllerInterface> controllers;
     private DecimalFormat decimalFormater;
     private String decimalFormat;
     private String results;
 
-    public MavnSinglePointModel(ControlFrame view)
+    /**
+     * Initialize the class.
+     * @param view the View to pull state
+     */
+    public MavnSinglePointModel(ArrayList<InputControllerInterface> controllers)
     {
-        this.view = view;
+        
+        this.controllers = controllers;
         observers = new ArrayList<ResultsObserver>();
         results = "";
 
@@ -39,19 +60,23 @@ public class MavnSinglePointModel implements MavnAlgorithmModelInterface
         decimalFormater = new DecimalFormat(decimalFormat);
     }
 
+    /**
+     * Calculate the results of the simulation.
+     */
     @Override
     public void calculate()
     {
-        Matrix matrix = new Matrix();
+        MatrixMultiply matrix = new MatrixMultiply();
         SHL shl = new SHL();
         CalcTheta theta = new CalcTheta();
 
+       double[][] w2 = this.controllers.get(Globals.W2_CONTROLLER).getMatrix();
         // Describe the input layer model
         appendResults("Input Layer:");
-        appendResults(view.getCurrentMatrixW2(), "W2: Shape Vector Directions");
-        appendResults(view.getCurrentMatrixTheta(), "Theta2: Shape Vector Boundaries");
-        appendResults(view.getCurrentMatrixTarget(), "Targets: Initial Node Inputs (x,y cooridnates)");
-        
+        appendResults(w2, "W2: Shape Vector Directions");
+        appendResults(this.controllers.get(Globals.THETA_CONTROLLER).getMatrix(), "Theta2: Shape Vector Boundaries");
+        appendResults(this.controllers.get(Globals.TARGET_CONTROLLER).getMatrix(), "Targets: Initial Node Inputs (x,y cooridnates)");
+
         appendResults("Input Layer Calculations: SHL[(W2*Targets)+Theta2]");
         // SHL[(W2*P)+Theta2]
         // An Image contaians multiple Shapes definined by four vectors,
@@ -67,8 +92,8 @@ public class MavnSinglePointModel implements MavnAlgorithmModelInterface
         // The input layer needs to see BOTH the X and Y nodes go active indicating that a "hit" has occured within
         // the image space described by the vectors.Usually, four nodes need to
         // be activated to indicate a 'hit'. This is calculated by the ANDing layer. 
-        double[][] matrix0 = matrix.multiply(view.getCurrentMatrixW2(), view.getCurrentMatrixTarget());
-        double[][] matrix1 = matrix.addMatrix(matrix0, view.getCurrentMatrixTheta());
+        double[][] matrix0 = matrix.multiply(this.controllers.get(Globals.W2_CONTROLLER).getMatrix(), this.controllers.get(Globals.TARGET_CONTROLLER).getMatrix());
+        double[][] matrix1 = matrix.addMatrix(matrix0, this.controllers.get(Globals.THETA_CONTROLLER).getMatrix());
         double[][] matrix2 = shl.calculate(matrix1);
 
         // Describe the results of SHL[(W2*P)+Theta2]
@@ -78,7 +103,7 @@ public class MavnSinglePointModel implements MavnAlgorithmModelInterface
 
         // Describe ANDing Layer
         appendResults("ANDing Layer");
-        appendResults(view.getCurrentMatrixW1(), "W1: Image Vectors");
+        appendResults(this.controllers.get(Globals.W1_CONTROLLER).getMatrix(), "W1: Image Vectors");
 
         // SHL[(W1*P)+Theta1]
         // Calculates the result of the ANDing layer.
@@ -94,27 +119,27 @@ public class MavnSinglePointModel implements MavnAlgorithmModelInterface
         // Iff all four nodes go high for a image, the ANDing node goes high
         // indicating a "hit" within the vectors defining the image. Otherwise,
         // if one or more nodes does not go high, the ANDing node will stay low.
-        double[][] matrix3 = matrix.multiply(view.getCurrentMatrixW1(), matrix2);
-        double[][] theta1 = theta.calculateAnd(view.getCurrentMatrixW1());
+        double[][] matrix3 = matrix.multiply(this.controllers.get(Globals.W1_CONTROLLER).getMatrix(), matrix2);
+        double[][] theta1 = theta.calculateAnd(this.controllers.get(Globals.W1_CONTROLLER).getMatrix());
         double[][] matrix4 = matrix.addMatrix(matrix3, theta1);
         double[][] matrix5 = shl.calculate(matrix4);
 
         // Describe the results of SHL[(W1*P)+Theta1]
         appendResults(theta1, "Theta1 (ANDing):");
         appendResults(matrix3, "W1*SHL[(W2*Target)+Theta2]:");
-        appendResults(matrix4, "(W1*SHL[(W2*Target)+Theta2])+Theta1");    
+        appendResults(matrix4, "(W1*SHL[(W2*Target)+Theta2])+Theta1");
         appendResults(matrix4, "SHL[(W1*SHL[(W2*Target)+Theta2])+Theta1]");
 
         // Describe ORing layer
         appendResults("Output Layer");
-        appendResults(view.getCurrentMatrixW0(), "W0:");
+        appendResults(this.controllers.get(Globals.W0_CONTROLLER).getMatrix(), "W0:");
 
         // SHL[(W0*P)+Theta0]
-        double[][] theta2 = theta.calculateOr(view.getCurrentMatrixW0());
-        double[][] matrix6 = matrix.multiply(view.getCurrentMatrixW0(), matrix5);
+        double[][] theta2 = theta.calculateOr(this.controllers.get(Globals.W0_CONTROLLER).getMatrix());
+        double[][] matrix6 = matrix.multiply(this.controllers.get(Globals.W0_CONTROLLER).getMatrix(), matrix5);
         double[][] matrix7 = matrix.addMatrix(matrix6, theta2);
         double[][] matrix8 = shl.calculate(matrix7);
-        
+
         appendResults(theta2, "Theta0 (ORing):");
         appendResults(matrix6, "(W0*SHL[(W1*SHL[(W2*Target)+Theta2])+Theta1]");
         appendResults(matrix7, "(W0*SHL[(W1*SHL[(W2*Target)+Theta2])+Theta1]+Theta0");
@@ -132,12 +157,20 @@ public class MavnSinglePointModel implements MavnAlgorithmModelInterface
         notifyObservers();
     }
 
+    /**
+     * Register a new ResultsObserver.
+     * @param o the ResultsObserver.
+     */
     @Override
     public void registerObserver(ResultsObserver o)
     {
         observers.add(o);
     }
 
+    /**
+     * Remove a ResultsObserver.
+     * @param o the ResultsObserver.
+     */
     @Override
     public void removeObserver(ResultsObserver o)
     {
@@ -148,6 +181,9 @@ public class MavnSinglePointModel implements MavnAlgorithmModelInterface
         }
     }
 
+    /**
+     * Notify all Observers.
+     */
     @Override
     public void notifyObservers()
     {

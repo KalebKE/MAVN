@@ -1,28 +1,51 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+TargetState -- an class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+Copyright (C) 2012, Kaleb Kircher.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.state;
 
-import mavn.view.ControlFrame;
+import mavn.view.MavnView;
 import util.components.BlinkerButton;
 
 /**
- *
+ * Implements the View's state control for the Target Model.
+ * This class is an implementation of the applications
+ * State Pattern.
  * @author Kaleb
  */
 public class TargetState implements InputStateInterface
 {
 
-    private ControlFrame view;
+    private MavnView view;
     private boolean matrixLoaded;
 
-    public TargetState(ControlFrame view)
+    /**
+     * Initialize the state.
+     * @param view the View the class is responsible for.
+     */
+    public TargetState(MavnView view)
     {
         this.view = view;
         matrixLoaded = false;
     }
 
+    /**
+     * Indicate that the Target Model matrix has been loaded.
+     */
     @Override
     public void matrixLoaded()
     {
@@ -43,6 +66,9 @@ public class TargetState implements InputStateInterface
         matrixLoaded = true;
     }
 
+    /**
+     * Indicate that Target Model matrix has been unloaded.
+     */
     @Override
     public void matrixUnloaded()
     {
@@ -63,6 +89,10 @@ public class TargetState implements InputStateInterface
         matrixLoaded = false;
     }
 
+    /**
+     * Check to see if the Target Model matrix has been loaded.
+     * @return boolean indicating the Target Model matrix has been loaded.
+     */
     @Override
     public boolean isMatrixLoaded()
     {

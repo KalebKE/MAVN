@@ -1,27 +1,51 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ThetaState -- an class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+Copyright (C) 2012, Kaleb Kircher.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.state;
 
-import mavn.view.ControlFrame;
+import mavn.view.MavnView;
 import util.components.BlinkerButton;
 
 /**
- *
+ * Implements the View's state control for the Theta Model.
+ * This class is an implementation of the applications
+ * State Pattern.
  * @author Kaleb
  */
 public class ThetaState implements InputStateInterface
 {
-    private ControlFrame view;
+
+    private MavnView view;
     private boolean matrixLoaded;
 
-    public ThetaState(ControlFrame view)
+    /**
+     * Initialize the state.
+     * @param view the View this class is reponsible for.
+     */
+    public ThetaState(MavnView view)
     {
         this.view = view;
         matrixLoaded = false;
     }
-    
+
+    /**
+     * Indicate a Theata Model matrix has been loaded.
+     */
     @Override
     public void matrixLoaded()
     {
@@ -42,10 +66,13 @@ public class ThetaState implements InputStateInterface
         matrixLoaded = true;
     }
 
+    /**
+     * Indicate a Theta Model matrix has been unloaded.
+     */
     @Override
     public void matrixUnloaded()
     {
-         // Disable these buttons
+        // Disable these buttons
         view.getNewThetaMatrixButton().setEnabled(true);
         view.getImportThetaMatrixButton().setEnabled(true);
         ((BlinkerButton) view.getNewThetaMatrixButton()).setBlink(true);
@@ -62,6 +89,10 @@ public class ThetaState implements InputStateInterface
         matrixLoaded = false;
     }
 
+    /**
+     * Check if a Theta Model matrix has been loaded.
+     * @return boolean indicating the Theta Model matrix has been loaded.
+     */
     @Override
     public boolean isMatrixLoaded()
     {

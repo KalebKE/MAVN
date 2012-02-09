@@ -1,6 +1,20 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+PropertiesFrame -- an class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+Copyright (C) 2012, Kaleb Kircher.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 /*
@@ -15,22 +29,27 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import mavn.globals.Globals;
+import mavn.state.RngStateInterface;
 import mavn.state.properties.state.PropertiesState;
 import mavn.state.properties.state.PropertiesStateInterface;
-import mavn.view.ControlFrame;
+import mavn.view.MavnView;
 
 /**
- *
+ * A special JFrame used to manage the properties state of the application.
  * @author Kaleb
  */
 public class PropertiesFrame extends javax.swing.JFrame
 {
 
     private PropertiesStateInterface propertiesState;
-    private ControlFrame view;
+    private MavnView view;
 
-    /** Creates new form ResultsFrame */
-    public PropertiesFrame(ControlFrame view)
+    /**
+     * Initialize the state.
+     * @param view the View this class is responsible for.
+     */
+    public PropertiesFrame(MavnView view)
     {
         initComponents();
         this.view = view;
@@ -40,6 +59,169 @@ public class PropertiesFrame extends javax.swing.JFrame
         this.setVisible(true);
 
         initToolTips();
+    }
+
+    /**
+     * Get the DartGunCheckBox. This check box indicates if the
+     * DartGun is desired.
+     * @return the DartGunCheckBox.
+     */
+    public JCheckBox getDartGunCheckBox()
+    {
+        return dartGunCheckBox;
+    }
+
+    /**
+     * Get the DartGunLabel.
+     * @return the DartGunLabel.
+     */
+    public JLabel getDartGunLabel()
+    {
+        return dartGunLabel;
+    }
+
+    /**
+     * Get the InputsLabel.
+     * @return the InputsLabel.
+     */
+    public JLabel getInputsLabel()
+    {
+        return inputsLabel;
+    }
+
+    /**
+     * Get the NumDartsLabel.
+     * @return the NumDartsLabel.
+     */
+    public JLabel getNumDartsLabel()
+    {
+        return numDartsLabel;
+    }
+
+    /**
+     * Get the NumDarts JSpinner. It allows the user to indicate
+     * how many darts should be fired during the DartGun simulation.
+     * @return the NumDarts JSpinner.
+     */
+    public JSpinner getNumDartsSpinner()
+    {
+        return numDartsSpinner;
+    }
+
+    /**
+     * Get the PropertiesHeaderLabel.
+     * @return the PropertiesHeaderLabel.
+     */
+    public JLabel getPropertiesHeaderLabel()
+    {
+        return propertiesHeaderLabel;
+    }
+
+    /**
+     * Get the RandomSeed Randio Button. It allows the user to
+     * indicate if they want to use a randomly generated seed for the RNG.
+     * @return the RandomSeed Randio Button.
+     */
+    public JRadioButton getRandomSeedRadio()
+    {
+        return randomSeedRadio;
+    }
+
+    /**
+     * Get the SeedLabel.
+     * @return the SeedLabel.
+     */
+    public JLabel getSeedLabel()
+    {
+        return seedLabel;
+    }
+
+    /**
+     * Get the Seed JSpinner. It allows the user to specify a seed for the RNG.
+     * @return Get the Seed JSpinner.
+     */
+    public JSpinner getSeedSpinner()
+    {
+        return seedSpinner;
+    }
+
+    /**
+     * Get the Seed JSpinner Label.
+     * @return the Seed JSpinner JLabel.
+     */
+    public JLabel getSeedSpinnerLabel()
+    {
+        return seedSpinnerLabel;
+    }
+
+    /**
+     * Get the SpecifiedSeed Radio Button. It allows the user to
+     * indicate that they want to use a specified seed for the RNG.
+     * @return the SpecifiedSeed Radio Button.
+     */
+    public JRadioButton getSpecifiedSeedRadio()
+    {
+        return specifiedSeedRadio;
+    }
+
+    /**
+     * Get the Target JCheckBox. It allows the user to indicate that
+     * they want to use the Target Model instead of the DartGun.
+     * @return
+     */
+    public JCheckBox getTargetCheckBox()
+    {
+        return targetCheckBox;
+    }
+
+    /**
+     * Get the Random Radio Button. It allows the user to indicate that
+     * they want to use java.random.util as the DartGun's RNG.
+     * @return the Random Radio Button.
+     */
+    public JRadioButton getRandomRadio()
+    {
+        return randomRadio;
+    }
+
+    /**
+     * Get the CA RNG Radio Button. Indicates that the user wants to
+     * use the CellularAutomatonRNG for the DartGun RNG.
+     * @return the CA RNG Radio Button.
+     */
+    public JRadioButton getCaRngRadio()
+    {
+        return caRngRadio;
+    }
+
+    /**
+     * Get the CMWC RNG Radio Button. It indicates that the user wants to
+     * use the CMWC4096 RNG for the DartGun's RNG.
+     * @return the CMWC RNG Radio Button.
+     */
+    public JRadioButton getCmwcRngRadio()
+    {
+        return cmwcRngRadio;
+    }
+
+    /**
+     * Get the MT RNG Radio Button. It indicates that the user wants to use the
+     * Mersenne Twister RNG for the DartGun's RNG.
+     * @return the MT RNG Radio Button.
+     */
+    public JRadioButton getMTRngRadio()
+    {
+        return mtRngRadio;
+    }
+
+    /**
+     * Get the XORSSHIFT RNG Radio Button. Inicates if the user
+     * wants to use the XORSHIFT RNG for the DartGun.
+     * @return the XORSSHIFT RNG Radio Button.
+     */
+    public JRadioButton getXORShiftRngRadio()
+    {
+        return xORShiftRngRadio;
     }
 
     private void initToolTips()
@@ -53,112 +235,27 @@ public class PropertiesFrame extends javax.swing.JFrame
                 + "Tests of Randomness. Diehard says that java.util.Random is<br>"
                 + " not sufficiently random. It is fast, however.</html>");
 
-        mtRngRadio.setToolTipText("<html>A Java port of the fast and reliable Mersenne<br> " +
-                "Twister RNG originally developed by Makoto Matsumoto and Takuji<br> " +
-                "Nishimura. It is faster than java.util.Random, does not have the<br> " +
-                "same statistical flaws as that RNG and also has a long period<br> " +
-                "(2^19937). The Mersenne Twister is an excellent general purpose RNG.</html>");
+        mtRngRadio.setToolTipText("<html>A Java port of the fast and reliable Mersenne<br> "
+                + "Twister RNG originally developed by Makoto Matsumoto and Takuji<br> "
+                + "Nishimura. It is faster than java.util.Random, does not have the<br> "
+                + "same statistical flaws as that RNG and also has a long period<br> "
+                + "(2^19937). The Mersenne Twister is an excellent general purpose RNG.</html>");
 
-        xORShiftRngRadio.setToolTipText("<html>A Java implementation of the very fast<br>" +
-                " PRNG described by George Marsaglia. It has a period of about 2^160,<br>" +
-                " which although much shorter than the Mersenne Twister's, <br>" +
-                "is still significantly longer than that of java.util.Random. <br>" +
-                "This is the RNG to use when performance is the primary concern. <br>" +
-                "It can be up to twice as fast as the Mersenne Twister.</html>");
+        xORShiftRngRadio.setToolTipText("<html>A Java implementation of the very fast<br>"
+                + " PRNG described by George Marsaglia. It has a period of about 2^160,<br>"
+                + " which although much shorter than the Mersenne Twister's, <br>"
+                + "is still significantly longer than that of java.util.Random. <br>"
+                + "This is the RNG to use when performance is the primary concern. <br>"
+                + "It can be up to twice as fast as the Mersenne Twister.</html>");
 
-        cmwcRngRadio.setToolTipText("<html>A Java implementation of a Complementary-Multiply-With-Carry <br>" +
-                "(CMWC) RNG as described by George Marsaglia. It has an extremely <br>" +
-                "long period (2^131104) and performance comparable to the Mersenne <br>" +
-                "Twister (though the Mersenne Twister has the advantage of only requiring <br>" +
-                "16 bytes of seed data rather than the 16 kilobytes required by the CMWC RNG).</html>");
+        cmwcRngRadio.setToolTipText("<html>A Java implementation of a Complementary-Multiply-With-Carry <br>"
+                + "(CMWC) RNG as described by George Marsaglia. It has an extremely <br>"
+                + "long period (2^131104) and performance comparable to the Mersenne <br>"
+                + "Twister (though the Mersenne Twister has the advantage of only requiring <br>"
+                + "16 bytes of seed data rather than the 16 kilobytes required by the CMWC RNG).</html>");
 
-        caRngRadio.setToolTipText("<html>A Java port of Tony Pasqualoni's fast Cellular <br>" +
-                "Automaton RNG. It uses a 256-cell automaton to generate random values.</html>");
-    }
-
-    public JCheckBox getDartGunCheckBox()
-    {
-        return dartGunCheckBox;
-    }
-
-    public JLabel getDartGunLabel()
-    {
-        return dartGunLabel;
-    }
-
-    public JRadioButton getXORShiftRngRadio()
-    {
-        return xORShiftRngRadio;
-    }
-
-    public JLabel getInputsLabel()
-    {
-        return inputsLabel;
-    }
-
-    public JLabel getNumDartsLabel()
-    {
-        return numDartsLabel;
-    }
-
-    public JSpinner getNumDartsSpinner()
-    {
-        return numDartsSpinner;
-    }
-
-    public JLabel getPropertiesHeaderLabel()
-    {
-        return propertiesHeaderLabel;
-    }
-
-    public JRadioButton getRandomSeedRadio()
-    {
-        return randomSeedRadio;
-    }
-
-    public JLabel getSeedLabel()
-    {
-        return seedLabel;
-    }
-
-    public JSpinner getSeedSpinner()
-    {
-        return seedSpinner;
-    }
-
-    public JLabel getSeedSpinnerLabel()
-    {
-        return seedSpinnerLabel;
-    }
-
-    public JRadioButton getSpecifiedSeedRadio()
-    {
-        return specifiedSeedRadio;
-    }
-
-    public JCheckBox getTargetCheckBox()
-    {
-        return targetCheckBox;
-    }
-
-    public JRadioButton getRandomRadio()
-    {
-        return randomRadio;
-    }
-
-    public JRadioButton getCaRngRadio()
-    {
-        return caRngRadio;
-    }
-
-    public JRadioButton getCmwcRngRadio()
-    {
-        return cmwcRngRadio;
-    }
-
-    public JRadioButton getMTRngRadio()
-    {
-        return mtRngRadio;
+        caRngRadio.setToolTipText("<html>A Java port of Tony Pasqualoni's fast Cellular <br>"
+                + "Automaton RNG. It uses a 256-cell automaton to generate random values.</html>");
     }
 
     /** This method is called from within the constructor to
@@ -375,7 +472,7 @@ public class PropertiesFrame extends javax.swing.JFrame
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addComponent(propertiesHeaderLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -420,11 +517,11 @@ public class PropertiesFrame extends javax.swing.JFrame
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -499,62 +596,63 @@ public class PropertiesFrame extends javax.swing.JFrame
     {//GEN-HEADEREND:event_acceptButtonActionPerformed
         if (propertiesState.isDart())
         {
-            view.setDartGunState(true);
-            view.setSeed((Double) propertiesState.getSeedModel().getValue());
-            view.setNumDarts((Double) propertiesState.getDartModel().getValue());
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setDartGunState(true);
+            Globals.SEED = ((Double) propertiesState.getSeedModel().getValue());
+            double darts = (Double) propertiesState.getDartModel().getValue();
+            Globals.NUM_DARTS = (int) darts;
         }
 
         if (propertiesState.isTarget())
         {
-            view.setDartGunState(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setDartGunState(false);
         }
 
         if (propertiesState.isCaRng())
         {
-            view.setCaRng(true);
-            view.setCmwcRng(false);
-            view.setMtRng(false);
-            view.setRandomRng(false);
-            view.setxORRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setCaRng(true);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setCmwcRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setMtRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setRandomRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setxORRng(false);
         }
 
         if (propertiesState.isCmwcRng())
         {
-            view.setCaRng(false);
-            view.setCmwcRng(true);
-            view.setMtRng(false);
-            view.setRandomRng(false);
-            view.setxORRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setCaRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setCmwcRng(true);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setMtRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setRandomRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setxORRng(false);
         }
 
         if (propertiesState.isMtRng())
         {
-            view.setCaRng(false);
-            view.setCmwcRng(false);
-            view.setMtRng(true);
-            view.setRandomRng(false);
-            view.setxORRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setCaRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setCmwcRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setMtRng(true);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setRandomRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setxORRng(false);
         }
 
         if (propertiesState.isRandomRng())
         {
-            view.setCaRng(false);
-            view.setCmwcRng(false);
-            view.setMtRng(false);
-            view.setRandomRng(true);
-            view.setxORRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setCaRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setCmwcRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setMtRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setRandomRng(true);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setxORRng(false);
         }
 
         if (propertiesState.isXORRng())
         {
-            view.setCaRng(false);
-            view.setCmwcRng(false);
-            view.setMtRng(false);
-            view.setRandomRng(false);
-            view.setxORRng(true);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setCaRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setCmwcRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setMtRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setRandomRng(false);
+            ((RngStateInterface) view.getOutputStates().get(Globals.RESULTS_STATE)).setxORRng(true);
         }
 
-        view.getResultsState().propertiesLoaded();
+        view.getOutputStates().get(Globals.RESULTS_STATE).propertiesLoaded();
         this.dispose();
     }//GEN-LAST:event_acceptButtonActionPerformed
 

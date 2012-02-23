@@ -70,7 +70,7 @@ public class DirectoryController implements DirectoryControllerInterface
     {
         for (int i = 0; i < files.length; i++)
         {
-            controllers[i].getOpenFileModel().setModel(files[i].getPath());
+            controllers[i].getFileController().openCsvFileModel(controllers[i], files[i].getPath());
         }
     }
 }

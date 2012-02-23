@@ -28,5 +28,5 @@ public interface ResultsObserver
      * Hook for classes to observe updates to the simulation results. 
      * @param results the simulation results.
      */
-    public void updateResultsMatrix(String results);
+    public void updateResultsModel(String results);
 }

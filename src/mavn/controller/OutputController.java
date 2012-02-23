@@ -20,11 +20,9 @@ package mavn.controller;
 
 import file.controller.FileController;
 import file.controller.FileControllerInterface;
-import file.model.SaveCSVFileModel;
-import file.model.SaveFileModelInterface;
 import java.util.ArrayList;
 import mavn.globals.Globals;
-import mavn.math.model.MavnAlgorithmModelInterface;
+import mavn.math.model.AlgorithmModelInterface;
 import mavn.state.OutputStateInterface;
 import mavn.state.RngStateInterface;
 
@@ -46,8 +44,7 @@ public class OutputController implements OutputControllerInterface
      */
 
     private FileControllerInterface fileController;
-    private SaveFileModelInterface saveFileModel;
-    private ArrayList<MavnAlgorithmModelInterface> algorithms;
+    private ArrayList<AlgorithmModelInterface> algorithms;
     private ArrayList<OutputStateInterface> outputStates;
     private String results;
     private boolean resultsSet;
@@ -57,12 +54,11 @@ public class OutputController implements OutputControllerInterface
      * @param mainView the View that will be updated with the output
      * @param dartGunIterator the DartGunInterface collection 
      */
-    public OutputController(ArrayList<MavnAlgorithmModelInterface> algorithms, ArrayList<OutputStateInterface> outputStates)
+    public OutputController(ArrayList<AlgorithmModelInterface> algorithms, ArrayList<OutputStateInterface> outputStates)
     {
         this.algorithms = algorithms;
         this.outputStates = outputStates;
-        saveFileModel = new SaveCSVFileModel();
-        fileController = new FileController(saveFileModel);
+        fileController = new FileController();
         resultsSet = false;
     }
 
@@ -93,7 +89,7 @@ public class OutputController implements OutputControllerInterface
      * called depends on the Output State Modules.
      */
     @Override
-    public void runMavnAlgorithm()
+    public void runSimulation()
     {
         // If the user wants to only fire *one* dart.
         if (!((RngStateInterface) outputStates.get(Globals.RESULTS_STATE)).isDartGunState())

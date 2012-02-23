@@ -21,8 +21,8 @@ package file.model;
 import mavn.util.collections.IteratorToDoubleArray;
 import mavn.util.parse.StringToDouble;
 import file.observer.FileObserver;
-import file.util.model.parse.CSVParserFactory;
-import file.util.model.parse.FileParser;
+import file.util.parse.CSVParserFactory;
+import file.util.parse.FileParser;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -105,7 +105,7 @@ public class OpenCSVFileModel implements OpenFileModelInterface
         for(int i = 0; i < observers.size(); i++)
         {
             FileObserver observer = (FileObserver)observers.get(i);
-            observer.updateMatrix(array);
+            observer.updateModel(array);
         }
     }
 }

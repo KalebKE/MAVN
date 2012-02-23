@@ -34,5 +34,5 @@ public interface MatrixWizardObserver
      * you want really. 
      * @param matrix the matrix defining the model
      */
-    public void updateMatrix(double[][] matrix);
+    public void updateModel(double[][] matrix);
 }

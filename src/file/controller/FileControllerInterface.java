@@ -18,6 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package file.controller;
 
+import mavn.controller.InputControllerInterface;
+
 /**
  * Implementations of FileControllerInterface define what File Chooser to use
  * (JFileChooser would be a typically choice) and how to parse the file with a
@@ -43,13 +45,41 @@ public interface FileControllerInterface
      * {
      *
      */
-    public void getOpenFileChooser();
+    public void getOpenFileChooser(InputControllerInterface controller);
 
+    /**
+     * The desired View for finding files should be initialized here.
+     * Example of a JFileChooser that only finds directories:
+     * {
+     * final JFileChooser fc = new JFileChooser("C:/");
+     * fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+     * }
+     * Implementations of JFileChooser, or any other View,
+     * should call setFile(String file).
+     * Example:
+     * {
+     * implementation.setFile(JFileChooserView.this.getSelectedFile().getPath());
+     * {
+     *
+     */
     public void getSaveFileChooser(double[][] matrix);
 
+    /**
+     * The desired View for finding files should be initialized here.
+     * Example of a JFileChooser that only finds directories:
+     * {
+     * final JFileChooser fc = new JFileChooser("C:/");
+     * fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+     * }
+     * Implementations of JFileChooser, or any other View,
+     * should call setFile(String file).
+     * Example:
+     * {
+     * implementation.setFile(JFileChooserView.this.getSelectedFile().getPath());
+     * {
+     *
+     */
     public void getSaveFileChooser(String results);
-
-    public void setModel(String path, String results);
 
     /**
      * The desired implemenation of FileModelInterface should be initialized here.
@@ -63,7 +93,33 @@ public interface FileControllerInterface
      * new state.
      * @param path the path of the file
      */
-    public void setModel(String path);
+    public void openCsvFileModel(InputControllerInterface controller, String path);
 
-    public void setModel(String path, double[][] matrix);
+    /**
+     * The desired implemenation of FileModelInterface should be initialized here.
+     * Example:
+     * {
+     * implemenation.setModel(path);
+     * {
+     * This will forward the file path to the Model that knows how to
+     * parse the file type. Any classes that implement FileObserver and
+     * and have registered as Observers of the Model will be notified of the
+     * new state.
+     * @param path the path of the file
+     */
+    public void saveCsvFileModel(String path, double[][] matrix);
+
+    /**
+     * The desired implemenation of FileModelInterface should be initialized here.
+     * Example:
+     * {
+     * implemenation.setModel(path);
+     * {
+     * This will forward the file path to the Model that knows how to
+     * parse the file type. Any classes that implement FileObserver and
+     * and have registered as Observers of the Model will be notified of the
+     * new state.
+     * @param path the path of the file
+     */
+    public void saveTxtFileModel(String path, String results);
 }

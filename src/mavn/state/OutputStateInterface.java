@@ -18,8 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.state;
 
-import java.util.ArrayList;
-
 /**
  * Defines an output framework to manage the applications state using a State Pattern.
  * Implementations are concerned with maintaining the output states of the
@@ -29,17 +27,9 @@ import java.util.ArrayList;
 public interface OutputStateInterface
 {
 
-    /**
-     * Get the number and points of darts that hit shapes during the simulation.
-     * @return the number of hits.
-     */
-    public ArrayList<double[][]> getHit();
+    public void animate(boolean animate);
 
-    /**
-     * Get the number of and points of darts that missed shapes during the simulation.
-     * @return
-     */
-    public ArrayList<double[][]> getMiss();
+    public boolean isAnimated();
 
     /**
      * Indicate if the simulation properties have been loaded.
@@ -57,7 +47,7 @@ public interface OutputStateInterface
      * Indicate if the simulation has been run.
      * @return boolean indicating a run simulation.
      */
-    public boolean hasRun();
+    public boolean isResultAvailable();
 
     /**
      * What state should be enabled when a simulation is loaded.
@@ -82,17 +72,5 @@ public interface OutputStateInterface
     /**
      * What state should be enabled when the simulation has been run.
      */
-    public void run();
-
-    /**
-     * Set the number and points of darts that hit shapes during the simulation.
-     * @param hit
-     */
-    public void setHit(ArrayList<double[][]> hit);
-
-    /**
-     * Set the number and points of darts that missed shapes during the simulation.
-     * @param miss
-     */
-    public void setMiss(ArrayList<double[][]> miss);
+    public void resultAvailable();
 }

@@ -22,6 +22,7 @@ import file.controller.FileControllerInterface;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFileChooser;
+import mavn.controller.InputControllerInterface;
 
 /**
  * A special JFileChoser that is integrated into an MVC library
@@ -43,7 +44,7 @@ public class OpenFileChooserView extends JFileChooser
      * it doesn't need to be updated of anything.
      * @param fileController
      */
-    public OpenFileChooserView(final FileControllerInterface fileController)
+    public OpenFileChooserView(final InputControllerInterface controller, final FileControllerInterface fileController)
     {
         // Start in the C:/ drive
         super("C:/");
@@ -58,7 +59,7 @@ public class OpenFileChooserView extends JFileChooser
             {
                 {
                     // Update the controller
-                    OpenFileChooserView.this.fileController.setModel(OpenFileChooserView.this.getSelectedFile().getPath());
+                    OpenFileChooserView.this.fileController.openCsvFileModel(controller, OpenFileChooserView.this.getSelectedFile().getPath());
                 }
             }
         });

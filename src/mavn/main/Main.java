@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.main;
 
-import mavn.controller.MavnController;
-import mavn.view.MavnView;
+import mavn.factory.MavnSimulationFactory;
+import mavn.view.ModelView;
 
 /**
  * The main class for the MAVN application.
@@ -62,16 +62,16 @@ public class Main
             }
         } catch (ClassNotFoundException ex)
         {
-            java.util.logging.Logger.getLogger(MavnView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModelView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex)
         {
-            java.util.logging.Logger.getLogger(MavnView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModelView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex)
         {
-            java.util.logging.Logger.getLogger(MavnView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModelView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
-            java.util.logging.Logger.getLogger(MavnView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModelView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -83,7 +83,7 @@ public class Main
             {
                 // Create an instance of the mavn controller
                 // to run the application. 
-                MavnController mavn = new MavnController();
+                MavnSimulationFactory mavn = new MavnSimulationFactory();
             }
         });
     }

@@ -27,8 +27,11 @@ package matrixWizard.controller;
  */
 public interface MatrixWizardControllerInterface
 {
+
     /**
      * Implementation of the desired graphical interface.
      */
     public void getMatrixWizard();
+
+    public void getMatrixWizard(double[][] matrix);
 }

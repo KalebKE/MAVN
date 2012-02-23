@@ -26,7 +26,10 @@ import mavn.globals.Globals;
 import mavn.math.algorithm.CalcTheta;
 import mavn.math.algorithm.MatrixMultiply;
 import mavn.math.algorithm.SHL;
+import mavn.observer.AndLayerObserver;
 import mavn.observer.DartsObserver;
+import mavn.observer.OrLayerObserver;
+import mavn.observer.OutputLayerObserver;
 import mavn.observer.ResultsObserver;
 import mavn.util.math.FindMax;
 
@@ -38,12 +41,19 @@ import mavn.util.math.FindMax;
  * are recorded and made availble to observers using an Observer pattern.
  * @author Kaleb
  */
-public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, DartModelInterface
+public class MavnMultiplePointModel implements AlgorithmModelInterface, DartModelInterface, AndLayerInterface, OrLayerInterface, OutputLayerInterface
 {
+
     private ArrayList<ResultsObserver> resultObservers;
     private ArrayList<DartsObserver> dartObservers;
+    private ArrayList<AndLayerObserver> andLayerObservers;
+    private ArrayList<OrLayerObserver> orLayerObservers;
+    private ArrayList<OutputLayerObserver> outputLayerObservers;
     private ArrayList<double[][]> hit;
     private ArrayList<double[][]> miss;
+    private double[][] andLayerResult;
+    private double[][] orLayerResult;
+    private double[][] outputLayerResult;
     private DartGunInterface dartGun;
     private ArrayList<InputControllerInterface> controllers;
     private DecimalFormat decimalFormater;
@@ -64,6 +74,9 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         this.dartGun = dartGun;
         resultObservers = new ArrayList<ResultsObserver>();
         dartObservers = new ArrayList<DartsObserver>();
+        andLayerObservers = new ArrayList<AndLayerObserver>();
+        orLayerObservers = new ArrayList<OrLayerObserver>();
+        outputLayerObservers = new ArrayList<OutputLayerObserver>();
         results = "";
 
         // *This can be overridden by the User Preferances panel!*
@@ -72,6 +85,10 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         // Creates a new DecimalFormatter for the text fields so we can
         // can control how many decimal places get printed.
         decimalFormater = new DecimalFormat(decimalFormat);
+
+        andLayerResult = null;
+        orLayerResult = null;
+        outputLayerResult = null;
     }
 
     /**
@@ -80,16 +97,16 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
     @Override
     public void calculate()
     {
-        bounds = FindMax.getMaxValue(this.controllers.get(Globals.THETA_CONTROLLER).getMatrix());
+        bounds = FindMax.getMaxValue(this.controllers.get(Globals.THETA_CONTROLLER).getModel());
         MatrixMultiply matrixMath = new MatrixMultiply();
         SHL shl = new SHL();
         CalcTheta theta = new CalcTheta();
 
         // Used to count the number of hits on a individual shape in the image
-        int[][] uniqueHits = new int[this.controllers.get(Globals.W1_CONTROLLER).getMatrix().length][1];
+        int[][] uniqueHits = new int[this.controllers.get(Globals.W1_CONTROLLER).getModel().length][1];
 
         // Used to calculate the ratio of hits to misses on a individual shape in the image
-        double[][] uniqueHitsRatio = new double[this.controllers.get(Globals.W1_CONTROLLER).getMatrix().length][1];
+        double[][] uniqueHitsRatio = new double[this.controllers.get(Globals.W1_CONTROLLER).getModel().length][1];
 
         // Used to count the number of hits in a spot where two or more images overlap
         int imageHits = 0;
@@ -109,22 +126,22 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
             double[][] points = dartGun.fireDart(bounds);
 
             // SHL[(W2*P)+Theta2]
-            double[][] matrix0 = matrixMath.multiply(this.controllers.get(Globals.W2_CONTROLLER).getMatrix(), points);
-            double[][] matrix1 = matrixMath.addMatrix(matrix0, this.controllers.get(Globals.THETA_CONTROLLER).getMatrix());
-            double[][] matrix2 = shl.calculate(matrix1);
+            double[][] matrix0 = matrixMath.multiply(this.controllers.get(Globals.W2_CONTROLLER).getModel(), points);
+            double[][] matrix1 = matrixMath.addMatrix(matrix0, this.controllers.get(Globals.THETA_CONTROLLER).getModel());
+            andLayerResult = shl.calculate(matrix1);
 
             // SHL[(W1*P)+Theta1]
-            double[][] matrix3 = matrixMath.multiply(this.controllers.get(Globals.W1_CONTROLLER).getMatrix(), matrix2);
-            double[][] theta1 = theta.calculateAnd(this.controllers.get(Globals.W1_CONTROLLER).getMatrix());
+            double[][] matrix3 = matrixMath.multiply(this.controllers.get(Globals.W1_CONTROLLER).getModel(), andLayerResult);
+            double[][] theta1 = theta.calculateAnd(this.controllers.get(Globals.W1_CONTROLLER).getModel());
             double[][] matrix4 = matrixMath.addMatrix(matrix3, theta1);
-            double[][] matrix5 = shl.calculate(matrix4);
+            orLayerResult = shl.calculate(matrix4);
 
             // Check for unique hits and tally them
-            for (int k = 0; k < matrix5.length; k++)
+            for (int k = 0; k < orLayerResult.length; k++)
             {
-                for (int l = 0; l < matrix5[k].length; l++)
+                for (int l = 0; l < orLayerResult[k].length; l++)
                 {
-                    if (matrix5[k][l] == 1)
+                    if (orLayerResult[k][l] == 1)
                     {
                         uniqueHits[k][l]++;
                     }
@@ -132,31 +149,32 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
             }
 
             // SHL[(W0*P)+Theta0]
-            double[][] theta2 = theta.calculateOr(this.controllers.get(Globals.W0_CONTROLLER).getMatrix());
-            double[][] matrix6 = matrixMath.multiply(this.controllers.get(Globals.W0_CONTROLLER).getMatrix(), matrix5);
+            double[][] theta2 = theta.calculateOr(this.controllers.get(Globals.W0_CONTROLLER).getModel());
+            double[][] matrix6 = matrixMath.multiply(this.controllers.get(Globals.W0_CONTROLLER).getModel(), orLayerResult);
             double[][] matrix7 = matrixMath.addMatrix(matrix6, theta2);
-            double[][] matrix8 = shl.calculate(matrix7);
+            outputLayerResult = shl.calculate(matrix7);
 
             // Check for shared hits and tally them
-            for (int k = 0; k < matrix8.length; k++)
+            for (int k = 0; k < outputLayerResult.length; k++)
             {
-                for (int l = 0; l < matrix8[k].length; l++)
+                for (int l = 0; l < outputLayerResult[k].length; l++)
                 {
-                    if (matrix8[k][l] == 1)
+                    if (outputLayerResult[k][l] == 1)
                     {
                         imageHits++;
                     }
                 }
             }
 
-            if (matrix8[0][0] == 1)
+            if (outputLayerResult[0][0] == 1)
             {
                 hit.add(points);
             }
-            if (matrix8[0][0] != 1)
+            if (outputLayerResult[0][0] != 1)
             {
                 miss.add(points);
             }
+            notifyObservers();
         }
 
         // Calculate the ratio of unique hits
@@ -175,7 +193,7 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
 
         appendResults(sharedHitsRatio, "Image ((sum: shape hits)/darts):");
 
-        notifyObservers();
+        notifyResultObservers();
     }
 
     /**
@@ -226,21 +244,89 @@ public class MavnMultiplePointModel implements MavnAlgorithmModelInterface, Dart
         }
     }
 
+    @Override
+    public void registerObserver(AndLayerObserver o)
+    {
+        andLayerObservers.add(o);
+    }
+
+    @Override
+    public void removeObserver(AndLayerObserver o)
+    {
+        int i = andLayerObservers.indexOf(o);
+        if (i >= 0)
+        {
+            andLayerObservers.remove(o);
+        }
+    }
+
+    @Override
+    public void registerObserver(OrLayerObserver o)
+    {
+        orLayerObservers.add(o);
+    }
+
+    @Override
+    public void removeObserver(OrLayerObserver o)
+    {
+        int i = orLayerObservers.indexOf(o);
+        if (i >= 0)
+        {
+            orLayerObservers.remove(o);
+        }
+    }
+
+    @Override
+    public void registerObserver(OutputLayerObserver o)
+    {
+        outputLayerObservers.add(o);
+    }
+
+    @Override
+    public void removeObserver(OutputLayerObserver o)
+    {
+        int i = outputLayerObservers.indexOf(o);
+        if (i >= 0)
+        {
+            outputLayerObservers.remove(o);
+        }
+    }
+
+    @Override
+    public void notifyResultObservers()
+    {
+        for (int i = 0; i < resultObservers.size(); i++)
+        {
+            ResultsObserver resultObserver = (ResultsObserver) resultObservers.get(i);
+            resultObserver.updateResultsModel(results);
+        }
+        for (int i = 0; i < dartObservers.size(); i++)
+        {
+            DartsObserver dartObserver = (DartsObserver) dartObservers.get(i);
+            dartObserver.updateDartResults(hit, miss);
+        }
+    }
+
     /**
      * Notify all Observers.
      */
     @Override
     public void notifyObservers()
     {
-        for (int i = 0; i < resultObservers.size(); i++)
+        for (int i = 0; i < andLayerObservers.size(); i++)
         {
-            ResultsObserver resultObserver = (ResultsObserver) resultObservers.get(i);
-            resultObserver.updateResultsMatrix(results);
+            AndLayerObserver observer = (AndLayerObserver) andLayerObservers.get(i);
+            observer.updateAndLayerModel(andLayerResult);
         }
-        for (int i = 0; i < dartObservers.size(); i++)
+        for (int i = 0; i < orLayerObservers.size(); i++)
         {
-            DartsObserver dartObserver = (DartsObserver) dartObservers.get(i);
-            dartObserver.updateDartResults(hit, miss);
+            OrLayerObserver observer = (OrLayerObserver) orLayerObservers.get(i);
+            observer.updateOrLayerModel(orLayerResult);
+        }
+        for (int i = 0; i < outputLayerObservers.size(); i++)
+        {
+            OutputLayerObserver observer = (OutputLayerObserver) outputLayerObservers.get(i);
+            observer.updateOutputLayerModel(outputLayerResult);
         }
     }
 

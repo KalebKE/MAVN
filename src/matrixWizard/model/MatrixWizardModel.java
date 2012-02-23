@@ -61,7 +61,7 @@ public class MatrixWizardModel implements MatrixWizardModelInterface
         for (int i = 0; i < observers.size(); i++)
         {
             MatrixWizardObserver observer = (MatrixWizardObserver) observers.get(i);
-            observer.updateMatrix(matrix);
+            observer.updateModel(matrix);
         }
     }
 

@@ -16,11 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package matrixWizard.controller;
 
+import matrixWizard.model.MatrixWizardModel;
 import matrixWizard.model.MatrixWizardModelInterface;
 import matrixWizard.view.MatrixTemplateFrame;
+import mavn.controller.InputController;
+import mavn.controller.InputControllerInterface;
 import mavn.util.math.Transpose;
 
 /**
@@ -32,27 +34,32 @@ import mavn.util.math.Transpose;
  */
 public class EditMatrixWizardController implements MatrixWizardControllerInterface
 {
-    private MatrixWizardModelInterface model;
-    private MatrixTemplateFrame matrixTemplate;
-    private double[][] matrix;
 
+    private MatrixTemplateFrame matrixTemplate;
+    private MatrixWizardModelInterface matrixWizardModel;
+    
     /**
      * Initialize the Controller for the MatrixWizard.
-     * @param model the model that will be updated with the new matrix
-     * @param matrix the matrix that will be updated
+     * @param controller the InputControllerIterface that uses this class.
      */
-    public EditMatrixWizardController(MatrixWizardModelInterface model, double[][] matrix)
+    public EditMatrixWizardController(InputControllerInterface controller)
     {
-        this.model = model;
-        this.matrix = matrix;
+        matrixWizardModel = new MatrixWizardModel();
+        matrixWizardModel.registerMatrixWizardObserver((InputController)controller);
+    }
+
+    @Override
+    public void getMatrixWizard(double[][] matrix)
+    {
         Transpose transpose = new Transpose();
-        this.matrix = transpose.tranposeMatrix(matrix);
+        matrix = transpose.tranposeMatrix(matrix);
+        matrixTemplate = new MatrixTemplateFrame(matrix.length, matrix[0].length, matrixWizardModel);
+        matrixTemplate.setMatrix(matrix);
     }
 
     @Override
     public void getMatrixWizard()
     {
-       matrixTemplate = new MatrixTemplateFrame(matrix.length, matrix[0].length, model);
-       matrixTemplate.setMatrix(matrix);
+        throw new UnsupportedOperationException("This action is not supported by this class.");
     }
 }

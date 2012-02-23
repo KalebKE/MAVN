@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.state;
 
-import mavn.view.MavnView;
+import mavn.view.ModelView;
 import util.components.BlinkerButton;
 
 /**
@@ -30,14 +30,14 @@ import util.components.BlinkerButton;
 public class ThetaState implements InputStateInterface
 {
 
-    private MavnView view;
+    private ModelView view;
     private boolean matrixLoaded;
 
     /**
      * Initialize the state.
      * @param view the View this class is reponsible for.
      */
-    public ThetaState(MavnView view)
+    public ThetaState(ModelView view)
     {
         this.view = view;
         matrixLoaded = false;
@@ -47,7 +47,7 @@ public class ThetaState implements InputStateInterface
      * Indicate a Theata Model matrix has been loaded.
      */
     @Override
-    public void matrixLoaded()
+    public void inputModelLoaded()
     {
         // Disable these buttons
         view.getNewThetaMatrixButton().setEnabled(false);
@@ -70,7 +70,7 @@ public class ThetaState implements InputStateInterface
      * Indicate a Theta Model matrix has been unloaded.
      */
     @Override
-    public void matrixUnloaded()
+    public void inputModelUnloaded()
     {
         // Disable these buttons
         view.getNewThetaMatrixButton().setEnabled(true);
@@ -94,7 +94,7 @@ public class ThetaState implements InputStateInterface
      * @return boolean indicating the Theta Model matrix has been loaded.
      */
     @Override
-    public boolean isMatrixLoaded()
+    public boolean isInputModelLoaded()
     {
         return matrixLoaded;
     }

@@ -53,6 +53,7 @@ public class PropertiesState implements PropertiesStateInterface
         dartModel = new SpinnerNumberModel(1000.0, 0.0, 100000.0, 1);
         propertiesView.getSeedSpinner().setModel(seedModel);
         propertiesView.getNumDartsSpinner().setModel(dartModel);
+        randomRng = true;
     }
 
     /**
@@ -270,8 +271,8 @@ public class PropertiesState implements PropertiesStateInterface
         propertiesView.getNumDartsSpinner().setEnabled(true);
         propertiesView.getRandomSeedRadio().setEnabled(true);
         propertiesView.getSeedLabel().setEnabled(true);
-        propertiesView.getSeedSpinner().setEnabled(true);
-        propertiesView.getSeedSpinnerLabel().setEnabled(true);
+        propertiesView.getSeedSpinner().setEnabled(false);
+        propertiesView.getSeedSpinnerLabel().setEnabled(false);
         propertiesView.getSpecifiedSeedRadio().setEnabled(true);
         propertiesView.getXORShiftRngRadio().setEnabled(true);
         propertiesView.getCmwcRngRadio().setEnabled(true);

@@ -29,7 +29,7 @@ import javax.swing.JOptionPane;
  * be notified and updated with a new Model whenever a new CSV file is parsed.
  * @author Kaleb
  */
-public class SaveCSVFileModel implements SaveFileModelInterface
+public class SaveCSVFileModel implements SaveCsvFileModelInterface
 {
 
     /**
@@ -59,37 +59,6 @@ public class SaveCSVFileModel implements SaveFileModelInterface
                     writer.append("\n");
                     writer.flush();
                 }
-                System.out.println("File Written!");
-                writer.close();
-            } catch (IOException error)
-            {
-                error.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Set the path to the file that defines the new Model.
-     * @param path to the file containing the model data
-     */
-    @Override
-    public void setModel(String path, String results)
-    {
-        int n = JOptionPane.showConfirmDialog(
-                null,
-                "Are you sure you want to save to this location?",
-                "Wait a second!",
-                JOptionPane.YES_NO_OPTION);
-
-        if (n == 0)
-        {
-            try
-            {
-                FileWriter writer = new FileWriter(path + ".txt");
-
-                writer.append(results);
-                writer.flush();
-
                 System.out.println("File Written!");
                 writer.close();
             } catch (IOException error)

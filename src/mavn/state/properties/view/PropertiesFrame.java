@@ -33,7 +33,7 @@ import mavn.globals.Globals;
 import mavn.state.RngStateInterface;
 import mavn.state.properties.state.PropertiesState;
 import mavn.state.properties.state.PropertiesStateInterface;
-import mavn.view.MavnView;
+import mavn.view.ModelView;
 
 /**
  * A special JFrame used to manage the properties state of the application.
@@ -43,13 +43,13 @@ public class PropertiesFrame extends javax.swing.JFrame
 {
 
     private PropertiesStateInterface propertiesState;
-    private MavnView view;
+    private ModelView view;
 
     /**
      * Initialize the state.
      * @param view the View this class is responsible for.
      */
-    public PropertiesFrame(MavnView view)
+    public PropertiesFrame(ModelView view)
     {
         initComponents();
         this.view = view;
@@ -57,7 +57,7 @@ public class PropertiesFrame extends javax.swing.JFrame
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.pack();
         this.setVisible(true);
-
+        propertiesState.useTargets();
         initToolTips();
     }
 

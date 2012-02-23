@@ -28,18 +28,18 @@ package mavn.state;
 public interface InputStateInterface
 {
     /**
-     * Check to see if a matrix is loaded.
+     * Check to see if a model is loaded.
      * @return indicate if a loaded has been loaded
      */
-    public boolean isMatrixLoaded();
+    public boolean isInputModelLoaded();
     /**
-     * What state should be enabled when a matrix is loaded.
+     * What state should be enabled when a model is loaded.
      */
-    public void matrixLoaded();
+    public void inputModelLoaded();
 
     /**
-     * What state should be enabled when a matrix is unloaded.
+     * What state should be enabled when a model is unloaded.
      */
-    public void matrixUnloaded();
+    public void inputModelUnloaded();
     
 }

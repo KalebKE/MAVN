@@ -21,18 +21,11 @@ package mavn.controller;
 import mavn.model.InputModelInterface;
 import file.controller.FileController;
 import file.controller.FileControllerInterface;
-import file.model.OpenCSVFileModel;
-import file.model.OpenFileModelInterface;
-import file.model.SaveCSVFileModel;
-import file.model.SaveFileModelInterface;
 import file.observer.FileObserver;
 import matrixWizard.controller.EditMatrixWizardController;
 import matrixWizard.controller.NewMatrixWizardController;
 import matrixWizard.controller.MatrixWizardControllerInterface;
-import matrixWizard.model.MatrixWizardModel;
-import matrixWizard.model.MatrixWizardModelInterface;
 import matrixWizard.observer.MatrixWizardObserver;
-import mavn.math.model.MavnAlgorithmModelInterface;
 
 /**
  * A special Controller that manages all of the input related to the files
@@ -47,13 +40,9 @@ public class InputController implements FileObserver, InputControllerInterface, 
 {
 
     private FileControllerInterface fileController;
-    private OpenFileModelInterface openFileModel;
-    private SaveFileModelInterface saveFileModel;
     private InputModelInterface model;
-    private MavnAlgorithmModelInterface mavn;
     private MatrixWizardControllerInterface newMatrixWizardController;
     private MatrixWizardControllerInterface editMatrixWizardControler;
-    private MatrixWizardModelInterface matrixWizardModel;
     private boolean matrixSet;
     private double[][] matrix;
 
@@ -64,81 +53,76 @@ public class InputController implements FileObserver, InputControllerInterface, 
     public InputController(InputModelInterface model)
     {
         this.model = model;
-        openFileModel = new OpenCSVFileModel();
-        openFileModel.registerFileObserver(this);
-        saveFileModel = new SaveCSVFileModel();
-        fileController = new FileController(openFileModel, saveFileModel);
-        matrixWizardModel = new MatrixWizardModel();
-        matrixWizardModel.registerMatrixWizardObserver(this);
-        newMatrixWizardController = new NewMatrixWizardController(matrixWizardModel);
-    }
-
-    @Override
-    public void importMatrix()
-    {
-        fileController.getOpenFileChooser();
-    }
-
-    @Override
-    public void newMatrix()
-    {
-        newMatrixWizardController.getMatrixWizard();
-    }
-
-    @Override
-    public void updateMatrix(double[][] matrix)
-    {
-        this.matrix = matrix;
-        model.setMatrix(matrix);
-        this.setMatrixSet(true);
+        fileController = new FileController();
+        newMatrixWizardController = new NewMatrixWizardController(this);
+        editMatrixWizardControler = new EditMatrixWizardController(this);
     }
 
     @Override
     public void editMatrix()
     {
-        if (this.isMatrixSet())
+        if (this.isModelSet())
         {
-            editMatrixWizardControler = new EditMatrixWizardController(matrixWizardModel, this.getMatrix());
-            editMatrixWizardControler.getMatrixWizard();
+            editMatrixWizardControler.getMatrixWizard(this.getModel());
         }
     }
 
     @Override
-    public OpenFileModelInterface getOpenFileModel()
+    public FileControllerInterface getFileController()
     {
-        return openFileModel;
+        return fileController;
     }
 
     @Override
-    public void saveMatrix()
-    {
-        if (this.isMatrixSet())
-        {
-            fileController.getSaveFileChooser(this.getMatrix());
-        }
-    }
-
-    @Override
-    public void setMatrix(double[][] matrix)
-    {
-        model.setMatrix(matrix);
-    }
-
-    @Override
-    public double[][] getMatrix()
+    public double[][] getModel()
     {
         return matrix;
     }
 
     @Override
-    public boolean isMatrixSet()
+    public boolean isModelSet()
     {
         return matrixSet;
     }
 
     @Override
-    public void setMatrixSet(boolean matrixSet)
+    public void importModel()
+    {
+        fileController.getOpenFileChooser(this);
+    }
+
+    @Override
+    public void newModel()
+    {
+        newMatrixWizardController.getMatrixWizard();
+    }
+
+    @Override
+    public void saveModel()
+    {
+        if (this.isModelSet())
+        {
+            fileController.getSaveFileChooser(this.getModel());
+        }
+    }
+
+    @Override
+    public void setModel(double[][] matrix)
+    {
+        model.setModel(matrix);
+    }
+
+    @Override
+    public void setModelSet(boolean matrixSet)
     {
         this.matrixSet = matrixSet;
+    }
+
+    @Override
+    public void updateModel(double[][] matrix)
+    {
+        this.matrix = matrix;
+        model.setModel(matrix);
+        this.setModelSet(true);
     }
 }

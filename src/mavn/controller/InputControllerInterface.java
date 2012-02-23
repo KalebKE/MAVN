@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.controller;
 
-import file.model.OpenFileModelInterface;
+import file.controller.FileControllerInterface;
 
 /**
  * InputControllerInterface implementations are concerned with managing
@@ -30,34 +30,49 @@ public interface InputControllerInterface
 {
 
     /**
-     * Implementation of the classes that will import data.
-     */
-    public void importMatrix();
-
-    /**
-     * Allow other classes access to the current FileModelInterface
-     * that is being used by the application.
-     * @return
-     */
-    public OpenFileModelInterface getOpenFileModel();
-
-    /**
      * Implementation of the classes that allow data to be edited.
      */
     public void editMatrix();
 
+    public FileControllerInterface getFileController();
+
+    /**
+     * Implementation of the classes that allow the matrix to be
+     * accessed by the rest of the application.
+     * @return the matrix.
+     */
+    public double[][] getModel();
+
+    /**
+     * Indicate if the matrix has been set.
+     * @return boolean indicating if the matrix has been set.
+     */
+    public boolean isModelSet();
+
+    /**
+     * Implementation of the classes that will import data.
+     */
+    public void importModel();
+
     /**
      * Implementation of the classes that allow new data to be created locally.
      */
-    public void newMatrix();
+    public void newModel();
 
-    public void saveMatrix();
-   
-    public double[][] getMatrix();
+    /**
+     * Implementatoin of the classes that allow input data to be saved externally.
+     */
+    public void saveModel();
 
-    public void setMatrix(double[][] matrix);
+    /**
+     * Implementation of setting the matrix.
+     * @param matrix the matrix to be set.
+     */
+    public void setModel(double[][] matrix);
 
-    public boolean isMatrixSet();
-
-    public void setMatrixSet(boolean matrixSet);
+    /**
+     * Inidcate that a matrix has been set.
+     * @param matrixSet boolean indicating if a matrix has been set.
+     */
+    public void setModelSet(boolean matrixSet);
 }

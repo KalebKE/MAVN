@@ -48,7 +48,7 @@ public interface OutputControllerInterface
      * algorithms.get(SIMULATION_IMPLEMENTATION).calculate();
      * }
      */
-    public void runMavnAlgorithm();
+    public void runSimulation();
 
     /**
      * Implementations should initialize the classes

@@ -19,8 +19,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package matrixWizard.controller;
 
+import matrixWizard.model.MatrixWizardModel;
 import matrixWizard.model.MatrixWizardModelInterface;
 import matrixWizard.view.CreateMatrixWizardFrame;
+import mavn.controller.InputController;
+import mavn.controller.InputControllerInterface;
 
 /**
  * An implementation of MatrixWizardControllerInterface that allows
@@ -29,23 +32,29 @@ import matrixWizard.view.CreateMatrixWizardFrame;
  */
 public class NewMatrixWizardController implements MatrixWizardControllerInterface
 {
-    private MatrixWizardModelInterface model;
-    private CreateMatrixWizardFrame view;
+    private MatrixWizardModelInterface matrixWizardModel;
 
     /**
      * Initialize the NewMatrixWizardController. The class will allow
      * the user to build a new matrix an update the Model with the matrix.
      * @param model the model that will be updated with the new matrix
      */
-    public NewMatrixWizardController(MatrixWizardModelInterface model)
+    public NewMatrixWizardController(InputControllerInterface controller)
     {
-        this.model = model;
+        matrixWizardModel = new MatrixWizardModel();
+        matrixWizardModel.registerMatrixWizardObserver((InputController)controller);
     }
 
     @Override
     public void getMatrixWizard()
     {
-        view = new CreateMatrixWizardFrame(model);
+        CreateMatrixWizardFrame view = new CreateMatrixWizardFrame(matrixWizardModel);
+    }
+
+    @Override
+    public void getMatrixWizard(double[][] matrix)
+    {
+        throw new UnsupportedOperationException("This action is not supported!");
     }
 
 }

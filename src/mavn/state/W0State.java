@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.state;
 
-import mavn.view.MavnView;
+import mavn.view.ModelView;
 import util.components.BlinkerButton;
 
 /**
@@ -29,14 +29,14 @@ import util.components.BlinkerButton;
  */
 public class W0State implements InputStateInterface
 {
-    private MavnView view;
+    private ModelView view;
     private boolean matrixLoaded;
 
     /**
      * Initialize the state.
      * @param view the View the class is responsible for.
      */
-    public W0State(MavnView view)
+    public W0State(ModelView view)
     {
         this.view = view;
         matrixLoaded = false;
@@ -45,7 +45,7 @@ public class W0State implements InputStateInterface
      * Inidcate that a W0 Model matrix has been loaded.
      */
     @Override
-    public void matrixLoaded()
+    public void inputModelLoaded()
     {
         // Disable these buttons
         view.getNewW0MatrixButton().setEnabled(false);
@@ -68,7 +68,7 @@ public class W0State implements InputStateInterface
      * Indicate that a W0 Model matrix has been unloaded.
      */
     @Override
-    public void matrixUnloaded()
+    public void inputModelUnloaded()
     {
          // Disable these buttons
         view.getNewW0MatrixButton().setEnabled(true);
@@ -92,7 +92,7 @@ public class W0State implements InputStateInterface
      * @return boolean indicating if the W0 Model matrix has been loaded.
      */
     @Override
-    public boolean isMatrixLoaded()
+    public boolean isInputModelLoaded()
     {
         return matrixLoaded;
     }

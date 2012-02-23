@@ -18,8 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.state;
 
-import java.util.ArrayList;
-import mavn.view.MavnView;
+import mavn.view.NetworkViewAbstract;
 import util.components.BlinkerButton;
 
 /**
@@ -29,8 +28,8 @@ import util.components.BlinkerButton;
  */
 public class ResultsState implements OutputStateInterface, RngStateInterface
 {
-
-    private MavnView view;
+    private NetworkViewAbstract view;
+    private boolean animated;
     private boolean randomRng;
     private boolean caRng;
     private boolean cmwcRng;
@@ -39,21 +38,16 @@ public class ResultsState implements OutputStateInterface, RngStateInterface
     private boolean dartGunState;
     private boolean propertiesLoaded;
     private boolean simulationLoaded;
-    private boolean run;
-    private ArrayList<double[][]> hit;
-    private ArrayList<double[][]> miss;
+    private boolean resultAvailable;
 
     /**
      * Initialize the state.
      * @param view the view the class manages the state for.
      */
-    public ResultsState(MavnView view)
+    public ResultsState(NetworkViewAbstract view)
     {
         this.view = view;
         propertiesLoaded = false;
-        hit = new ArrayList<double[][]>();
-        miss = new ArrayList<double[][]>();
-
         randomRng = false;
         caRng = false;
         cmwcRng = false;
@@ -62,35 +56,13 @@ public class ResultsState implements OutputStateInterface, RngStateInterface
     }
 
     /**
-     * Get the number and points of darts that hit a shape in the image
-     * during the simulation.
-     * @return the points of darts that hit a shape.
-     */
-    @Override
-    public ArrayList<double[][]> getHit()
-    {
-        return hit;
-    }
-
-    /**
-     * Get the number and points of darts that missed a shape in the image
-     * during the simulation.
-     * @return the points of darts that missed a shape.
-     */
-    @Override
-    public ArrayList<double[][]> getMiss()
-    {
-        return miss;
-    }
-
-    /**
      * Check if the simulation has been run.
      * @return boolean indicating a simulation has been run.
      */
     @Override
-    public boolean hasRun()
+    public boolean isResultAvailable()
     {
-        return run;
+        return resultAvailable;
     }
 
     /**
@@ -201,25 +173,23 @@ public class ResultsState implements OutputStateInterface, RngStateInterface
         view.getClearResultsMatrixButton().setEnabled(false);
         ((BlinkerButton) view.getClearResultsMatrixButton()).setBlink(false);
         propertiesLoaded = false;
-        run = false;
+        resultAvailable = false;
     }
 
     /**
      * Indicate that the simulation has been run.
      */
     @Override
-    public void run()
+    public void resultAvailable()
     {
         // Disable these buttons
         view.getRunButton().setEnabled(true);
         ((BlinkerButton) view.getRunButton()).setBlink(true);
-        view.getViewResultsButton().setEnabled(true);
-        ((BlinkerButton) view.getViewResultsButton()).setBlink(true);
         view.getSaveResultsButton().setEnabled(true);
         ((BlinkerButton) view.getSaveResultsButton()).setBlink(true);
         view.getClearResultsMatrixButton().setEnabled(true);
         ((BlinkerButton) view.getClearResultsMatrixButton()).setBlink(true);
-        run = true;
+        resultAvailable = true;
     }
 
     /**
@@ -264,27 +234,6 @@ public class ResultsState implements OutputStateInterface, RngStateInterface
     }
 
     /**
-     * Set the points of darts that hit a shape in the image during the
-     * simulation.
-     * @param hit the points of darts that hit shapes.
-     */
-    @Override
-    public void setHit(ArrayList<double[][]> hit)
-    {
-        this.hit = hit;
-    }
-
-    /**
-     * Set the points of darts that missed shapes in the image during the simulation.
-     * @param miss the points of darts that missed shapes.
-     */
-    @Override
-    public void setMiss(ArrayList<double[][]> miss)
-    {
-        this.miss = miss;
-    }
-
-    /**
      * Indicate if MTRNG is the desired DartGun.
      * @param mtRng boolean indicating MTRNG is desired.
      */
@@ -314,6 +263,8 @@ public class ResultsState implements OutputStateInterface, RngStateInterface
         // Disable these buttons
         view.getPropertiesButton().setEnabled(true);
         ((BlinkerButton) view.getPropertiesButton()).setBlink(true);
+        view.getLoadModelButton().setEnabled(true);
+        ((BlinkerButton) view.getLoadModelButton()).setBlink(false);
     }
 
     /**
@@ -323,18 +274,30 @@ public class ResultsState implements OutputStateInterface, RngStateInterface
     public void simulationUnloaded()
     {
         // Disable these buttons
+        view.getLoadModelButton().setEnabled(true);
+        ((BlinkerButton) view.getLoadModelButton()).setBlink(true);
         view.getPropertiesButton().setEnabled(false);
         ((BlinkerButton) view.getPropertiesButton()).setBlink(false);
         view.getRunButton().setEnabled(false);
         ((BlinkerButton) view.getRunButton()).setBlink(false);
         view.getRunButton().setEnabled(false);
         ((BlinkerButton) view.getRunButton()).setBlink(false);
-        view.getViewResultsButton().setEnabled(false);
-        ((BlinkerButton) view.getViewResultsButton()).setBlink(false);
         view.getSaveResultsButton().setEnabled(false);
         ((BlinkerButton) view.getSaveResultsButton()).setBlink(false);
         view.getClearResultsMatrixButton().setEnabled(false);
         ((BlinkerButton) view.getClearResultsMatrixButton()).setBlink(false);
         simulationLoaded = false;
+    }
+
+    @Override
+    public void animate(boolean animate)
+    {
+        this.animated = animate;
+    }
+
+    @Override
+    public boolean isAnimated()
+    {
+        return animated;
     }
 }

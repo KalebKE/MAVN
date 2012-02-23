@@ -41,7 +41,7 @@ public abstract class InputModelInterface
      * Set the matrix.
      * @param matrix
      */
-    public void setMatrix(double[][] matrix)
+    public void setModel(double[][] matrix)
     {
         this.matrix = matrix;
         notifyObservers();

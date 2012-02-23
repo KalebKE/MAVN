@@ -29,7 +29,7 @@ public class Transpose
      * @param array the array to be transposed.
      * @return the transposed array.
      */
-    public double[][] tranposeMatrix(double[][] array)
+    public static double[][] tranposeMatrix(double[][] array)
     {
 
         int r = array.length;

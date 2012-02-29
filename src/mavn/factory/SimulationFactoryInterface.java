@@ -18,9 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.factory;
 
-import java.util.ArrayList;
-import mavn.controller.InputControllerInterface;
-
 /**
  * An interface for MavnControllers. MavnControllers are responsible for
  * initializing all of the state required for the application. The MAVN application
@@ -47,7 +44,7 @@ public interface SimulationFactoryInterface
      * of initAlgorithm will initialize implementations of a
      * MavnAlgorithmModelInterface.
      */
-    public void initAlgorithms();
+    public void initModelAlgorithms();
 
     /**
      * Implementation of DartGuns used by the application. DartGun's
@@ -55,50 +52,43 @@ public interface SimulationFactoryInterface
      * dimensional plane. They will generally be implementations of
      * DartModelInterface. 
      */
-    public void initDartGuns();
+    public void initModelAlgorithmDartGuns();
 
     /**
      * Initialize Input Controller Modules (ICM). Generally, ICM's
      * would implement InputControllerInterface. 
      */
-    public void initInputControllers();
+    public void initModelInputControllers();
 
     /**
      * Initialize Input Model Modules (IMM). Gernally, IMM's would
      * implement InputModelInterface.
      */
-    public void initInputModels();
+    public void initModelInputModels();
 
     /**
      * Initialize Input State Modules (ISM). Generally, ISM's would implement
      * InputStateInterface.
      */
-    public void initInputState();
+    public void initModelInputStates();
+
+    public void initModelResultModels();
 
     /**
      * Initialize Output Controller Modules (OCM). Generally, OCM's would
      * implement OutputControllerInterface.
      */
-    public void initOutputController();
+    public void initModelResultControllers();
 
     /**
      * Initialize Output State Modules (OSM). Generally, OSM's would implement
      * OutputStateInterface.
      */
-    public void initOutputState();
+    public void initModelResultStates();
 
     /**
      * Initialize the main View that the user will see when they first
      * see the application.
      */
-    public void initView();
-
-    /**
-     * Set the InputControllerInterface collection that the application will
-     * use. InputControllerInterface implementations handle the applications
-     * inputs. They usually deal with getting external data into the application
-     * and then modifying or using that data locally. 
-     * @param inputControllersList
-     */
-    public void setInputControllersList(ArrayList<InputControllerInterface> inputControllersList);
+    public void initModelViews();
 }

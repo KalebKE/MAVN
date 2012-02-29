@@ -41,6 +41,23 @@ public class Globals
     public final static int W1_MODEL = 3;
     public final static int W2_MODEL = 4;
 
+
+    public final static int TARGET_PANEL = 0;
+    public final static int THETA_PANEL = 1;
+    public final static int W0_PANEL = 2;
+    public final static int W1_PANEL = 3;
+    public final static int W2_PANEL = 4;
+    
+
+    public final static int AND_LAYER_MODEL = 0;
+    public final static int OR_LAYER_MODEL = 1;
+    public final static int OUTPUT_LAYER_MODEL = 2;
+    public final static int SIMULATION_RESULT = 3;
+    public final static int SHAPES_RATIO_RESULT = 4;
+    public final static int IMAGE_RATIO_RESULT = 5;
+
+    public final static int DART_RESULT_MODEL = 0;
+
     public final static int TARGET_STATE = 0;
     public final static int THETA_STATE = 1;
     public final static int W0_STATE = 2;

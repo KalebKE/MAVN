@@ -18,17 +18,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.factory;
 
+import file.open.observer.OpenFileObserver;
 import java.util.ArrayList;
-import java.util.Iterator;
-import mavn.controller.InputControllerInterface;
-import mavn.controller.OutputControllerInterface;
+import mavn.simModel.input.controller.ModelInputFileInterface;
+import mavn.simModel.result.controller.ModelResultControllerInterface;
 import mavn.dartGun.DartGunInterface;
-import mavn.math.model.AlgorithmModelInterface;
-import mavn.model.InputModelInterface;
-import mavn.state.InputStateInterface;
-import mavn.state.OutputStateInterface;
-import mavn.view.ModelView;
-import mavn.view.NetworkViewAbstract;
+import mavn.simModel.algorithm.model.AlgorithmModelInterface;
+import mavn.simModel.input.model.ModelInputInterface;
+import mavn.simModel.input.view.state.InputStateInterface;
+import mavn.simModel.properties.state.PropertiesStateInterface;
+import mavn.simModel.properties.view.PropertiesFrame;
+import mavn.simModel.result.model.DartResultInterface;
+import mavn.simModel.result.model.ModelResultInterface;
+import mavn.simModel.result.view.state.OutputStateInterface;
+import mavn.view.input.ModelChangeEvent;
+import mavn.view.input.ModelInputControlPanel;
+import mavn.view.input.ModelInputPanelAbstract;
+import mavn.view.input.SimControlView;
+import mavn.view.result.NetworkViewAbstract;
 
 /**
  * MavnControllerAbstract is a special implementation of the MavnControllerInterface.
@@ -41,55 +48,89 @@ import mavn.view.NetworkViewAbstract;
  */
 public abstract class AbstractSimulationFactory implements SimulationFactoryInterface
 {
+    // Model Input Collections
 
-    protected Iterator<InputModelInterface> inputModels;
-    protected Iterator<InputControllerInterface> inputControllers;
-    protected Iterator<InputStateInterface> inputStates;
-    protected Iterator<OutputControllerInterface> outputControllers;
-    protected Iterator<OutputStateInterface> outputStates;
-    protected ModelView view;
-    protected NetworkViewAbstract networkPanel;
-    // Collections
-    protected ArrayList<InputControllerInterface> inputControllersList;
-    protected ArrayList<InputModelInterface> inputModelsList;
-    protected ArrayList<InputStateInterface> inputStatesList;
-    protected ArrayList<OutputControllerInterface> outputControllersList;
-    protected ArrayList<OutputStateInterface> outputStatesList;
-    protected ArrayList<DartGunInterface> dartGuns;
-    protected ArrayList<AlgorithmModelInterface> algorithms;
-    // Input Controllers
-    protected InputControllerInterface w2Controller;
-    protected InputControllerInterface w1Controller;
-    protected InputControllerInterface w0Controller;
-    protected InputControllerInterface thetaController;
-    protected InputControllerInterface targetController;
-    // Input Models
-    protected InputModelInterface w2Model;
-    protected InputModelInterface w1Model;
-    protected InputModelInterface w0Model;
-    protected InputModelInterface thetaModel;
-    protected InputModelInterface targetModel;
-    // Input States
+    protected ArrayList<ModelInputFileInterface> modelInputControllersList;
+    protected ArrayList<OpenFileObserver> modelInputFileControllersList;
+    protected ArrayList<ModelInputInterface> modelInputModelsList;
+    protected ArrayList<InputStateInterface> modelInputStatesList;
+    // Model Result Collections
+    protected ArrayList<ModelResultControllerInterface> modelResultControllersList;
+    protected ArrayList<ModelResultInterface> modelResultModelsList;
+    protected ArrayList<OutputStateInterface> modelResultStatesList;
+    // Model Algorithm Collections
+    protected ArrayList<AlgorithmModelInterface> modelAlgorithmsModelsList;
+    protected ArrayList<DartGunInterface> modelDartGunModelsList;
+    protected ArrayList<DartResultInterface> modelDartResultModelsList;
+    // Model Input View Collections
+    protected ArrayList<ModelInputPanelAbstract> modelInputPanelsList;
+    // Model Input Controllers
+    protected ModelInputFileInterface targetController;
+    protected ModelInputFileInterface thetaController;
+    protected ModelInputFileInterface w0Controller;
+    protected ModelInputFileInterface w1Controller;
+    protected ModelInputFileInterface w2Controller;
+    // Model Input Models
+    protected ModelInputInterface w2Model;
+    protected ModelInputInterface w1Model;
+    protected ModelInputInterface w0Model;
+    protected ModelInputInterface thetaModel;
+    protected ModelInputInterface targetModel;
+    // Model Input States
     protected InputStateInterface w0State;
     protected InputStateInterface w1State;
     protected InputStateInterface w2State;
     protected InputStateInterface targetState;
     protected InputStateInterface thetaState;
-    // Output Controlller
-    protected OutputControllerInterface resultsController;
-    // Ouput State
+    // Model Result Controlller
+    protected ModelResultControllerInterface resultsController;
+    // Model Result Models
+    protected ModelResultInterface andLayerModelResult;
+    protected ModelResultInterface orLayerModelResult;
+    protected ModelResultInterface outputLayerModelResult;
+    protected ModelResultInterface simulationResult;
+    protected ModelResultInterface shapesRatioResult;
+    protected ModelResultInterface imageRatioResult;
+    // Model Result State
     protected OutputStateInterface resultsState;
-    protected DartGunInterface cmwcDartGun;
-    protected DartGunInterface caDartGun;
-    protected DartGunInterface javaDartGun;
-    protected DartGunInterface mtDartGun;
-    protected DartGunInterface xOrDartGun;
+    // Model Algorithm Model
     protected AlgorithmModelInterface singlePoint;
     protected AlgorithmModelInterface cmwc;
     protected AlgorithmModelInterface ca;
     protected AlgorithmModelInterface mt;
     protected AlgorithmModelInterface random;
     protected AlgorithmModelInterface xor;
+    // Model Algorithm Dart Gun's
+    protected DartGunInterface cmwcDartGun;
+    protected DartGunInterface caDartGun;
+    protected DartGunInterface javaDartGun;
+    protected DartGunInterface mtDartGun;
+    protected DartGunInterface xOrDartGun;
+    // Model Algorithm Dart Gun Result
+    protected DartResultInterface dartResult;
+    // Model Views
+    protected SimControlView view;
+    protected NetworkViewAbstract networkPanel;
+    protected ModelInputControlPanel modelPanel;
+    protected ModelInputPanelAbstract targetPanel;
+    protected ModelInputPanelAbstract thetaPanel;
+    protected ModelInputPanelAbstract w0Panel;
+    protected ModelInputPanelAbstract w1Panel;
+    protected ModelInputPanelAbstract w2Panel;
+    protected ModelChangeEvent modelChanged;
+
+    protected PropertiesStateInterface propertiesState;
+    protected PropertiesFrame propertiesFrame;
+
+    public ArrayList<AlgorithmModelInterface> getModelAlgorithmsModelsList()
+    {
+        return modelAlgorithmsModelsList;
+    }
+
+    public ArrayList<DartResultInterface> getModelDartResultModelsList()
+    {
+        return modelDartResultModelsList;
+    }
 
     /**
      * Return the Input Controller Module collection. Input Controller Modules
@@ -100,9 +141,9 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * @return A collection of InputerControllerInterface implementations currently
      * being used in the application.
      */
-    public Iterator<InputControllerInterface> getInputControllers()
+    public ArrayList<ModelInputFileInterface> getModelInputControllers()
     {
-        return inputControllers;
+        return modelInputControllersList;
     }
 
     /**
@@ -115,9 +156,14 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * @return A collection of InputModelInterface implementations currenlty
      * being used by the application.
      */
-    public Iterator<InputModelInterface> getInputModels()
+    public ArrayList<ModelInputInterface> getModelInputModels()
     {
-        return inputModels;
+        return modelInputModelsList;
+    }
+
+    public ArrayList<OpenFileObserver> getModelInputFileControllersList()
+    {
+        return modelInputFileControllersList;
     }
 
     /**
@@ -128,9 +174,24 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * @return A collection of InputStateInterface implementations currently
      * being used by the application.
      */
-    public Iterator<InputStateInterface> getInputStates()
+    public ArrayList<InputStateInterface> getModelInputStates()
     {
-        return inputStates;
+        return modelInputStatesList;
+    }
+
+    public PropertiesFrame getPropertiesFrame()
+    {
+        return propertiesFrame;
+    }
+
+    public PropertiesStateInterface getPropertiesState()
+    {
+        return propertiesState;
+    }
+
+    public ArrayList<ModelResultInterface> getModelResultModelsList()
+    {
+        return modelResultModelsList;
     }
 
     /**
@@ -138,9 +199,9 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * @return A collection of OutputControllerInterface implementations currently
      * being used by the application.
      */
-    public Iterator<OutputControllerInterface> getOutputControllers()
+    public ArrayList<ModelResultControllerInterface> getModelResultControllers()
     {
-        return outputControllers;
+        return modelResultControllersList;
     }
 
     /**
@@ -148,9 +209,9 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * @param inputControllers A collection of InputerControllerInterface implementations currently
      * being used by the application.
      */
-    public void setInputControllers(Iterator<InputControllerInterface> inputControllers)
+    public void setModelInputControllers(ArrayList<ModelInputFileInterface> inputControllers)
     {
-        this.inputControllers = inputControllers;
+        this.modelInputControllersList = inputControllers;
     }
 
     /**
@@ -158,9 +219,9 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * @param inputModels A collection of InputModelInterface implementations currenlty
      * being used by the application.
      */
-    public void setInputModels(Iterator<InputModelInterface> inputModels)
+    public void setModelInputModels(ArrayList<ModelInputInterface> inputModels)
     {
-        this.inputModels = inputModels;
+        this.modelInputModelsList = inputModels;
     }
 
     /**
@@ -168,9 +229,9 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * @param inputStates A collection of InputStateInterface implementations currently
      * being used by the application.
      */
-    public void setInputStates(Iterator<InputStateInterface> inputStates)
+    public void setModelInputStates(ArrayList<InputStateInterface> inputStates)
     {
-        this.inputStates = inputStates;
+        this.modelInputStatesList = inputStates;
     }
 
     /**
@@ -178,9 +239,9 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * @param outputControllers A collection of OutputControllerInterface implementations currently
      * being used by the application.
      */
-    public void setOutputControllers(Iterator<OutputControllerInterface> outputControllers)
+    public void setModelResultControllers(ArrayList<ModelResultControllerInterface> modelResultControllers)
     {
-        this.outputControllers = outputControllers;
+        this.modelResultControllersList = modelResultControllers;
     }
 
     /**
@@ -188,9 +249,9 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * @return A collection of OutputStateInterace implementations currently
      * being used by the application.
      */
-    public Iterator<OutputStateInterface> getOutputStates()
+    public ArrayList<OutputStateInterface> getModelResultStates()
     {
-        return outputStates;
+        return modelResultStatesList;
     }
 
     /**
@@ -198,16 +259,16 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * @param outputStates A collection of OutputStateInterace implementations currently
      * being used by the application.
      */
-    public void setOutputStates(Iterator<OutputStateInterface> outputStates)
+    public void setModelResultStates(ArrayList<OutputStateInterface> outputStates)
     {
-        this.outputStates = outputStates;
+        this.modelResultStatesList = outputStates;
     }
 
     /**
      * Return the View.
      * @return the View being used by the application.
      */
-    public ModelView getView()
+    public SimControlView getView()
     {
         return view;
     }
@@ -216,7 +277,7 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
      * Set the View.
      * @param view the View being used by the application.
      */
-    public void setView(ModelView view)
+    public void setView(SimControlView view)
     {
         this.view = view;
     }
@@ -224,5 +285,10 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
     public NetworkViewAbstract getNetworkPanel()
     {
         return networkPanel;
+    }
+
+    public ModelInputControlPanel getModelPanel()
+    {
+        return modelPanel;
     }
 }

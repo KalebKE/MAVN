@@ -39,7 +39,7 @@ public class FindMax
             {
                 if (numbers[i][j] > maxValue)
                 {
-                    maxValue = numbers[i][j];
+                    maxValue = Math.abs(numbers[i][j]);
                 }
             }
         }

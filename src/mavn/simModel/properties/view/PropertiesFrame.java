@@ -32,7 +32,6 @@ import javax.swing.JSpinner;
 import mavn.factory.AbstractSimulationFactory;
 import mavn.globals.Globals;
 import mavn.simModel.result.view.state.RngStateInterface;
-import mavn.simModel.properties.state.PropertiesState;
 
 /**
  * A special JFrame used to manage the properties state of the application.

@@ -136,8 +136,6 @@ public class MavnMultiplePointModel implements AlgorithmModelInterface,
         hit = new ArrayList<double[][]>();
         miss = new ArrayList<double[][]>();
 
-
-
         // For loop to fire the darts
         for (int i = 0; i < darts; i++)
         {
@@ -212,10 +210,6 @@ public class MavnMultiplePointModel implements AlgorithmModelInterface,
 
         // Calculate the ratio of shared hits
         imageRatio[0][0] = imageHits / darts;
-
-        appendResults(shapesRatio, "Shape (hits/darts):");
-
-        appendResults(imageRatio, "Image ((sum: shape hits)/darts):");
 
         notifyResultObservers();
     }

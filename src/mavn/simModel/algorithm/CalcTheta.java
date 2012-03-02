@@ -96,7 +96,7 @@ public class CalcTheta {
         // row's and subtracting one from the sum. Just one node has to go high
         // for the OR to activate, so when the matrices are multiplied and subtracted
         // from the result of the OR function, if any of the nodes have gone high,
-        // the result will be >0. 
+        // the result will be > 0.
         for (int i = 0; i < matrix.length; i++)
         {
             for (int j = 0; j < result[0].length; j++)

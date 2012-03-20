@@ -18,24 +18,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.factory;
 
-import file.open.observer.OpenFileObserver;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import mavn.simModel.input.controller.ModelInputFileInterface;
-import mavn.simModel.result.controller.ModelResultControllerInterface;
-import mavn.dartGun.DartGunInterface;
-import mavn.simModel.algorithm.model.AlgorithmModelInterface;
-import mavn.simModel.input.model.ModelInputInterface;
-import mavn.simModel.input.view.state.InputStateInterface;
-import mavn.simModel.properties.state.PropertiesStateInterface;
-import mavn.simModel.properties.view.PropertiesFrame;
-import mavn.simModel.result.model.DartResultInterface;
-import mavn.simModel.result.model.ModelResultInterface;
-import mavn.simModel.result.view.state.OutputStateInterface;
-import mavn.view.input.ModelChangeEvent;
-import mavn.view.input.ModelInputControlPanel;
-import mavn.view.input.ModelInputPanelAbstract;
-import mavn.view.input.SimControlView;
-import mavn.view.result.NetworkViewAbstract;
+import mavn.simModel.algorithm.model.point.generator.PointGeneratorInterface;
+import mavn.simModel.algorithm.properties.view.state.SimulationPropertiesStateInterface;
+import mavn.simModel.algorithm.properties.view.SimulationPropertiesFrame;
+import mavn.simModel.algorithm.properties.view.state.PointGeneratorStateInterface;
+import mavn.simModel.plot.model.PointOutputModelInterface;
+import mavn.simModel.output.view.state.OutputModelStateInterface;
+import mavn.simModel.input.view.changeEvent.InputModelChangeEvent;
+import mavn.simModel.input.view.layoutPanel.InputViewGridLayoutPanel;
+import mavn.simModel.network.mediator.NetworkRendererInterface;
+import mavn.view.SimControlView;
+import mavn.simModel.output.view.layoutPanel.ModelOutputDefaultLayoutView;
+import simulyn.algorithm.model.AlgorithmModelInterface;
+import simulyn.input.controller.InputControllerInterface;
+import simulyn.input.model.InputModelInterface;
+import simulyn.input.view.state.InputViewStateInterface;
+import simulyn.output.model.OutputModelInterface;
+import simulyn.output.view.OutputViewInterface;
+import simulyn.output.view.mediator.OutputViewMediatorInterface;
+import simulyn.ui.components.inputModelPanel.InputViewAbstract;
 
 /**
  * MavnControllerAbstract is a special implementation of the MavnControllerInterface.
@@ -48,220 +51,77 @@ import mavn.view.result.NetworkViewAbstract;
  */
 public abstract class AbstractSimulationFactory implements SimulationFactoryInterface
 {
-    // Model Input Collections
 
-    protected ArrayList<ModelInputFileInterface> modelInputControllersList;
-    protected ArrayList<OpenFileObserver> modelInputFileControllersList;
-    protected ArrayList<ModelInputInterface> modelInputModelsList;
-    protected ArrayList<InputStateInterface> modelInputStatesList;
-    // Model Result Collections
-    protected ArrayList<ModelResultControllerInterface> modelResultControllersList;
-    protected ArrayList<ModelResultInterface> modelResultModelsList;
-    protected ArrayList<OutputStateInterface> modelResultStatesList;
-    // Model Algorithm Collections
-    protected ArrayList<AlgorithmModelInterface> modelAlgorithmsModelsList;
-    protected ArrayList<DartGunInterface> modelDartGunModelsList;
-    protected ArrayList<DartResultInterface> modelDartResultModelsList;
-    // Model Input View Collections
-    protected ArrayList<ModelInputPanelAbstract> modelInputPanelsList;
+    protected ArrayList<InputModelInterface> inputModels;
+    protected ArrayList<InputViewAbstract> inputViews;
+    protected AlgorithmModelInterface singlePointSimulation;
+    protected AlgorithmModelInterface multiplePointSimulation;
+
     // Model Input Controllers
-    protected ModelInputFileInterface targetController;
-    protected ModelInputFileInterface thetaController;
-    protected ModelInputFileInterface w0Controller;
-    protected ModelInputFileInterface w1Controller;
-    protected ModelInputFileInterface w2Controller;
+    protected InputControllerInterface targetController;
+    protected InputControllerInterface thetaController;
+    protected InputControllerInterface w0Controller;
+    protected InputControllerInterface w1Controller;
+    protected InputControllerInterface w2Controller;
     // Model Input Models
-    protected ModelInputInterface w2Model;
-    protected ModelInputInterface w1Model;
-    protected ModelInputInterface w0Model;
-    protected ModelInputInterface thetaModel;
-    protected ModelInputInterface targetModel;
+    protected InputModelInterface w2Model;
+    protected InputModelInterface w1Model;
+    protected InputModelInterface w0Model;
+    protected InputModelInterface thetaModel;
+    protected InputModelInterface targetModel;
     // Model Input States
-    protected InputStateInterface w0State;
-    protected InputStateInterface w1State;
-    protected InputStateInterface w2State;
-    protected InputStateInterface targetState;
-    protected InputStateInterface thetaState;
-    // Model Result Controlller
-    protected ModelResultControllerInterface resultsController;
+    protected InputViewStateInterface w0State;
+    protected InputViewStateInterface w1State;
+    protected InputViewStateInterface w2State;
+    protected InputViewStateInterface targetState;
+    protected InputViewStateInterface thetaState;
     // Model Result Models
-    protected ModelResultInterface andLayerModelResult;
-    protected ModelResultInterface orLayerModelResult;
-    protected ModelResultInterface outputLayerModelResult;
-    protected ModelResultInterface simulationResult;
-    protected ModelResultInterface shapesRatioResult;
-    protected ModelResultInterface imageRatioResult;
+    protected OutputModelInterface andLayerModelResult;
+    protected OutputModelInterface orLayerModelResult;
+    protected OutputModelInterface outputLayerModelResult;
+    protected OutputModelInterface simulationModelResult;
+    protected OutputModelInterface shapesRatioResult;
+    protected OutputModelInterface imageRatioResult;
     // Model Result State
-    protected OutputStateInterface resultsState;
-    // Model Algorithm Model
-    protected AlgorithmModelInterface singlePoint;
-    protected AlgorithmModelInterface cmwc;
-    protected AlgorithmModelInterface ca;
-    protected AlgorithmModelInterface mt;
-    protected AlgorithmModelInterface random;
-    protected AlgorithmModelInterface xor;
+    protected OutputModelStateInterface outputModelsState;
     // Model Algorithm Dart Gun's
-    protected DartGunInterface cmwcDartGun;
-    protected DartGunInterface caDartGun;
-    protected DartGunInterface javaDartGun;
-    protected DartGunInterface mtDartGun;
-    protected DartGunInterface xOrDartGun;
+    protected PointGeneratorInterface cmwcPointGenerator;
+    protected PointGeneratorInterface caPointGenerator;
+    protected PointGeneratorInterface javaPointGenerator;
+    protected PointGeneratorInterface mtPointGenerator;
+    protected PointGeneratorInterface xOrPointGenerator;
     // Model Algorithm Dart Gun Result
-    protected DartResultInterface dartResult;
+    protected PointOutputModelInterface pointOutputModel;
+    protected PointGeneratorStateInterface pointModelOutputState;
     // Model Views
     protected SimControlView view;
-    protected NetworkViewAbstract networkPanel;
-    protected ModelInputControlPanel modelPanel;
-    protected ModelInputPanelAbstract targetPanel;
-    protected ModelInputPanelAbstract thetaPanel;
-    protected ModelInputPanelAbstract w0Panel;
-    protected ModelInputPanelAbstract w1Panel;
-    protected ModelInputPanelAbstract w2Panel;
-    protected ModelChangeEvent modelChanged;
+    protected ModelOutputDefaultLayoutView outputLayoutPanel;
+    protected OutputViewInterface outputViewController;
+    protected ActionListener outputControllViewAction;
+    
+    protected OutputViewMediatorInterface outputMediator;
+    protected OutputViewMediatorInterface networkMediator;
+    protected OutputViewMediatorInterface plotMediator;
 
-    protected PropertiesStateInterface propertiesState;
-    protected PropertiesFrame propertiesFrame;
+    protected InputViewGridLayoutPanel inputView;
+    protected InputViewAbstract targetPanel;
+    protected InputViewAbstract thetaPanel;
+    protected InputViewAbstract w0Panel;
+    protected InputViewAbstract w1Panel;
+    protected InputViewAbstract w2Panel;
+    protected InputModelChangeEvent modelChanged;
+    protected NetworkRendererInterface networkRendererMediator;
+    protected SimulationPropertiesStateInterface propertiesState;
+    protected SimulationPropertiesFrame propertiesFrame;
 
-    public ArrayList<AlgorithmModelInterface> getModelAlgorithmsModelsList()
-    {
-        return modelAlgorithmsModelsList;
-    }
-
-    public ArrayList<DartResultInterface> getModelDartResultModelsList()
-    {
-        return modelDartResultModelsList;
-    }
-
-    /**
-     * Return the Input Controller Module collection. Input Controller Modules
-     * implement InputControllerInterface and are responsible for controlling
-     * Input Modules. Implementations concern themselves with importing external
-     * data into the application and then allowing other classes (Views, Models and other Controllers)
-     * to work with that data locally.
-     * @return A collection of InputerControllerInterface implementations currently
-     * being used in the application.
-     */
-    public ArrayList<ModelInputFileInterface> getModelInputControllers()
-    {
-        return modelInputControllersList;
-    }
-
-    /**
-     * Return the Input Model Module collection. Input Model Modules implement
-     * InputModelInterface and are responsible for implementing the Models
-     * that import the data into the application. They generally use an Observer
-     * pattern to update any observers of changes to the model.Many objects can
-     * observe specific changes to the Input Model. This allows for
-     * fine grain control of the applications Input Model.
-     * @return A collection of InputModelInterface implementations currenlty
-     * being used by the application.
-     */
-    public ArrayList<ModelInputInterface> getModelInputModels()
-    {
-        return modelInputModelsList;
-    }
-
-    public ArrayList<OpenFileObserver> getModelInputFileControllersList()
-    {
-        return modelInputFileControllersList;
-    }
-
-    /**
-     * Return the Input State Module collection. InputStateModules usually
-     * implement InputStateInterface. Implementations are concerend with
-     * managing the Input State of the Views. These implementations are key to
-     * managing the user experience and reducing the complexity of the application.
-     * @return A collection of InputStateInterface implementations currently
-     * being used by the application.
-     */
-    public ArrayList<InputStateInterface> getModelInputStates()
-    {
-        return modelInputStatesList;
-    }
-
-    public PropertiesFrame getPropertiesFrame()
+    public SimulationPropertiesFrame getPropertiesFrame()
     {
         return propertiesFrame;
     }
 
-    public PropertiesStateInterface getPropertiesState()
+    public SimulationPropertiesStateInterface getPropertiesState()
     {
         return propertiesState;
-    }
-
-    public ArrayList<ModelResultInterface> getModelResultModelsList()
-    {
-        return modelResultModelsList;
-    }
-
-    /**
-     * Return the Output Controller Module collection.
-     * @return A collection of OutputControllerInterface implementations currently
-     * being used by the application.
-     */
-    public ArrayList<ModelResultControllerInterface> getModelResultControllers()
-    {
-        return modelResultControllersList;
-    }
-
-    /**
-     * Set the Input Controller Module collection.
-     * @param inputControllers A collection of InputerControllerInterface implementations currently
-     * being used by the application.
-     */
-    public void setModelInputControllers(ArrayList<ModelInputFileInterface> inputControllers)
-    {
-        this.modelInputControllersList = inputControllers;
-    }
-
-    /**
-     * Set the Input Model Modules collection.
-     * @param inputModels A collection of InputModelInterface implementations currenlty
-     * being used by the application.
-     */
-    public void setModelInputModels(ArrayList<ModelInputInterface> inputModels)
-    {
-        this.modelInputModelsList = inputModels;
-    }
-
-    /**
-     * Set the Input State Module collection.
-     * @param inputStates A collection of InputStateInterface implementations currently
-     * being used by the application.
-     */
-    public void setModelInputStates(ArrayList<InputStateInterface> inputStates)
-    {
-        this.modelInputStatesList = inputStates;
-    }
-
-    /**
-     * Set the Output Controller Module collection.
-     * @param outputControllers A collection of OutputControllerInterface implementations currently
-     * being used by the application.
-     */
-    public void setModelResultControllers(ArrayList<ModelResultControllerInterface> modelResultControllers)
-    {
-        this.modelResultControllersList = modelResultControllers;
-    }
-
-    /**
-     * Get the Output State Module collection.
-     * @return A collection of OutputStateInterace implementations currently
-     * being used by the application.
-     */
-    public ArrayList<OutputStateInterface> getModelResultStates()
-    {
-        return modelResultStatesList;
-    }
-
-    /**
-     * Get the Output State Module collection.
-     * @param outputStates A collection of OutputStateInterace implementations currently
-     * being used by the application.
-     */
-    public void setModelResultStates(ArrayList<OutputStateInterface> outputStates)
-    {
-        this.modelResultStatesList = outputStates;
     }
 
     /**
@@ -282,13 +142,13 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
         this.view = view;
     }
 
-    public NetworkViewAbstract getNetworkPanel()
+    public ModelOutputDefaultLayoutView getNetworkPanel()
     {
-        return networkPanel;
+        return outputLayoutPanel;
     }
 
-    public ModelInputControlPanel getModelPanel()
+    public InputViewGridLayoutPanel getModelPanel()
     {
-        return modelPanel;
+        return inputView;
     }
 }

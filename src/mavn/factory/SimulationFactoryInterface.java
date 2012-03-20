@@ -36,16 +36,6 @@ package mavn.factory;
  */
 public interface SimulationFactoryInterface
 {
-
-    /**
-     * Implementation of algorithms used by the application.
-     * This allows implementations of the algorithms to change
-     * flexibly within the application. Generally, implementations
-     * of initAlgorithm will initialize implementations of a
-     * MavnAlgorithmModelInterface.
-     */
-    public void initModelAlgorithms();
-
     /**
      * Implementation of DartGuns used by the application. DartGun's
      * use random number generators to produce two points for a two
@@ -64,7 +54,7 @@ public interface SimulationFactoryInterface
      * Initialize Input Model Modules (IMM). Gernally, IMM's would
      * implement InputModelInterface.
      */
-    public void initModelInputModels();
+    public void initInputModels();
 
     /**
      * Initialize Input State Modules (ISM). Generally, ISM's would implement
@@ -72,13 +62,6 @@ public interface SimulationFactoryInterface
      */
     public void initModelInputStates();
 
-    public void initModelResultModels();
-
-    /**
-     * Initialize Output Controller Modules (OCM). Generally, OCM's would
-     * implement OutputControllerInterface.
-     */
-    public void initModelResultControllers();
 
     /**
      * Initialize Output State Modules (OSM). Generally, OSM's would implement

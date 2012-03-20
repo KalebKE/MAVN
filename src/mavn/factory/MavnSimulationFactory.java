@@ -18,59 +18,60 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.factory;
 
-import file.open.observer.OpenFileObserver;
 import java.util.ArrayList;
-import mavn.simModel.input.controller.ModelInputFileController;
-import mavn.simModel.input.controller.ModelInputFileInterface;
-import mavn.simModel.result.controller.ModelResultsController;
-import mavn.simModel.result.controller.ModelResultControllerInterface;
-import mavn.dartGun.CMWC4096RngDartGun;
-import mavn.dartGun.CellularAutomatonRngDartGun;
-import mavn.dartGun.DartGunInterface;
-import mavn.dartGun.JavaRngDartGun;
-import mavn.dartGun.MtRngDartGun;
-import mavn.dartGun.XORRngDartGun;
+import javax.swing.JPanel;
 import mavn.globals.Globals;
-import mavn.simModel.algorithm.model.dart.DartModelInterface;
-import mavn.simModel.algorithm.model.AlgorithmModelInterface;
-import mavn.simModel.algorithm.network.AndLayerInterface;
-import mavn.simModel.algorithm.model.MavnMultiplePointModel;
-import mavn.simModel.algorithm.model.MavnSinglePointModel;
-import mavn.simModel.algorithm.network.ImageRatioInterface;
-import mavn.simModel.algorithm.network.OrLayerInterface;
-import mavn.simModel.algorithm.network.OutputLayerInterface;
-import mavn.simModel.algorithm.network.ShapesRatioInterface;
-import mavn.simModel.input.model.ModelInputInterface;
-import mavn.simModel.input.model.TargetModel;
-import mavn.simModel.input.model.ThetaModel;
-import mavn.simModel.input.model.W0Model;
-import mavn.simModel.input.model.W1Model;
-import mavn.simModel.input.model.W2Model;
-import mavn.simModel.input.view.state.InputStateInterface;
-import mavn.simModel.result.view.state.OutputStateInterface;
-import mavn.simModel.result.view.state.ResultsState;
-import mavn.simModel.input.view.state.InputState;
-import mavn.simModel.properties.state.PropertiesState;
-import mavn.simModel.properties.view.PropertiesFrame;
-import mavn.simModel.result.model.AndLayerModel;
-import mavn.simModel.result.model.DartResult;
-import mavn.simModel.result.model.DartResultInterface;
-import mavn.simModel.result.model.ImageRatioModel;
-import mavn.simModel.result.model.ModelResultInterface;
-import mavn.simModel.result.model.OrLayerModel;
-import mavn.simModel.result.model.OutputLayerModel;
-import mavn.simModel.result.model.ResultModel;
-import mavn.simModel.result.model.ShapesRatioModel;
-import mavn.view.input.ModelChangeEvent;
-import mavn.view.input.ModelInputControlPanel;
-import mavn.view.input.ModelInputPanelAbstract;
-import mavn.view.input.ModelInputTargetPanel;
-import mavn.view.input.ModelInputThetaPanel;
-import mavn.view.input.ModelInputW0Panel;
-import mavn.view.input.ModelInputW1Panel;
-import mavn.view.input.ModelInputW2Panel;
-import mavn.view.result.MavnNetworkView;
-import mavn.view.input.SimControlView;
+import mavn.simModel.algorithm.model.multiplePointSimulation.MultiplePointModelInterface;
+import mavn.simModel.algorithm.model.multiplePointSimulation.UniformMultiPointSimulation;
+import mavn.simModel.algorithm.model.network.AndLayerAlgorithmModelInterface;
+import mavn.simModel.algorithm.model.network.OrLayerAlgorithmModelInterface;
+import mavn.simModel.algorithm.model.network.OutputLayerAlgorithmModelInterface;
+import mavn.simModel.algorithm.model.network.observer.AndLayerAlgorithmModelObserver;
+import mavn.simModel.algorithm.model.network.observer.OrLayerAlgorithmModelObserver;
+import mavn.simModel.algorithm.model.network.observer.OutputLayerAlgorithmModelObserver;
+import mavn.simModel.algorithm.model.point.ImageRatioAlgorithmModelInterface;
+import mavn.simModel.algorithm.model.point.PointModelInterface;
+import mavn.simModel.algorithm.model.point.ShapesRatioAlgorithmModelInterface;
+import mavn.simModel.algorithm.model.point.generator.JavaRandomPointGenerator;
+import mavn.simModel.algorithm.model.point.observer.ImageRatioAlgorithmModelObserver;
+import mavn.simModel.algorithm.model.point.observer.PointGeneratorModelObserver;
+import mavn.simModel.algorithm.model.point.observer.ShapesRatioAlgorithmModelObserver;
+import mavn.simModel.algorithm.model.singlePointSimulation.SinglePointModelInterface;
+import mavn.simModel.algorithm.model.singlePointSimulation.SinglePointSimulation;
+import mavn.simModel.input.model.TargetInputModel;
+import mavn.simModel.input.model.ThetaInputModel;
+import mavn.simModel.input.model.W0InputModel;
+import mavn.simModel.input.model.W1InputModel;
+import mavn.simModel.input.model.W2InputModel;
+import mavn.simModel.algorithm.properties.view.state.SimulationPropertiesState;
+import mavn.simModel.algorithm.properties.view.SimulationPropertiesFrame;
+import mavn.simModel.input.view.changeEvent.InputModelChangeEvent;
+import mavn.simModel.input.view.InputViewTargetModel;
+import mavn.simModel.input.view.InputViewThetaModel;
+import mavn.simModel.input.view.InputViewW0Model;
+import mavn.simModel.input.view.InputViewW1Model;
+import mavn.simModel.input.view.InputViewW2Model;
+import mavn.simModel.input.view.layoutPanel.InputViewGridLayoutPanel;
+import mavn.simModel.network.mediator.NetworkMediator;
+import mavn.simModel.network.mediator.NetworkRendererInterface;
+import mavn.simModel.network.model.AndLayerOutputModel;
+import mavn.simModel.network.model.OrLayerOutputModel;
+import mavn.simModel.network.model.OutputLayerOutputModel;
+import mavn.simModel.output.mediator.OutputMediator;
+import mavn.simModel.output.model.ImageRatioOutputModel;
+import mavn.simModel.output.model.ShapesRatioOutputModel;
+import mavn.simModel.output.model.SimulationOutputModel;
+import mavn.simModel.output.view.actions.ModelOutputViewAction;
+import mavn.simModel.output.view.layoutPanel.ModelOutputDefaultLayoutView;
+import mavn.simModel.plot.mediator.PlotMediator;
+import mavn.simModel.plot.mediator.PlotMediatorInterface;
+import mavn.simModel.plot.model.PointOutputModel;
+import mavn.view.SimControlView;
+import simulyn.input.controller.InputController;
+import simulyn.input.model.InputModelInterface;
+import simulyn.output.mediator.OutputMediatorInterface;
+import simulyn.ui.components.inputModelPanel.InputViewAbstract;
+import simulyn.ui.components.outputModelPanel.SimulynDefaultOutputView;
 
 /**
  * A Controller class for the MAVN application. This class serves as the master
@@ -87,244 +88,160 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
      */
     public MavnSimulationFactory()
     {
-        // Initialize the collections.
-        modelInputModelsList = new ArrayList<ModelInputInterface>();
-        modelInputControllersList = new ArrayList<ModelInputFileInterface>();
-        modelInputStatesList = new ArrayList<InputStateInterface>();
-        modelResultControllersList = new ArrayList<ModelResultControllerInterface>();
-        modelResultModelsList = new ArrayList<ModelResultInterface>();
-        modelResultStatesList = new ArrayList<OutputStateInterface>();
-        modelDartGunModelsList = new ArrayList<DartGunInterface>();
-        modelAlgorithmsModelsList = new ArrayList<AlgorithmModelInterface>();
-        modelDartResultModelsList = new ArrayList<DartResultInterface>();
-        modelInputPanelsList = new ArrayList<ModelInputPanelAbstract>();
-        modelInputFileControllersList = new ArrayList<OpenFileObserver>();
-
+        inputModels = new ArrayList<InputModelInterface>();
+        inputViews = new ArrayList<InputViewAbstract>();
+        initInputModels();
+        initSimulationModels();
+        initNetworkOutputModels();
+        initPointOutputModels();
         initModelInputControllers();
-        initModelInputModels();
-        initModelResultControllers();
-        initModelResultModels();
         initModelViews();
-        initModelResultStates();
-        initModelInputStates();
-        initModelAlgorithmDartGuns();
-        initModelAlgorithms();
-
-        view.setNetworkView();
+        view.setOutputView();
         // Display the view.
         this.view.setVisible(true);
     }
 
     @Override
-    public void initModelAlgorithms()
+    public void initInputModels()
     {
-        singlePoint = new MavnSinglePointModel(modelInputControllersList);
-        ca = new MavnMultiplePointModel(modelInputControllersList, modelDartGunModelsList.get(Globals.CELLULAR_AUTOMATON_DARTGUN));
-        cmwc = new MavnMultiplePointModel(modelInputControllersList, modelDartGunModelsList.get(Globals.CMWC4096_DARTGUN));
-        mt = new MavnMultiplePointModel(modelInputControllersList, modelDartGunModelsList.get(Globals.MT_DARTGUN));
-        random = new MavnMultiplePointModel(modelInputControllersList, modelDartGunModelsList.get(Globals.JAVA_RNG_DARTGUN));
-        xor = new MavnMultiplePointModel(modelInputControllersList, modelDartGunModelsList.get(Globals.XOR_DARTGUN));
+        // Initialize the input models
+        targetModel = new TargetInputModel();
+        thetaModel = new ThetaInputModel();
+        w0Model = new W0InputModel();
+        w1Model = new W1InputModel();
+        w2Model = new W2InputModel();
 
-        singlePoint.registerObserver((ModelResultsController) resultsController);
-        ((AndLayerInterface) singlePoint).registerObserver((ModelResultsController) resultsController);
-        ((OrLayerInterface) singlePoint).registerObserver((ModelResultsController) resultsController);
-        ((OutputLayerInterface) singlePoint).registerObserver((ModelResultsController) resultsController);
+        // Add the input models to the collection
+        // Use globals to associate the object with the correct index
+        inputModels.add(Globals.TARGET_MODEL, targetModel);
+        inputModels.add(Globals.THETA_MODEL, thetaModel);
+        inputModels.add(Globals.W0_MODEL, w0Model);
+        inputModels.add(Globals.W1_MODEL, w1Model);
+        inputModels.add(Globals.W2_MODEL, w2Model);
 
-        cmwc.registerObserver((ModelResultsController) resultsController);
-        ((DartModelInterface) cmwc).registerObserver((ModelResultsController) resultsController);
-        ((AndLayerInterface) cmwc).registerObserver((ModelResultsController) resultsController);
-        ((OrLayerInterface) cmwc).registerObserver((ModelResultsController) resultsController);
-        ((OutputLayerInterface) cmwc).registerObserver((ModelResultsController) resultsController);
-        ((ShapesRatioInterface) cmwc).registerObserver((ModelResultsController) resultsController);
-        ((ImageRatioInterface) cmwc).registerObserver((ModelResultsController) resultsController);
-
-        ca.registerObserver((ModelResultsController) resultsController);
-        ((DartModelInterface) ca).registerObserver((ModelResultsController) resultsController);
-        ((AndLayerInterface) ca).registerObserver((ModelResultsController) resultsController);
-        ((OrLayerInterface) ca).registerObserver((ModelResultsController) resultsController);
-        ((OutputLayerInterface) ca).registerObserver((ModelResultsController) resultsController);
-        ((ShapesRatioInterface) ca).registerObserver((ModelResultsController) resultsController);
-        ((ImageRatioInterface) ca).registerObserver((ModelResultsController) resultsController);
-
-        mt.registerObserver((ModelResultsController) resultsController);
-        ((DartModelInterface) mt).registerObserver((ModelResultsController) resultsController);
-        ((AndLayerInterface) mt).registerObserver((ModelResultsController) resultsController);
-        ((OrLayerInterface) mt).registerObserver((ModelResultsController) resultsController);
-        ((OutputLayerInterface) mt).registerObserver((ModelResultsController) resultsController);
-        ((ShapesRatioInterface) mt).registerObserver((ModelResultsController) resultsController);
-        ((ImageRatioInterface) mt).registerObserver((ModelResultsController) resultsController);
-
-        random.registerObserver((ModelResultsController) resultsController);
-        ((DartModelInterface) random).registerObserver((ModelResultsController) resultsController);
-        ((AndLayerInterface) random).registerObserver((ModelResultsController) resultsController);
-        ((OrLayerInterface) random).registerObserver((ModelResultsController) resultsController);
-        ((OutputLayerInterface) random).registerObserver((ModelResultsController) resultsController);
-        ((ShapesRatioInterface) random).registerObserver((ModelResultsController) resultsController);
-        ((ImageRatioInterface) random).registerObserver((ModelResultsController) resultsController);
-
-        xor.registerObserver((ModelResultsController) (ModelResultsController) resultsController);
-        ((DartModelInterface) xor).registerObserver((ModelResultsController) resultsController);
-        ((AndLayerInterface) xor).registerObserver((ModelResultsController) resultsController);
-        ((OrLayerInterface) xor).registerObserver((ModelResultsController) resultsController);
-        ((OutputLayerInterface) xor).registerObserver((ModelResultsController) resultsController);
-        ((ShapesRatioInterface) xor).registerObserver((ModelResultsController) resultsController);
-        ((ImageRatioInterface) xor).registerObserver((ModelResultsController) resultsController);
-
-        modelAlgorithmsModelsList.add(Globals.SINGLE_POINT_ALGORITHM, singlePoint);
-        modelAlgorithmsModelsList.add(Globals.CELLULAR_AUTOMATON_ALGORITHM, ca);
-        modelAlgorithmsModelsList.add(Globals.CMWC4096_ALGORITHM, cmwc);
-        modelAlgorithmsModelsList.add(Globals.JAVA_RNG_ALGORITHM, random);
-        modelAlgorithmsModelsList.add(Globals.MT_ALGORITHM, mt);
-        modelAlgorithmsModelsList.add(Globals.XOR_ALGORITHM, xor);
-    }
-
-    @Override
-    public void initModelAlgorithmDartGuns()
-    {
-        modelDartGunModelsList.add(Globals.CELLULAR_AUTOMATON_DARTGUN, caDartGun = new CellularAutomatonRngDartGun());
-        modelDartGunModelsList.add(Globals.CMWC4096_DARTGUN, cmwcDartGun = new CMWC4096RngDartGun());
-        modelDartGunModelsList.add(Globals.JAVA_RNG_DARTGUN, javaDartGun = new JavaRngDartGun());
-        modelDartGunModelsList.add(Globals.MT_DARTGUN, mtDartGun = new MtRngDartGun());
-        modelDartGunModelsList.add(Globals.XOR_DARTGUN, xOrDartGun = new XORRngDartGun());
     }
 
     @Override
     public void initModelInputControllers()
     {
-        // Get a new instance of the input models
-        targetModel = new TargetModel();
-        thetaModel = new ThetaModel();
-        w0Model = new W0Model();
-        w1Model = new W1Model();
-        w2Model = new W2Model();
-
         // Initialize the input controllers.
-        // Pass them an instance of the desired View and Model
-        targetController = new ModelInputFileController(targetModel);
-        thetaController = new ModelInputFileController(thetaModel);
-        w0Controller = new ModelInputFileController(w0Model);
-        w1Controller = new ModelInputFileController(w1Model);
-        w2Controller = new ModelInputFileController(w2Model);
-
-        // Add the input controllers to the collection.
-        // Use the Globals to associate the object with the correct index.
-        modelInputControllersList.add(Globals.TARGET_CONTROLLER, targetController);
-        modelInputControllersList.add(Globals.THETA_CONTROLLER, thetaController);
-        modelInputControllersList.add(Globals.W0_CONTROLLER, w0Controller);
-        modelInputControllersList.add(Globals.W1_CONTROLLER, w1Controller);
-        modelInputControllersList.add(Globals.W2_CONTROLLER, w2Controller);
-    }
-
-    @Override
-    public void initModelInputModels()
-    {
-        // Add the input models to the collection
-        // Use globals to associate the object with the correct index
-        modelInputModelsList.add(Globals.TARGET_MODEL, targetModel);
-        modelInputModelsList.add(Globals.THETA_MODEL, thetaModel);
-        modelInputModelsList.add(Globals.W0_MODEL, w0Model);
-        modelInputModelsList.add(Globals.W1_MODEL, w1Model);
-        modelInputModelsList.add(Globals.W2_MODEL, w2Model);
-
-        modelInputFileControllersList.add(Globals.TARGET_CONTROLLER, (OpenFileObserver) targetController);
-        modelInputFileControllersList.add(Globals.THETA_CONTROLLER, (OpenFileObserver) thetaController);
-        modelInputFileControllersList.add(Globals.W0_CONTROLLER, (OpenFileObserver) w0Controller);
-        modelInputFileControllersList.add(Globals.W1_CONTROLLER, (OpenFileObserver) w1Controller);
-        modelInputFileControllersList.add(Globals.W2_CONTROLLER, (OpenFileObserver) w2Controller);
-    }
-
-    @Override
-    public void initModelInputStates()
-    {
-        // Initialize input state modules by passing them a View
-        targetState = new InputState(targetPanel);
-        thetaState = new InputState(thetaPanel);
-        w0State = new InputState(w0Panel);
-        w1State = new InputState(w1Panel);
-        w2State = new InputState(w2Panel);
-
-        // Add the input state modules to the collection
-        // Use Globals to associate the right object with the right index
-        modelInputStatesList.add(Globals.TARGET_STATE, targetState);
-        modelInputStatesList.add(Globals.THETA_STATE, thetaState);
-        modelInputStatesList.add(Globals.W0_STATE, w0State);
-        modelInputStatesList.add(Globals.W1_STATE, w1State);
-        modelInputStatesList.add(Globals.W2_STATE, w2State);
-    }
-
-    @Override
-    public void initModelResultControllers()
-    {
-        // Initialize a new output module by passing it a View.
-        resultsController = new ModelResultsController(this);
-        modelResultControllersList.add(Globals.RESULTS_CONTROLLER, resultsController);
-    }
-
-    @Override
-    public void initModelResultModels()
-    {
-        // Initize a new View by passing it this controller.
-        this.networkPanel = new MavnNetworkView(this);
-
-        super.andLayerModelResult = new AndLayerModel();
-        ((AndLayerModel) andLayerModelResult).registerObserver(networkPanel);
-        modelResultModelsList.add(Globals.AND_LAYER_MODEL, andLayerModelResult);
-        super.orLayerModelResult = new OrLayerModel();
-        ((OrLayerModel) orLayerModelResult).registerObserver(networkPanel);
-        modelResultModelsList.add(Globals.OR_LAYER_MODEL, orLayerModelResult);
-        super.outputLayerModelResult = new OutputLayerModel();
-        ((OutputLayerModel) outputLayerModelResult).registerObserver(networkPanel);
-        modelResultModelsList.add(Globals.OUTPUT_LAYER_MODEL, outputLayerModelResult);
-        super.simulationResult = new ResultModel();
-        ((ResultModel) simulationResult).registerObserver(networkPanel);
-        modelResultModelsList.add(Globals.SIMULATION_RESULT, simulationResult);
-        super.shapesRatioResult = new ShapesRatioModel();
-        ((ShapesRatioModel) shapesRatioResult).registerObserver(networkPanel);
-        modelResultModelsList.add(Globals.SHAPES_RATIO_RESULT, shapesRatioResult);
-        super.imageRatioResult = new ImageRatioModel();
-        ((ImageRatioModel) imageRatioResult).registerObserver(networkPanel);
-        modelResultModelsList.add(Globals.IMAGE_RATIO_RESULT, imageRatioResult);
-
-
-        super.dartResult = new DartResult();
-        ((DartResult) dartResult).registerObserver(networkPanel);
-        modelDartResultModelsList.add(Globals.DART_RESULT_MODEL, dartResult);
-
-    }
-
-    @Override
-    public void initModelResultStates()
-    {
-        // Initialize a new output state module by passing it a View.
-        resultsState = new ResultsState(networkPanel);
-        modelResultStatesList.add(Globals.RESULTS_STATE, resultsState);
+        targetController = new InputController(targetModel);
+        thetaController = new InputController(thetaModel);
+        w0Controller = new InputController(w0Model);
+        w1Controller = new InputController(w1Model);
+        w2Controller = new InputController(w2Model);
     }
 
     @Override
     public void initModelViews()
     {
-        modelChanged = new ModelChangeEvent(this);
-        targetPanel = new ModelInputTargetPanel(targetController, targetModel, modelChanged);
-        modelInputPanelsList.add(Globals.TARGET_PANEL, targetPanel);
-        thetaPanel = new ModelInputThetaPanel(thetaController, thetaModel, modelChanged);
-        modelInputPanelsList.add(Globals.THETA_PANEL, thetaPanel);
-        w0Panel = new ModelInputW0Panel(w0Controller, w0Model, modelChanged);
-        modelInputPanelsList.add(Globals.W0_PANEL, w0Panel);
-        w1Panel = new ModelInputW1Panel(w1Controller, w1Model, modelChanged);
-        modelInputPanelsList.add(Globals.W1_PANEL, w1Panel);
-        w2Panel = new ModelInputW2Panel(w2Controller, w2Model, modelChanged);
-        modelInputPanelsList.add(Globals.W2_PANEL, w2Panel);
+        pointOutputModel = new PointOutputModel();
+        ((PointModelInterface) multiplePointSimulation).registerObserver
+                ((PointGeneratorModelObserver) pointOutputModel);
+
+
+        outputMediator = new OutputMediator(singlePointSimulation,
+                multiplePointSimulation, simulationModelResult,
+                shapesRatioResult, imageRatioResult);
+
+        networkMediator = new NetworkMediator(singlePointSimulation,
+                multiplePointSimulation, andLayerModelResult,
+                orLayerModelResult, outputLayerModelResult);
+
+        plotMediator = new PlotMediator(singlePointSimulation,
+                multiplePointSimulation, pointOutputModel, simulationModelResult);
+
+        outputControllViewAction = new ModelOutputViewAction((OutputMediatorInterface) outputMediator);
+        outputViewController = new SimulynDefaultOutputView(outputControllViewAction);
+        outputViewController.setOutputViewRendererPanel(((OutputMediatorInterface)outputMediator).getView());
+
+        outputLayoutPanel = new ModelOutputDefaultLayoutView(
+                (JPanel) outputViewController, ((PlotMediatorInterface) plotMediator).getView(),
+                ((NetworkRendererInterface) networkMediator).getView());
+
+
+        modelChanged = new InputModelChangeEvent(inputModels, networkRendererMediator, outputModelsState, view);
+
+        targetPanel = new InputViewTargetModel(targetController, targetModel, modelChanged);
+        thetaPanel = new InputViewThetaModel(thetaController, thetaModel, modelChanged);
+        w0Panel = new InputViewW0Model(w0Controller, w0Model, modelChanged);
+        w1Panel = new InputViewW1Model(w1Controller, w1Model, modelChanged);
+        w2Panel = new InputViewW2Model(w2Controller, w2Model, modelChanged);
+
+        inputViews.add(Globals.TARGET_PANEL, targetPanel);
+        inputViews.add(Globals.THETA_PANEL, thetaPanel);
+        inputViews.add(Globals.W0_PANEL, w0Panel);
+        inputViews.add(Globals.W1_PANEL, w1Panel);
+        inputViews.add(Globals.W2_PANEL, w2Panel);
 
         // register with the input model observers with the view
-        ((TargetModel) targetModel).registerObserver((ModelInputTargetPanel) targetPanel);
-        ((ThetaModel) thetaModel).registerObserver((ModelInputThetaPanel) thetaPanel);
-        ((W0Model) w0Model).registerObserver((ModelInputW0Panel) w0Panel);
-        ((W1Model) w1Model).registerObserver((ModelInputW1Panel) w1Panel);
-        ((W2Model) w2Model).registerObserver((ModelInputW2Panel) w2Panel);
+        ((TargetInputModel) targetModel).registerObserver((InputViewTargetModel) targetPanel);
+        ((ThetaInputModel) thetaModel).registerObserver((InputViewThetaModel) thetaPanel);
+        ((W0InputModel) w0Model).registerObserver((InputViewW0Model) w0Panel);
+        ((W1InputModel) w1Model).registerObserver((InputViewW1Model) w1Panel);
+        ((W2InputModel) w2Model).registerObserver((InputViewW2Model) w2Panel);
 
-        this.modelPanel = new ModelInputControlPanel(modelInputPanelsList);
-        this.view = new SimControlView(this);
-        propertiesFrame = new PropertiesFrame(this);
-        propertiesState = new PropertiesState(propertiesFrame);
+        //.modelPanel = new InputViewGridLayoutPanel(modelInputPanelsList);
+        propertiesFrame = new SimulationPropertiesFrame(outputModelsState, pointModelOutputState, propertiesState);
+        propertiesState = new SimulationPropertiesState(propertiesFrame);
+
+        inputView = new InputViewGridLayoutPanel(inputViews);
+        view = new SimControlView(inputView, outputLayoutPanel);
+    }
+
+    /**
+     * Initialize the Network Output Models.
+     */
+    public void initNetworkOutputModels()
+    {
+        super.andLayerModelResult = new AndLayerOutputModel();
+        super.orLayerModelResult = new OrLayerOutputModel();
+        super.outputLayerModelResult = new OutputLayerOutputModel();
+
+        ((AndLayerAlgorithmModelInterface) singlePointSimulation).registerObserver((AndLayerAlgorithmModelObserver) andLayerModelResult);
+        ((AndLayerAlgorithmModelInterface) multiplePointSimulation).registerObserver((AndLayerAlgorithmModelObserver) andLayerModelResult);
+
+        ((OrLayerAlgorithmModelInterface) singlePointSimulation).registerObserver((OrLayerAlgorithmModelObserver) orLayerModelResult);
+        ((OrLayerAlgorithmModelInterface) multiplePointSimulation).registerObserver((OrLayerAlgorithmModelObserver) orLayerModelResult);
+
+        ((OutputLayerAlgorithmModelInterface) singlePointSimulation).registerObserver((OutputLayerAlgorithmModelObserver) outputLayerModelResult);
+        ((OutputLayerAlgorithmModelInterface) multiplePointSimulation).registerObserver((OutputLayerAlgorithmModelObserver) outputLayerModelResult);
+    }
+
+    /**
+     * Initialize the Point Output Models.
+     */
+    public void initPointOutputModels()
+    {
+        super.simulationModelResult = new SimulationOutputModel((MultiplePointModelInterface) multiplePointSimulation, (SinglePointModelInterface) singlePointSimulation);
+        super.shapesRatioResult = new ShapesRatioOutputModel();
+        super.imageRatioResult = new ImageRatioOutputModel();
+
+        ((ShapesRatioAlgorithmModelInterface) multiplePointSimulation).registerObserver((ShapesRatioAlgorithmModelObserver) shapesRatioResult);
+        ((ImageRatioAlgorithmModelInterface) multiplePointSimulation).registerObserver((ImageRatioAlgorithmModelObserver) imageRatioResult);
+    }
+
+    public void initSimulationModels()
+    {
+        singlePointSimulation = new SinglePointSimulation();
+        multiplePointSimulation = new UniformMultiPointSimulation(new JavaRandomPointGenerator());
+    }
+
+    @Override
+    public void initModelAlgorithmDartGuns()
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void initModelInputStates()
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void initModelResultStates()
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

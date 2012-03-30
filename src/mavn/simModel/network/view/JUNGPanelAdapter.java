@@ -31,6 +31,7 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
+import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import java.awt.Paint;
 import java.util.ArrayList;
@@ -160,6 +161,8 @@ public class JUNGPanelAdapter extends JPanel implements Printable
                 LazyMap.<Number, String>decorate(new HashMap<Number, String>(), new ToStringLabeller<Number>())));
 
         vv.setVertexToolTipTransformer(vv.getRenderContext().getVertexLabelTransformer());
+
+        vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
 
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         this.add(panel);

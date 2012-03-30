@@ -19,9 +19,14 @@ public class NetworkMediatorState implements MediatorStateInterface
     private boolean andLayerUpdated;
     private boolean orLayerUpdated;
     private boolean outputLayerUpdated;
+
     private double[] andLayerOutput;
     private double[] orLayerOutput;
     private double[] outputLayerOutput;
+
+    private double[][] w0;
+    private double[][] w1;
+    private double[][] w2;
 
     public NetworkMediatorState(OutputViewMediatorInterface controller)
     {
@@ -29,6 +34,10 @@ public class NetworkMediatorState implements MediatorStateInterface
         andLayerUpdated = false;
         orLayerUpdated = false;
         outputLayerUpdated = false;
+
+        w0 = new double[0][0];
+        w1 = new double[0][0];
+        w2 = new double[0][0];
     }
 
     public double[] getAndLayerOutput()
@@ -77,6 +86,21 @@ public class NetworkMediatorState implements MediatorStateInterface
         return outputLayerOutput;
     }
 
+    public double[][] getW0()
+    {
+        return w0;
+    }
+
+    public double[][] getW1()
+    {
+        return w1;
+    }
+
+    public double[][] getW2()
+    {
+        return w2;
+    }
+
     public void setAndLayerOutput(double[] andLayerResult)
     {
         this.andLayerOutput = andLayerResult;
@@ -96,6 +120,21 @@ public class NetworkMediatorState implements MediatorStateInterface
         this.outputLayerOutput = outputLayerResult;
         outputLayerUpdated = true;
         stateChanged();
+    }
+
+    public void setW0(double[][] w0)
+    {
+        this.w0 = w0;
+    }
+
+    public void setW1(double[][] w1)
+    {
+        this.w1 = w1;
+    }
+
+    public void setW2(double[][] w2)
+    {
+        this.w2 = w2;
     }
 
     @Override

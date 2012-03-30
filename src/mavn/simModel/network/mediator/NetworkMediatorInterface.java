@@ -10,9 +10,11 @@ import javax.swing.JPanel;
  *
  * @author Kaleb
  */
-public interface NetworkRendererInterface
+public interface NetworkMediatorInterface
 {
     public JPanel getView();
     
     public void setNetwork(double[][] w2, double[][] w1, double[][] w0);
+
+    public void resetNetwork();
 }

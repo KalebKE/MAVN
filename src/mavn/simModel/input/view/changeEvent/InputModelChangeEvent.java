@@ -9,7 +9,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import mavn.globals.Globals;
-import mavn.simModel.network.mediator.NetworkRendererInterface;
+import mavn.simModel.network.mediator.NetworkMediatorInterface;
 import mavn.simModel.output.view.state.OutputViewStateInterface;
 import mavn.util.math.Transpose;
 import mavn.view.SimControlView;
@@ -23,12 +23,12 @@ public class InputModelChangeEvent implements PropertyChangeListener
 {
 
     private ArrayList<InputModelInterface> models;
-    private NetworkRendererInterface mediator;
+    private NetworkMediatorInterface mediator;
     private OutputViewStateInterface modelResultState;
     private SimControlView view;
 
     public InputModelChangeEvent(ArrayList<InputModelInterface> models,
-            NetworkRendererInterface mediator,
+            NetworkMediatorInterface mediator,
             OutputViewStateInterface modelResultState)
     {
         this.models = models;

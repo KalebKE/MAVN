@@ -6,8 +6,7 @@ package mavn.simModel.output.view.actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import mavn.simModel.network.mediator.NetworkRendererInterface;
-import mavn.simModel.plot.mediator.PlotMediatorInterface;
+import mavn.simModel.network.mediator.NetworkMediatorInterface;
 import simulyn.output.mediator.OutputMediatorInterface;
 
 /**
@@ -18,10 +17,10 @@ public class NetworkBarAction implements ActionListener
 {
 
     private OutputMediatorInterface outputMediator;
-    private NetworkRendererInterface networkMediator;
+    private NetworkMediatorInterface networkMediator;
 
     public NetworkBarAction(OutputMediatorInterface outputMediator,
-            NetworkRendererInterface networkMediator)
+            NetworkMediatorInterface networkMediator)
     {
         this.outputMediator = outputMediator;
         this.networkMediator = networkMediator;

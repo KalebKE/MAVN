@@ -64,7 +64,7 @@ import mavn.simModel.input.view.action.InputViewAction;
 import mavn.simModel.input.view.layoutPanel.InputViewGridLayoutPanel;
 import mavn.simModel.input.view.state.InputViewState;
 import mavn.simModel.network.mediator.NetworkMediator;
-import mavn.simModel.network.mediator.NetworkRendererInterface;
+import mavn.simModel.network.mediator.NetworkMediatorInterface;
 import mavn.simModel.network.model.AndLayerOutputModel;
 import mavn.simModel.network.model.OrLayerOutputModel;
 import mavn.simModel.network.model.OutputLayerOutputModel;
@@ -188,17 +188,23 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     @Override
     public void initModelViews()
     {
-        simulationBarAction = new SimulationBarAction(inputModels);
-        propertiesBarAction = new PropertiesBarAction(controlBarMediator, propertiesState);
+        simulationBarAction = new SimulationBarAction(inputModels,
+                (NetworkMediator) networkMediator, controlBarMediator,
+                (PlotMediator) plotMediator);
+        propertiesBarAction = new PropertiesBarAction(controlBarMediator,
+                propertiesState);
         modelOuputBarAction = new OutputBarAction(controlBarMediator);
-        newtorkViewBarAction = new NetworkBarAction(controlBarMediator, (NetworkMediator) networkMediator);
+        newtorkViewBarAction = new NetworkBarAction(controlBarMediator,
+                (NetworkMediator) networkMediator);
         viewBarAction = new ViewBarAction();
         plotViewBarAction = new PlotBarAction((PlotMediator) plotMediator);
-        runSimulationAction = new RunSimulationBarAction(controlBarMediator);
+        runSimulationAction = new RunSimulationBarAction(
+                (NetworkMediator) networkMediator, controlBarMediator,
+                (PlotMediator) plotMediator);
 
-        ouputControlBar = new ControlBar(simulationBarAction, propertiesBarAction,
-                modelOuputBarAction, viewBarAction, newtorkViewBarAction,
-                plotViewBarAction, runSimulationAction);
+        ouputControlBar = new ControlBar(simulationBarAction, 
+                propertiesBarAction, modelOuputBarAction, viewBarAction,
+                newtorkViewBarAction,plotViewBarAction, runSimulationAction);
 
         inputControlBar = new ControlBar(simulationBarAction, propertiesBarAction,
                 modelOuputBarAction, viewBarAction, newtorkViewBarAction,
@@ -213,9 +219,9 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
 
         outputLayoutPanel = new ModelOutputDefaultLayoutView(ouputControlBar,
                 ((OutputViewMediator) outputMediator).getView(), ((PlotMediatorInterface) plotMediator).getView(),
-                ((NetworkRendererInterface) networkMediator).getView());
+                ((NetworkMediatorInterface) networkMediator).getView());
 
-        modelChanged = new InputModelChangeEvent(inputModels, (NetworkRendererInterface) networkMediator, outputViewState);
+        modelChanged = new InputModelChangeEvent(inputModels, (NetworkMediatorInterface) networkMediator, outputViewState);
 
         targetState = new InputViewState();
         thetaState = new InputViewState();
@@ -266,6 +272,7 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
         modelChanged.setView(view);
         ((ViewBarAction) viewBarAction).setView(view);
         ((PlotBarAction) plotViewBarAction).setViewState(outputViewState);
+        ((SimulationBarAction)simulationBarAction).setOutputViewState(outputViewState);
     }
 
     /**

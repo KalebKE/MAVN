@@ -63,7 +63,7 @@ import simulyn.output.view.mediator.OutputViewMediatorInterface;
  * Network Rendering UI backed by the JUNG library within the View.
  * @author Kaleb
  */
-public class NetworkMediator implements OutputViewMediatorInterface, NetworkRendererInterface,
+public class NetworkMediator implements OutputViewMediatorInterface, NetworkMediatorInterface,
         AndLayerOutputModelObserver, OrLayerOutputModelObserver, OutputLayerOutputModelObserver
 {
     // Model Algorithm Model
@@ -115,6 +115,14 @@ public class NetworkMediator implements OutputViewMediatorInterface, NetworkRend
         return view;
     }
 
+        @Override
+    public void resetNetwork()
+    {
+        this.setNetwork(((NetworkMediatorState)multiPointNetworkState).getW2(),
+                ((NetworkMediatorState)multiPointNetworkState).getW1(),
+                ((NetworkMediatorState)multiPointNetworkState).getW0());
+    }
+
     public void setModelResultState(OutputViewStateInterface modelResultState)
     {
         this.modelResultState = modelResultState;
@@ -123,6 +131,10 @@ public class NetworkMediator implements OutputViewMediatorInterface, NetworkRend
     @Override
     public void setNetwork(double[][] w2, double[][] w1, double[][] w0)
     {
+        ((NetworkMediatorState)multiPointNetworkState).setW2(w2);
+        ((NetworkMediatorState)multiPointNetworkState).setW1(w1);
+        ((NetworkMediatorState)multiPointNetworkState).setW0(w0);
+        
         view.setNetwork(w2, w1, w0);
     }
 

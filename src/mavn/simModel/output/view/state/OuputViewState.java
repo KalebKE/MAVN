@@ -130,11 +130,13 @@ public class OuputViewState implements OutputViewStateInterface
             outputViewBar.getRunSimulationButton().setEnabled(true);
             outputViewBar.getSaveModelOutputButton().setEnabled(true);
             outputViewBar.getClearModelOutputButton().setEnabled(true);
+            outputViewBar.getResetSimulationButton().setEnabled(true);
 
             // Disable these buttons
             inputViewBar.getRunSimulationButton().setEnabled(true);
             inputViewBar.getSaveModelOutputButton().setEnabled(true);
             inputViewBar.getClearModelOutputButton().setEnabled(true);
+            inputViewBar.getResetSimulationButton().setEnabled(true);
 
             resultAvailable = true;
         }
@@ -384,6 +386,7 @@ public class OuputViewState implements OutputViewStateInterface
         this.inputViewBar.getTargetSimulationButton().getModel().setSelected(false);
     }
 
+    @Override
     public void onScatterPlot()
     {
         this.outputViewBar.getScatterPlotButton().getModel().setPressed(true);
@@ -399,6 +402,7 @@ public class OuputViewState implements OutputViewStateInterface
         this.inputViewBar.getLinePlotButton().getModel().setSelected(false);
     }
 
+    @Override
     public void onLinePlot()
     {
         this.outputViewBar.getScatterPlotButton().getModel().setPressed(false);

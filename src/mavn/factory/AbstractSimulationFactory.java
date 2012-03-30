@@ -28,7 +28,7 @@ import mavn.simModel.algorithm.properties.view.state.PointGeneratorStateInterfac
 import mavn.simModel.algorithm.properties.view.state.SimulationPropertiesStateInterface;
 import mavn.simModel.input.view.changeEvent.InputModelChangeEvent;
 import mavn.simModel.input.view.layoutPanel.InputViewGridLayoutPanel;
-import mavn.simModel.network.mediator.NetworkRendererInterface;
+import mavn.simModel.network.mediator.NetworkMediatorInterface;
 import mavn.simModel.output.view.layoutPanel.ModelOutputDefaultLayoutView;
 import mavn.simModel.output.view.state.OutputViewStateInterface;
 import mavn.simModel.plot.model.PointHitOutputModelInterface;
@@ -121,7 +121,7 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
 
     protected ModelOutputDefaultLayoutView outputLayoutPanel;
 
-    protected NetworkRendererInterface networkRendererMediator;
+    protected NetworkMediatorInterface networkRendererMediator;
 
     protected OutputMediatorInterface controlBarMediator;
 

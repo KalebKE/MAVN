@@ -19,13 +19,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.simModel.output.view.state;
 
 import mavn.simModel.output.view.layoutPanel.ControlBar;
+import mavn.view.SimControlView;
 
 /**
  * A class that maintains all of the state required for the simulations output.
  * This class is an implementation of the applications State Pattern.
  * @author Kaleb
  */
-public class OuputViewState implements OutputViewStateInterface
+public class OutputViewState implements OutputViewStateInterface
 {
 
     private boolean animated;
@@ -34,12 +35,13 @@ public class OuputViewState implements OutputViewStateInterface
     private boolean resultAvailable;
     private ControlBar outputViewBar;
     private ControlBar inputViewBar;
+    private SimControlView view;
 
     /**
      * Initialize the state.
      * @param view the view the class manages the state for.
      */
-    public OuputViewState(ControlBar outputViewBar, ControlBar inputViewBar)
+    public OutputViewState(ControlBar outputViewBar, ControlBar inputViewBar)
     {
         this.outputViewBar = outputViewBar;
         this.inputViewBar = inputViewBar;
@@ -47,6 +49,11 @@ public class OuputViewState implements OutputViewStateInterface
         propertiesLoaded = false;
         animated = true;
 
+
+    }
+
+    public void init()
+    {
         this.propertiesUnloaded();
         this.simulationUnloaded();
         this.animate(animated);
@@ -93,6 +100,8 @@ public class OuputViewState implements OutputViewStateInterface
         // Disable these buttons
         outputViewBar.getRunSimulationButton().setEnabled(true);
         inputViewBar.getRunSimulationButton().setEnabled(true);
+        view.getRunSimulationMenuItem().setEnabled(true);
+
         propertiesLoaded = true;
     }
 
@@ -102,14 +111,19 @@ public class OuputViewState implements OutputViewStateInterface
     @Override
     public void propertiesUnloaded()
     {
-        outputViewBar.getSimulationPropertiesButton().setEnabled(true);
+        view.getEditPropertiesMenuItem().setEnabled(true);
+        view.getRunSimulationMenuItem().setEnabled(false);
+        view.getSaveModelMenuItem().setEnabled(false);
+        view.getClearOutputMenuItem().setEnabled(false);
+
         // Disable these buttons
+        outputViewBar.getSimulationPropertiesButton().setEnabled(true);
         outputViewBar.getRunSimulationButton().setEnabled(false);
         outputViewBar.getSaveModelOutputButton().setEnabled(false);
         outputViewBar.getClearModelOutputButton().setEnabled(false);
 
-        inputViewBar.getSimulationPropertiesButton().setEnabled(true);
         // Disable these buttons
+        inputViewBar.getSimulationPropertiesButton().setEnabled(true);
         inputViewBar.getRunSimulationButton().setEnabled(false);
         inputViewBar.getSaveModelOutputButton().setEnabled(false);
         inputViewBar.getClearModelOutputButton().setEnabled(false);
@@ -126,6 +140,11 @@ public class OuputViewState implements OutputViewStateInterface
     {
         if (available)
         {
+            view.getRunSimulationMenuItem().setEnabled(true);
+            view.getResetSimulationMenuItem().setEnabled(true);
+            view.getSaveModelMenuItem().setEnabled(true);
+            view.getClearOutputMenuItem().setEnabled(true);
+
             // Disable these buttons
             outputViewBar.getRunSimulationButton().setEnabled(true);
             outputViewBar.getSaveModelOutputButton().setEnabled(true);
@@ -142,6 +161,11 @@ public class OuputViewState implements OutputViewStateInterface
         }
         if (!available)
         {
+            view.getRunSimulationMenuItem().setEnabled(false);
+            view.getResetSimulationMenuItem().setEnabled(false);
+            view.getSaveModelMenuItem().setEnabled(false);
+            view.getClearOutputMenuItem().setEnabled(false);
+
             // Disable these buttons
             outputViewBar.getRunSimulationButton().setEnabled(false);
             outputViewBar.getSaveModelOutputButton().setEnabled(false);
@@ -156,12 +180,33 @@ public class OuputViewState implements OutputViewStateInterface
         }
     }
 
+    public void setView(SimControlView view)
+    {
+        this.view = view;
+    }
+
     /**
      * Indicate that a simulation has been loaded.
      */
     @Override
     public void simulationLoaded()
     {
+        view.getEditPropertiesMenuItem().setEnabled(true);
+        view.getSaveModelMenuItem().setEnabled(true);
+        view.getCloseSimulationMenuItem().setEnabled(true);
+        view.getMonteCarloMenuItem().setEnabled(true);
+        view.getMonteCarloMenuItem().setSelected(true);
+        view.getDiagnosticPointMenuItem().setEnabled(true);
+        view.getAnimateNetworkMenuItem().setEnabled(true);
+        view.getAnimateNetworkMenuItem().setSelected(true);
+        view.getRenderNetworkMenuItem().setEnabled(true);
+        view.getClearNetworkMenuItem().setEnabled(true);
+        view.getClearPlotterMenuItem().setEnabled(true);
+        view.getRenderPointsMenuItem().setEnabled(true);
+        view.getRenderPointsMenuItem().setEnabled(true);
+        view.getRenderTimeMenuItem().setEnabled(true);
+        view.getRunSimulationMenuItem().setEnabled(true);
+
         // Disable these buttons
         outputViewBar.getSimulationPropertiesButton().setEnabled(true);
         outputViewBar.getSaveSimulationButton().setEnabled(true);
@@ -205,6 +250,19 @@ public class OuputViewState implements OutputViewStateInterface
     @Override
     public void simulationUnloaded()
     {
+        view.getEditPropertiesMenuItem().setEnabled(false);
+        view.getSaveModelMenuItem().setEnabled(false);
+        view.getCloseSimulationMenuItem().setEnabled(false);
+        view.getMonteCarloMenuItem().setEnabled(false);
+        view.getDiagnosticPointMenuItem().setEnabled(false);
+        view.getAnimateNetworkMenuItem().setEnabled(false);
+        view.getClearNetworkMenuItem().setEnabled(false);
+        view.getClearPlotterMenuItem().setEnabled(false);
+        view.getRenderPointsMenuItem().setEnabled(false);
+        view.getRenderPointsMenuItem().setEnabled(false);
+        view.getRenderTimeMenuItem().setEnabled(false);
+        view.getRunSimulationMenuItem().setEnabled(false);
+
         outputViewBar.getClearSimulationButton().setEnabled(false);
         outputViewBar.getSaveSimulationButton().setEnabled(false);
 
@@ -258,6 +316,9 @@ public class OuputViewState implements OutputViewStateInterface
         this.animated = animate;
         if (animate)
         {
+            view.getAnimateNetworkMenuItem().setSelected(true);
+            view.getRenderNetworkMenuItem().setSelected(false);
+
             outputViewBar.getAnimateSimulationButton().getModel().setPressed(true);
             outputViewBar.getAnimateSimulationButton().getModel().setSelected(true);
 
@@ -272,6 +333,9 @@ public class OuputViewState implements OutputViewStateInterface
         }
         if (!animate)
         {
+            view.getAnimateNetworkMenuItem().setSelected(false);
+            view.getRenderNetworkMenuItem().setSelected(true);
+
             outputViewBar.getRenderSimulationButton().getModel().setPressed(true);
             outputViewBar.getRenderSimulationButton().getModel().setSelected(true);
 
@@ -295,6 +359,9 @@ public class OuputViewState implements OutputViewStateInterface
     @Override
     public void onOutputView()
     {
+        this.view.getViewOutputMenuItem().setSelected(true);
+        this.view.getViewInputMenuItem().setSelected(false);
+
         this.outputViewBar.getOutputViewButton().getModel().setPressed(true);
         this.outputViewBar.getOutputViewButton().getModel().setSelected(true);
         this.outputViewBar.getInputViewButton().getModel().setPressed(false);
@@ -309,6 +376,9 @@ public class OuputViewState implements OutputViewStateInterface
     @Override
     public void onInputView()
     {
+        this.view.getViewOutputMenuItem().setSelected(false);
+        this.view.getViewInputMenuItem().setSelected(true);
+
         this.outputViewBar.getOutputViewButton().getModel().setPressed(false);
         this.outputViewBar.getOutputViewButton().getModel().setSelected(false);
         this.outputViewBar.getInputViewButton().getModel().setPressed(true);
@@ -323,6 +393,10 @@ public class OuputViewState implements OutputViewStateInterface
     @Override
     public void onMonteCarloSimulation()
     {
+        this.view.getMonteCarloMenuItem().setSelected(true);
+        this.view.getPixelResolutionMenuItem().setSelected(false);
+        this.view.getDiagnosticPointMenuItem().setSelected(false);
+
         this.outputViewBar.getMonteCarloSimulationButton().getModel().setPressed(true);
         this.outputViewBar.getMonteCarloSimulationButton().getModel().setSelected(true);
 
@@ -345,6 +419,10 @@ public class OuputViewState implements OutputViewStateInterface
     @Override
     public void onTargetSimluation()
     {
+        this.view.getMonteCarloMenuItem().setSelected(false);
+        this.view.getPixelResolutionMenuItem().setSelected(false);
+        this.view.getDiagnosticPointMenuItem().setSelected(true);
+
         this.outputViewBar.getMonteCarloSimulationButton().getModel().setPressed(false);
         this.outputViewBar.getMonteCarloSimulationButton().getModel().setSelected(false);
 
@@ -367,6 +445,10 @@ public class OuputViewState implements OutputViewStateInterface
     @Override
     public void onGridSimulation()
     {
+        this.view.getMonteCarloMenuItem().setSelected(false);
+        this.view.getPixelResolutionMenuItem().setSelected(true);
+        this.view.getDiagnosticPointMenuItem().setSelected(false);
+
         this.outputViewBar.getMonteCarloSimulationButton().getModel().setPressed(false);
         this.outputViewBar.getMonteCarloSimulationButton().getModel().setSelected(false);
 
@@ -389,6 +471,9 @@ public class OuputViewState implements OutputViewStateInterface
     @Override
     public void onScatterPlot()
     {
+        this.view.getRenderPointsMenuItem().setSelected(true);
+        this.view.getRenderTimeMenuItem().setSelected(false);
+
         this.outputViewBar.getScatterPlotButton().getModel().setPressed(true);
         this.outputViewBar.getScatterPlotButton().getModel().setSelected(true);
 
@@ -405,6 +490,9 @@ public class OuputViewState implements OutputViewStateInterface
     @Override
     public void onLinePlot()
     {
+        this.view.getRenderPointsMenuItem().setSelected(false);
+        this.view.getRenderTimeMenuItem().setSelected(true);
+
         this.outputViewBar.getScatterPlotButton().getModel().setPressed(false);
         this.outputViewBar.getScatterPlotButton().getModel().setSelected(false);
 

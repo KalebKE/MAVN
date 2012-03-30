@@ -20,7 +20,9 @@ package mavn.view;
 
 import java.awt.Frame;
 import java.awt.event.ActionListener;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.ScrollPaneConstants;
 import mavn.simModel.output.view.state.OutputViewStateInterface;
@@ -32,21 +34,38 @@ import mavn.simModel.output.view.state.OutputViewStateInterface;
 public class SimControlView extends JFrame
 {
 
-    private ActionListener action;
+    private ActionListener networkAction;
+    private ActionListener outputAction;
+    private ActionListener plotterAction;
+    private ActionListener propertiesAction;
+    private ActionListener simulationAction;
+    private ActionListener runSimulationAction;
+    private ActionListener viewAction;
     private JPanel outputView;
     private JPanel inputView;
     private OutputViewStateInterface outputViewState;
 
     /** Creates new form Main */
-    public SimControlView(ActionListener action, JPanel inputView, JPanel outputView, OutputViewStateInterface outputViewState)
+    public SimControlView(ActionListener networkAction, 
+            ActionListener outputAction, ActionListener simulationAction,
+            ActionListener plotterAction, ActionListener propertiesAction,
+            ActionListener runSimulationAction, ActionListener viewAction,
+            JPanel inputView, JPanel outputView,
+            OutputViewStateInterface outputViewState)
     {
         initComponents();
 
-        this.action = action;
+        this.networkAction = networkAction;
+        this.outputAction = outputAction;
+        this.plotterAction = plotterAction;
+        this.propertiesAction = propertiesAction;
+        this.simulationAction = simulationAction;
+        this.runSimulationAction = runSimulationAction;
+        this.viewAction = viewAction;
         this.outputViewState = outputViewState;
 
-        importModelMenuItem.setActionCommand("importSimulationAction");
-        importModelMenuItem.addActionListener(action);
+        initActions();
+
 
         this.inputView = inputView;
         this.outputView = outputView;
@@ -56,12 +75,273 @@ public class SimControlView extends JFrame
         this.setVisible(true);
         this.pack();
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         mainScrollPane.setViewportView(this.inputView);
         mainScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainScrollPane.validate();
         mainScrollPane.updateUI();
 
+    }
+
+    public void initActions()
+    {
+        this.importModelMenuItem.setActionCommand("importSimulationAction");
+        this.importModelMenuItem.addActionListener(simulationAction);
+
+        this.saveModelMenuItem.setActionCommand("exportSimulationAction");
+        this.saveModelMenuItem.addActionListener(simulationAction);
+
+        this.closeSimulationMenuItem.setActionCommand("clearSimulationAction");
+        this.closeSimulationMenuItem.addActionListener(simulationAction);
+
+        this.saveOutputMenuItem.setActionCommand("saveOutputAction");
+        this.saveOutputMenuItem.addActionListener(outputAction);
+
+        this.clearOutputMenuItem.setActionCommand("clearOutputAction");
+        this.clearOutputMenuItem.addActionListener(outputAction);
+
+        this.viewInputMenuItem.setActionCommand("useInputViewAction");
+        this.viewInputMenuItem.addActionListener(viewAction);
+
+        this.viewOutputMenuItem.setActionCommand("useOutputViewAction");
+        this.viewOutputMenuItem.addActionListener(viewAction);
+
+        this.editPropertiesMenuItem.setActionCommand("loadPropertiesAction");
+        this.editPropertiesMenuItem.addActionListener(propertiesAction);
+
+        this.monteCarloMenuItem.setActionCommand("useMonteCaroloSimuationAction");
+        this.monteCarloMenuItem.addActionListener(propertiesAction);
+
+        this.pixelResolutionMenuItem.setActionCommand("useGridSimulationAction");
+        this.pixelResolutionMenuItem.addActionListener(propertiesAction);
+
+        this.diagnosticPointMenuItem.setActionCommand("useTargetSimulationAction");
+        this.diagnosticPointMenuItem.addActionListener(propertiesAction);
+
+        this.runSimulationMenuItem.setActionCommand("runSimulationAction");
+        this.runSimulationMenuItem.addActionListener(runSimulationAction);
+
+        this.resetSimulationMenuItem.setActionCommand("resetSimulationAction");
+        this.resetSimulationMenuItem.addActionListener(runSimulationAction);
+
+        this.animateNetworkMenuItem.setActionCommand("animateNetworkAction");
+        this.animateNetworkMenuItem.addActionListener(networkAction);
+
+        this.renderNetworkMenuItem.setActionCommand("renderNetworkAction");
+        this.renderNetworkMenuItem.addActionListener(networkAction);
+
+        this.clearNetworkMenuItem.setActionCommand("clearNetworkAction");
+        this.clearNetworkMenuItem.addActionListener(networkAction);
+
+        this.renderPointsMenuItem.setActionCommand("useScatterPlotAction");
+        this.renderPointsMenuItem.addActionListener(plotterAction);
+
+        this.renderTimeMenuItem.setActionCommand("useLinePlotAction");
+        this.renderTimeMenuItem.addActionListener(plotterAction);
+
+        this.clearPlotterMenuItem.setActionCommand("clearPlotAction");
+        this.clearPlotterMenuItem.addActionListener(plotterAction);
+    }
+
+    public JCheckBoxMenuItem getAnimateNetworkMenuItem()
+    {
+        return animateNetworkMenuItem;
+    }
+
+    public void setAnimateNetworkMenuItem(JCheckBoxMenuItem animateNetworkMenuItem)
+    {
+        this.animateNetworkMenuItem = animateNetworkMenuItem;
+    }
+
+    public JMenuItem getClearNetworkMenuItem()
+    {
+        return clearNetworkMenuItem;
+    }
+
+    public void setClearNetworkMenuItem(JMenuItem clearNetworkMenuItem)
+    {
+        this.clearNetworkMenuItem = clearNetworkMenuItem;
+    }
+
+    public JMenuItem getClearOutputMenuItem()
+    {
+        return clearOutputMenuItem;
+    }
+
+    public void setClearOutputMenuItem(JMenuItem clearOutputMenuItem)
+    {
+        this.clearOutputMenuItem = clearOutputMenuItem;
+    }
+
+    public JMenuItem getClearPlotterMenuItem()
+    {
+        return clearPlotterMenuItem;
+    }
+
+    public void setClearPlotterMenuItem(JMenuItem clearPlotterMenuItem)
+    {
+        this.clearPlotterMenuItem = clearPlotterMenuItem;
+    }
+
+    public JMenuItem getCloseSimulationMenuItem()
+    {
+        return closeSimulationMenuItem;
+    }
+
+    public void setCloseSimulationMenuItem(JMenuItem closeSimulationMenuItem)
+    {
+        this.closeSimulationMenuItem = closeSimulationMenuItem;
+    }
+
+    public JCheckBoxMenuItem getDiagnosticPointMenuItem()
+    {
+        return diagnosticPointMenuItem;
+    }
+
+    public void setDiagnosticPointMenuItem(JCheckBoxMenuItem diagnosticPointMenuItem)
+    {
+        this.diagnosticPointMenuItem = diagnosticPointMenuItem;
+    }
+
+    public JMenuItem getEditPropertiesMenuItem()
+    {
+        return editPropertiesMenuItem;
+    }
+
+    public void setEditPropertiesMenuItem(JMenuItem editPropertiesMenuItem)
+    {
+        this.editPropertiesMenuItem = editPropertiesMenuItem;
+    }
+
+    public JMenuItem getExitMenuItem()
+    {
+        return exitMenuItem;
+    }
+
+    public void setExitMenuItem(JMenuItem exitMenuItem)
+    {
+        this.exitMenuItem = exitMenuItem;
+    }
+
+    public JMenuItem getImportModelMenuItem()
+    {
+        return importModelMenuItem;
+    }
+
+    public void setImportModelMenuItem(JMenuItem importModelMenuItem)
+    {
+        this.importModelMenuItem = importModelMenuItem;
+    }
+
+    public JCheckBoxMenuItem getMonteCarloMenuItem()
+    {
+        return monteCarloMenuItem;
+    }
+
+    public void setMonteCarloMenuItem(JCheckBoxMenuItem monteCarloMenuItem)
+    {
+        this.monteCarloMenuItem = monteCarloMenuItem;
+    }
+
+    public JCheckBoxMenuItem getPixelResolutionMenuItem()
+    {
+        return pixelResolutionMenuItem;
+    }
+
+    public void setPixelResolutionMenuItem(JCheckBoxMenuItem pixelResolutionMenuItem)
+    {
+        this.pixelResolutionMenuItem = pixelResolutionMenuItem;
+    }
+
+    public JCheckBoxMenuItem getRenderNetworkMenuItem()
+    {
+        return renderNetworkMenuItem;
+    }
+
+    public void setRenderNetworkMenuItem(JCheckBoxMenuItem renderNetworkMenuItem)
+    {
+        this.renderNetworkMenuItem = renderNetworkMenuItem;
+    }
+
+    public JCheckBoxMenuItem getRenderPointsMenuItem()
+    {
+        return renderPointsMenuItem;
+    }
+
+    public void setRenderPointsMenuItem(JCheckBoxMenuItem renderPointsMenuItem)
+    {
+        this.renderPointsMenuItem = renderPointsMenuItem;
+    }
+
+    public JCheckBoxMenuItem getRenderTimeMenuItem()
+    {
+        return renderTimeMenuItem;
+    }
+
+    public void setRenderTimeMenuItem(JCheckBoxMenuItem renderTimeMenuItem)
+    {
+        this.renderTimeMenuItem = renderTimeMenuItem;
+    }
+
+    public JMenuItem getResetSimulationMenuItem()
+    {
+        return resetSimulationMenuItem;
+    }
+
+    public void setResetSimulationMenuItem(JMenuItem resetSimulationMenuItem)
+    {
+        this.resetSimulationMenuItem = resetSimulationMenuItem;
+    }
+
+    public JMenuItem getRunSimulationMenuItem()
+    {
+        return runSimulationMenuItem;
+    }
+
+    public void setRunSimulationMenuItem(JMenuItem runSimulationMenuItem)
+    {
+        this.runSimulationMenuItem = runSimulationMenuItem;
+    }
+
+    public JMenuItem getSaveModelMenuItem()
+    {
+        return saveModelMenuItem;
+    }
+
+    public void setSaveModelMenuItem(JMenuItem saveModelMenuItem)
+    {
+        this.saveModelMenuItem = saveModelMenuItem;
+    }
+
+    public JMenuItem getSaveOutputMenuItem()
+    {
+        return saveOutputMenuItem;
+    }
+
+    public void setSaveOutputMenuItem(JMenuItem saveOutputMenuItem)
+    {
+        this.saveOutputMenuItem = saveOutputMenuItem;
+    }
+
+    public JCheckBoxMenuItem getViewInputMenuItem()
+    {
+        return viewInputMenuItem;
+    }
+
+    public void setViewInputMenuItem(JCheckBoxMenuItem viewInputMenuItem)
+    {
+        this.viewInputMenuItem = viewInputMenuItem;
+    }
+
+    public JCheckBoxMenuItem getViewOutputMenuItem()
+    {
+        return viewOutputMenuItem;
+    }
+
+    public void setViewOutputMenuItem(JCheckBoxMenuItem viewOutputMenuItem)
+    {
+        this.viewOutputMenuItem = viewOutputMenuItem;
     }
 
     public void setInputView()
@@ -90,9 +370,34 @@ public class SimControlView extends JFrame
         fileMenu = new javax.swing.JMenu();
         importModelMenuItem = new javax.swing.JMenuItem();
         saveModelMenuItem = new javax.swing.JMenuItem();
+        closeSimulationMenuItem = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        saveOutputMenuItem = new javax.swing.JMenuItem();
+        clearOutputMenuItem = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        exitMenuItem = new javax.swing.JMenuItem();
         viewNetworkMenu = new javax.swing.JMenu();
-        viewOutputMenuItem = new javax.swing.JMenuItem();
-        viewInputsMenuItem = new javax.swing.JMenuItem();
+        viewOutputMenuItem = new javax.swing.JCheckBoxMenuItem();
+        viewInputMenuItem = new javax.swing.JCheckBoxMenuItem();
+        propertiesMenu = new javax.swing.JMenu();
+        editPropertiesMenuItem = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        monteCarloMenuItem = new javax.swing.JCheckBoxMenuItem();
+        pixelResolutionMenuItem = new javax.swing.JCheckBoxMenuItem();
+        diagnosticPointMenuItem = new javax.swing.JCheckBoxMenuItem();
+        runMenu = new javax.swing.JMenu();
+        runSimulationMenuItem = new javax.swing.JMenuItem();
+        resetSimulationMenuItem = new javax.swing.JMenuItem();
+        networkMenu = new javax.swing.JMenu();
+        animateNetworkMenuItem = new javax.swing.JCheckBoxMenuItem();
+        renderNetworkMenuItem = new javax.swing.JCheckBoxMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        clearNetworkMenuItem = new javax.swing.JMenuItem();
+        plotterMenu = new javax.swing.JMenu();
+        renderPointsMenuItem = new javax.swing.JCheckBoxMenuItem();
+        renderTimeMenuItem = new javax.swing.JCheckBoxMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        clearPlotterMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -107,33 +412,118 @@ public class SimControlView extends JFrame
 
         fileMenu.setText("File");
 
-        importModelMenuItem.setText("Import Model");
+        importModelMenuItem.setText("Open Simulation");
         fileMenu.add(importModelMenuItem);
 
-        saveModelMenuItem.setText("Save Model");
+        saveModelMenuItem.setText("Save Simulation");
+        saveModelMenuItem.setEnabled(false);
         fileMenu.add(saveModelMenuItem);
+
+        closeSimulationMenuItem.setText("Close Simulation");
+        closeSimulationMenuItem.setEnabled(false);
+        fileMenu.add(closeSimulationMenuItem);
+        fileMenu.add(jSeparator1);
+
+        saveOutputMenuItem.setText("Save Output");
+        saveOutputMenuItem.setEnabled(false);
+        fileMenu.add(saveOutputMenuItem);
+
+        clearOutputMenuItem.setText("Clear Output");
+        clearOutputMenuItem.setEnabled(false);
+        fileMenu.add(clearOutputMenuItem);
+        fileMenu.add(jSeparator2);
+
+        exitMenuItem.setText("Exit");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(exitMenuItem);
 
         jMenuBar1.add(fileMenu);
 
         viewNetworkMenu.setText("Views");
 
-        viewOutputMenuItem.setText("Model Outputs");
-        viewOutputMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewOutputMenuItemActionPerformed(evt);
-            }
-        });
+        viewOutputMenuItem.setSelected(true);
+        viewOutputMenuItem.setText("View Simulation Output");
         viewNetworkMenu.add(viewOutputMenuItem);
 
-        viewInputsMenuItem.setText("Model Inputs");
-        viewInputsMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewInputsMenuItemActionPerformed(evt);
-            }
-        });
-        viewNetworkMenu.add(viewInputsMenuItem);
+        viewInputMenuItem.setSelected(true);
+        viewInputMenuItem.setText("View Simulation Input");
+        viewNetworkMenu.add(viewInputMenuItem);
 
         jMenuBar1.add(viewNetworkMenu);
+
+        propertiesMenu.setText("Properties");
+
+        editPropertiesMenuItem.setText("Edit Properties");
+        editPropertiesMenuItem.setEnabled(false);
+        propertiesMenu.add(editPropertiesMenuItem);
+        propertiesMenu.add(jSeparator3);
+
+        monteCarloMenuItem.setSelected(true);
+        monteCarloMenuItem.setText("Monte Carlo Simulation");
+        monteCarloMenuItem.setEnabled(false);
+        propertiesMenu.add(monteCarloMenuItem);
+
+        pixelResolutionMenuItem.setText("Pixel Resolution Simulation");
+        pixelResolutionMenuItem.setEnabled(false);
+        propertiesMenu.add(pixelResolutionMenuItem);
+
+        diagnosticPointMenuItem.setText("Diagnostic Point Simulation");
+        diagnosticPointMenuItem.setEnabled(false);
+        propertiesMenu.add(diagnosticPointMenuItem);
+
+        jMenuBar1.add(propertiesMenu);
+
+        runMenu.setText("Run");
+
+        runSimulationMenuItem.setText("Run Simulation");
+        runSimulationMenuItem.setEnabled(false);
+        runMenu.add(runSimulationMenuItem);
+
+        resetSimulationMenuItem.setText("Reset Simulation");
+        resetSimulationMenuItem.setEnabled(false);
+        runMenu.add(resetSimulationMenuItem);
+
+        jMenuBar1.add(runMenu);
+
+        networkMenu.setText("Network");
+
+        animateNetworkMenuItem.setSelected(true);
+        animateNetworkMenuItem.setText("Animate Network");
+        animateNetworkMenuItem.setEnabled(false);
+        networkMenu.add(animateNetworkMenuItem);
+
+        renderNetworkMenuItem.setText("Render Network");
+        renderNetworkMenuItem.setEnabled(false);
+        networkMenu.add(renderNetworkMenuItem);
+        networkMenu.add(jSeparator4);
+
+        clearNetworkMenuItem.setText("Clear Network");
+        clearNetworkMenuItem.setEnabled(false);
+        networkMenu.add(clearNetworkMenuItem);
+
+        jMenuBar1.add(networkMenu);
+
+        plotterMenu.setText("Plotter");
+
+        renderPointsMenuItem.setSelected(true);
+        renderPointsMenuItem.setText("Render Points (Scatter Plot)");
+        renderPointsMenuItem.setEnabled(false);
+        plotterMenu.add(renderPointsMenuItem);
+
+        renderTimeMenuItem.setText("Render Time (Line Plot)");
+        renderTimeMenuItem.setEnabled(false);
+        plotterMenu.add(renderTimeMenuItem);
+        plotterMenu.add(jSeparator5);
+
+        clearPlotterMenuItem.setText("Clear Plotter");
+        clearPlotterMenuItem.setEnabled(false);
+        plotterMenu.add(clearPlotterMenuItem);
+
+        jMenuBar1.add(plotterMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -145,7 +535,7 @@ public class SimControlView extends JFrame
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1085, Short.MAX_VALUE)
+            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1087, Short.MAX_VALUE)
         );
 
         pack();
@@ -155,31 +545,44 @@ public class SimControlView extends JFrame
     {//GEN-HEADEREND:event_formPropertyChange
     }//GEN-LAST:event_formPropertyChange
 
-    private void viewOutputMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_viewOutputMenuItemActionPerformed
-    {//GEN-HEADEREND:event_viewOutputMenuItemActionPerformed
-        this.setOutputView();
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitMenuItemActionPerformed
+    {//GEN-HEADEREND:event_exitMenuItemActionPerformed
+       this.dispose();
+    }//GEN-LAST:event_exitMenuItemActionPerformed
 
-        mainScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        mainScrollPane.validate();
-        mainScrollPane.updateUI();
-    }//GEN-LAST:event_viewOutputMenuItemActionPerformed
-
-    private void viewInputsMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_viewInputsMenuItemActionPerformed
-    {//GEN-HEADEREND:event_viewInputsMenuItemActionPerformed
-        this.setInputView();
-
-        mainScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        mainScrollPane.validate();
-        mainScrollPane.updateUI();
-    }//GEN-LAST:event_viewInputsMenuItemActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBoxMenuItem animateNetworkMenuItem;
+    private javax.swing.JMenuItem clearNetworkMenuItem;
+    private javax.swing.JMenuItem clearOutputMenuItem;
+    private javax.swing.JMenuItem clearPlotterMenuItem;
+    private javax.swing.JMenuItem closeSimulationMenuItem;
+    private javax.swing.JCheckBoxMenuItem diagnosticPointMenuItem;
+    private javax.swing.JMenuItem editPropertiesMenuItem;
+    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem importModelMenuItem;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JScrollPane mainScrollPane;
+    private javax.swing.JCheckBoxMenuItem monteCarloMenuItem;
+    private javax.swing.JMenu networkMenu;
+    private javax.swing.JCheckBoxMenuItem pixelResolutionMenuItem;
+    private javax.swing.JMenu plotterMenu;
+    private javax.swing.JMenu propertiesMenu;
+    private javax.swing.JCheckBoxMenuItem renderNetworkMenuItem;
+    private javax.swing.JCheckBoxMenuItem renderPointsMenuItem;
+    private javax.swing.JCheckBoxMenuItem renderTimeMenuItem;
+    private javax.swing.JMenuItem resetSimulationMenuItem;
+    private javax.swing.JMenu runMenu;
+    private javax.swing.JMenuItem runSimulationMenuItem;
     private javax.swing.JMenuItem saveModelMenuItem;
-    private javax.swing.JMenuItem viewInputsMenuItem;
+    private javax.swing.JMenuItem saveOutputMenuItem;
+    private javax.swing.JCheckBoxMenuItem viewInputMenuItem;
     private javax.swing.JMenu viewNetworkMenu;
-    private javax.swing.JMenuItem viewOutputMenuItem;
+    private javax.swing.JCheckBoxMenuItem viewOutputMenuItem;
     // End of variables declaration//GEN-END:variables
 }

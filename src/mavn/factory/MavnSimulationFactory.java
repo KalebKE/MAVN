@@ -81,7 +81,7 @@ import mavn.simModel.output.view.actions.SimulationBarAction;
 import mavn.simModel.output.view.actions.ViewBarAction;
 import mavn.simModel.output.view.layoutPanel.ControlBar;
 import mavn.simModel.output.view.layoutPanel.ModelOutputDefaultLayoutView;
-import mavn.simModel.output.view.state.OuputViewState;
+import mavn.simModel.output.view.state.OutputViewState;
 import mavn.simModel.plot.mediator.PlotMediator;
 import mavn.simModel.plot.mediator.PlotMediatorInterface;
 import mavn.simModel.plot.model.PointHitOutputModel;
@@ -202,15 +202,16 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
                 (NetworkMediator) networkMediator, controlBarMediator,
                 (PlotMediator) plotMediator);
 
-        ouputControlBar = new ControlBar(simulationBarAction, 
+        ouputControlBar = new ControlBar(simulationBarAction,
                 propertiesBarAction, modelOuputBarAction, viewBarAction,
-                newtorkViewBarAction,plotViewBarAction, runSimulationAction);
+                newtorkViewBarAction, plotViewBarAction, runSimulationAction);
 
         inputControlBar = new ControlBar(simulationBarAction, propertiesBarAction,
                 modelOuputBarAction, viewBarAction, newtorkViewBarAction,
                 plotViewBarAction, runSimulationAction);
 
-        outputViewState = new OuputViewState((ControlBar) ouputControlBar, (ControlBar) inputControlBar);
+        outputViewState = new OutputViewState((ControlBar) ouputControlBar, (ControlBar) inputControlBar);
+
         ((SimulationPropertiesFrame) propertiesFrame).setOutputState(outputViewState);
         ((OutputViewMediator) outputMediator).setModelResultState(outputViewState);
         ((NetworkMediator) networkMediator).setModelResultState(outputViewState);
@@ -268,11 +269,16 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
 
         inputView = new InputViewGridLayoutPanel(inputViews, inputControlBar);
         simControlAction = new SimControlAction(inputModels);
-        view = new SimControlView(simControlAction, inputView, outputLayoutPanel, outputViewState);
+        view = new SimControlView(newtorkViewBarAction, modelOuputBarAction,
+                simControlAction, plotViewBarAction, propertiesBarAction,
+                runSimulationAction, viewBarAction, inputView,
+                outputLayoutPanel, outputViewState);
         modelChanged.setView(view);
         ((ViewBarAction) viewBarAction).setView(view);
         ((PlotBarAction) plotViewBarAction).setViewState(outputViewState);
-        ((SimulationBarAction)simulationBarAction).setOutputViewState(outputViewState);
+        ((SimulationBarAction) simulationBarAction).setOutputViewState(outputViewState);
+        ((OutputViewState)outputViewState).setView(view);
+        ((OutputViewState)outputViewState).init();
     }
 
     /**

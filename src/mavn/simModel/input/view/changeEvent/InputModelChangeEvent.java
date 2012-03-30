@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import mavn.globals.Globals;
 import mavn.simModel.network.mediator.NetworkRendererInterface;
-import mavn.simModel.output.view.state.OutputModelStateInterface;
+import mavn.simModel.output.view.state.OutputViewStateInterface;
 import mavn.util.math.Transpose;
 import mavn.view.SimControlView;
 import simulyn.input.model.InputModelInterface;
@@ -24,18 +24,16 @@ public class InputModelChangeEvent implements PropertyChangeListener
 
     private ArrayList<InputModelInterface> models;
     private NetworkRendererInterface mediator;
-    private OutputModelStateInterface modelResultState;
+    private OutputViewStateInterface modelResultState;
     private SimControlView view;
 
     public InputModelChangeEvent(ArrayList<InputModelInterface> models,
             NetworkRendererInterface mediator,
-            OutputModelStateInterface modelResultState,
-            SimControlView view)
+            OutputViewStateInterface modelResultState)
     {
         this.models = models;
         this.mediator = mediator;
         this.modelResultState = modelResultState;
-        this.view = view;
     }
 
     @Override
@@ -63,4 +61,10 @@ public class InputModelChangeEvent implements PropertyChangeListener
             }
         }
     }
+
+    public void setView(SimControlView view)
+    {
+        this.view = view;
+    }
+    
 }

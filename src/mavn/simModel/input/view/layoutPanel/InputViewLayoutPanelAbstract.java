@@ -11,6 +11,8 @@
 package mavn.simModel.input.view.layoutPanel;
 
 import java.util.ArrayList;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 import simulyn.ui.components.inputModelPanel.InputViewAbstract;
 
 
@@ -21,11 +23,16 @@ import simulyn.ui.components.inputModelPanel.InputViewAbstract;
 public abstract class InputViewLayoutPanelAbstract extends javax.swing.JPanel
 {
     protected ArrayList<InputViewAbstract> inputPanels;
+    private JPanel controlBar;
    
     /** Creates new form InputControlPanel */
-    public InputViewLayoutPanelAbstract()
+    public InputViewLayoutPanelAbstract(JPanel controlBar)
     {
         initComponents();
+
+        this.controlBar = controlBar;
+        this.controlPanel.setLayout(new BoxLayout(this.controlPanel, BoxLayout.LINE_AXIS));
+        this.controlPanel.add(this.controlBar);
     }
 
     /** This method is called from within the constructor to
@@ -37,17 +44,50 @@ public abstract class InputViewLayoutPanelAbstract extends javax.swing.JPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        controlPanel = new javax.swing.JPanel();
+        modelPanel = new javax.swing.JPanel();
+
+        controlPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
+        controlPanel.setLayout(controlPanelLayout);
+        controlPanelLayout.setHorizontalGroup(
+            controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 839, Short.MAX_VALUE)
+        );
+        controlPanelLayout.setVerticalGroup(
+            controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 73, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout modelPanelLayout = new javax.swing.GroupLayout(modelPanel);
+        modelPanel.setLayout(modelPanelLayout);
+        modelPanelLayout.setHorizontalGroup(
+            modelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 843, Short.MAX_VALUE)
+        );
+        modelPanelLayout.setVerticalGroup(
+            modelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 395, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 833, Short.MAX_VALUE)
+            .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(modelPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 478, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(modelPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel controlPanel;
+    protected javax.swing.JPanel modelPanel;
     // End of variables declaration//GEN-END:variables
 }

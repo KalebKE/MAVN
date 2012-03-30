@@ -4,16 +4,17 @@
  */
 package mavn.simModel.plot.model;
 
-import java.awt.Point;
 import java.util.ArrayList;
-import mavn.simModel.algorithm.model.point.observer.PointGeneratorModelObserver;
+import mavn.simModel.algorithm.model.point.Point;
+import mavn.simModel.algorithm.model.point.observer.PointGeneratorAlgorithmModelObserver;
 import mavn.simModel.plot.model.observer.PointOutputModelObserver;
 
 /**
  *
  * @author Kaleb
  */
-public class PointOutputModel extends PointOutputModelInterface implements PointGeneratorModelObserver
+public class PointOutputModel extends PointOutputModelInterface implements
+        PointGeneratorAlgorithmModelObserver
 {
 
     /**
@@ -21,7 +22,7 @@ public class PointOutputModel extends PointOutputModelInterface implements Point
      */
     public PointOutputModel()
     {
-        modelResultObservers = new ArrayList<PointOutputModelObserver>();
+        modeOutputObservers = new ArrayList<PointOutputModelObserver>();
     }
 
     /**
@@ -30,7 +31,7 @@ public class PointOutputModel extends PointOutputModelInterface implements Point
      */
     public void registerObserver(PointOutputModelObserver o)
     {
-        modelResultObservers.add(o);
+        modeOutputObservers.add(o);
     }
 
     /**
@@ -39,10 +40,10 @@ public class PointOutputModel extends PointOutputModelInterface implements Point
      */
     public void removeObserver(PointOutputModelObserver o)
     {
-        int i = modelResultObservers.indexOf(o);
+        int i = modeOutputObservers.indexOf(o);
         if (i >= 0)
         {
-            modelResultObservers.remove(i);
+            modeOutputObservers.remove(i);
         }
     }
 
@@ -50,18 +51,18 @@ public class PointOutputModel extends PointOutputModelInterface implements Point
      * Notify all observers.
      */
     @Override
-    public void notifyObservers()
+    public void notifyPointsObservers()
     {
-        for (int i = 0; i < modelResultObservers.size(); i++)
+        for (int i = 0; i < modeOutputObservers.size(); i++)
         {
-            PointOutputModelObserver matrixObserver = (PointOutputModelObserver) modelResultObservers.get(i);
-            matrixObserver.updateDartResults(hit, miss);
+            PointOutputModelObserver matrixObserver = (PointOutputModelObserver) modeOutputObservers.get(i);
+            matrixObserver.updatePoints(hit, miss);
         }
     }
 
     @Override
-    public void updateDartResults(ArrayList<Point> hit, ArrayList<Point> miss)
+    public void updatePoints(ArrayList<Point> hit, ArrayList<Point> miss)
     {
-        this.setDartResult(hit, miss);
+        this.setPointsOutput(hit, miss);
     }
 }

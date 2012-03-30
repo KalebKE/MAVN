@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simModel.algorithm.model.point;
 
-import mavn.simModel.algorithm.model.point.observer.PointGeneratorModelObserver;
+import mavn.simModel.algorithm.model.point.observer.PointHitAlgorithmModelObserver;
 
 /**
  * An interface for classes that create Points for MAVN Multiple Point Simulations.
@@ -38,22 +38,22 @@ import mavn.simModel.algorithm.model.point.observer.PointGeneratorModelObserver;
  * and needs to push the State to Observers.
  * @author Kaleb
  */
-public interface PointModelInterface
+public interface PointHitAlgorithmModelInterface
 {
     /**
      * Notify observers.
      */
-    public void notifyPointGeneratorModelObservers();
+    public void notifyPointHitModelObservers();
 
     /**
      * Register a PointGeneratorModelObserver.
      * @param o the PointGeneratorModelObserver
      */
-    public void registerObserver(PointGeneratorModelObserver o);
+    public void registerObserver(PointHitAlgorithmModelObserver o);
 
     /**
      * Remove a PointGeneratorModelObserver
      * @param o the PointGeneratorModelObserver
      */
-    public void removeObserver(PointGeneratorModelObserver o);
+    public void removeObserver(PointHitAlgorithmModelObserver o);
 }

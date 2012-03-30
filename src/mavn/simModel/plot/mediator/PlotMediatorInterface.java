@@ -18,6 +18,8 @@ public interface PlotMediatorInterface
 
     public Plot2DPanel getPlot();
 
+    public void onClearUI();
+
     public void onScatterPlot();
 
     public void onLinePlot();

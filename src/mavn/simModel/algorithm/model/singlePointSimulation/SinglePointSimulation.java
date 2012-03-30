@@ -80,6 +80,8 @@ public class SinglePointSimulation implements AlgorithmModelInterface,
         andLayerObservers = new ArrayList<AndLayerAlgorithmModelObserver>();
         orLayerObservers = new ArrayList<OrLayerAlgorithmModelObserver>();
         outputLayerObservers = new ArrayList<OutputLayerAlgorithmModelObserver>();
+        inputModelState = new InputModelState();
+        outputModelState = new SinglePointLayerOutputModelState(this);
     }
 
     /**

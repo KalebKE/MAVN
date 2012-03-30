@@ -19,54 +19,42 @@ public class NetworkMediatorState implements MediatorStateInterface
     private boolean andLayerUpdated;
     private boolean orLayerUpdated;
     private boolean outputLayerUpdated;
-    private double[] andLayerResult;
-    private double[] orLayerResult;
-    private double[] outputLayerResult;
+    private double[] andLayerOutput;
+    private double[] orLayerOutput;
+    private double[] outputLayerOutput;
 
     public NetworkMediatorState(OutputViewMediatorInterface controller)
     {
         this.controller = controller;
+        andLayerUpdated = false;
+        orLayerUpdated = false;
+        outputLayerUpdated = false;
     }
 
-    public double[] getAndLayerResult()
+    public double[] getAndLayerOutput()
     {
-        return andLayerResult;
+        return andLayerOutput;
     }
 
-    public void setAndLayerResult(double[] andLayerResult)
-    {
-        this.andLayerResult = andLayerResult;
-    }
-
-    public double[] getOrLayerResult()
-    {
-        return orLayerResult;
-    }
-
-    public void setOrLayerResult(double[] orLayerResult)
-    {
-        this.orLayerResult = orLayerResult;
-    }
-
-    public double[] getNodeResults()
+    public double[] getNodeOutput()
     {
         ArrayList<Double> list = new ArrayList<Double>();
 
         list.add((double) 1);
         list.add((double) 1);
-        for (int i = 0; i < andLayerResult.length; i++)
+        for (int i = 0; i < andLayerOutput.length; i++)
         {
-            list.add(andLayerResult[i]);
+            list.add(andLayerOutput[i]);
         }
 
-        for (int i = 0; i < orLayerResult.length; i++)
+        for (int i = 0; i < orLayerOutput.length; i++)
         {
-            list.add(orLayerResult[i]);
+            list.add(orLayerOutput[i]);
         }
 
-        for (int i = 0; i < outputLayerResult.length; i++)
+        for (int i = 0; i < outputLayerOutput.length; i++)
         {
-            list.add(outputLayerResult[i]);
+            list.add(outputLayerOutput[i]);
         }
 
         double[] nodeResults = new double[list.size()];
@@ -79,14 +67,35 @@ public class NetworkMediatorState implements MediatorStateInterface
         return nodeResults;
     }
 
-    public double[] getOutputLayerResult()
+    public double[] getOrLayerOutput()
     {
-        return outputLayerResult;
+        return orLayerOutput;
     }
 
-    public void setOutputLayerResult(double[] outputLayerResult)
+    public double[] getOutputLayerOutput()
     {
-        this.outputLayerResult = outputLayerResult;
+        return outputLayerOutput;
+    }
+
+    public void setAndLayerOutput(double[] andLayerResult)
+    {
+        this.andLayerOutput = andLayerResult;
+        andLayerUpdated = true;
+        stateChanged();
+    }
+
+    public void setOrLayerOutput(double[] orLayerResult)
+    {
+        this.orLayerOutput = orLayerResult;
+        orLayerUpdated = true;
+        stateChanged();
+    }
+
+    public void setOutputLayerOutput(double[] outputLayerResult)
+    {
+        this.outputLayerOutput = outputLayerResult;
+        outputLayerUpdated = true;
+        stateChanged();
     }
 
     @Override

@@ -5,8 +5,8 @@
 package mavn.simModel.plot.mediator.worker;
 
 import java.awt.Color;
-import java.awt.Point;
 import javax.swing.SwingWorker;
+import mavn.simModel.algorithm.model.point.Point;
 import mavn.simModel.plot.mediator.PlotMediator;
 
 /**

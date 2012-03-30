@@ -4,8 +4,6 @@
  */
 package mavn.simModel.output.mediator.state;
 
-import javax.swing.table.DefaultTableModel;
-import mavn.simModel.output.mediator.OutputMediator;
 import simulyn.output.mediators.state.MediatorStateInterface;
 import simulyn.output.view.mediator.OutputViewMediatorInterface;
 
@@ -17,7 +15,6 @@ public class MediatorMultiplePointTableState implements MediatorStateInterface
 {
 
     private OutputViewMediatorInterface controller;
-
     private boolean imageRatioModelUpdated;
     private boolean shapeRatioModelUpdated;
 
@@ -53,9 +50,9 @@ public class MediatorMultiplePointTableState implements MediatorStateInterface
     public void stateChanged()
     {
         if (this.imageRatioModelUpdated && this.shapeRatioModelUpdated)
-        {
-            controller.updateUI();
-            resetState();
+        {  
+                controller.updateUI();
+                resetState();
         }
     }
 
@@ -64,6 +61,5 @@ public class MediatorMultiplePointTableState implements MediatorStateInterface
     {
         this.imageRatioModelUpdated = false;
         this.shapeRatioModelUpdated = false;
-        ((OutputMediator) controller).setTableModel(new DefaultTableModel());
     }
 }

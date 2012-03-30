@@ -4,7 +4,6 @@
  */
 package mavn.simModel.output.mediator.state;
 
-import simulyn.output.mediator.OutputMediatorInterface;
 import simulyn.output.mediators.state.MediatorStateInterface;
 
 /**
@@ -13,14 +12,12 @@ import simulyn.output.mediators.state.MediatorStateInterface;
  */
 public class SinglePointInputModelState implements MediatorStateInterface
 {
-    private OutputMediatorInterface controller;
     private boolean inputModelTargetReady;
     private double[][] inputModelTarget;
 
 
-    public SinglePointInputModelState(OutputMediatorInterface controller)
+    public SinglePointInputModelState()
     {
-        this.controller = controller;
         inputModelTargetReady = false;
     }
 

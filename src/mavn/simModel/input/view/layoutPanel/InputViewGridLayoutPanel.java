@@ -6,9 +6,9 @@ package mavn.simModel.input.view.layoutPanel;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import javax.swing.JPanel;
 import mavn.globals.Globals;
 import simulyn.ui.components.inputModelPanel.InputViewAbstract;
-
 
 /**
  *
@@ -16,18 +16,20 @@ import simulyn.ui.components.inputModelPanel.InputViewAbstract;
  */
 public class InputViewGridLayoutPanel extends InputViewLayoutPanelAbstract
 {
+
     private GridLayout layout;
 
-    public InputViewGridLayoutPanel(ArrayList<InputViewAbstract> inputPanels)
+    public InputViewGridLayoutPanel(ArrayList<InputViewAbstract> inputPanels, JPanel controlBar)
     {
+        super(controlBar);
         this.inputPanels = inputPanels;
         this.layout = new GridLayout(3, 2);
-        this.setLayout(layout);
+        this.modelPanel.setLayout(layout);
 
-        this.add(inputPanels.get(Globals.W2_PANEL));
-        this.add(inputPanels.get(Globals.THETA_PANEL));
-        this.add(inputPanels.get(Globals.W1_PANEL));
-        this.add(inputPanels.get(Globals.W0_PANEL));
-        this.add(inputPanels.get(Globals.TARGET_PANEL));
+        this.modelPanel.add(inputPanels.get(Globals.W2_PANEL));
+        this.modelPanel.add(inputPanels.get(Globals.THETA_PANEL));
+        this.modelPanel.add(inputPanels.get(Globals.W1_PANEL));
+        this.modelPanel.add(inputPanels.get(Globals.W0_PANEL));
+        this.modelPanel.add(inputPanels.get(Globals.TARGET_PANEL));
     }
 }

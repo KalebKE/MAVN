@@ -24,10 +24,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import mavn.globals.Globals;
 import mavn.simModel.algorithm.properties.view.state.SimulationPropertiesStateInterface;
 import mavn.simModel.algorithm.properties.view.state.PointGeneratorStateInterface;
-import mavn.simModel.output.view.state.OutputModelStateInterface;
+import mavn.simModel.output.view.state.OutputViewStateInterface;
 
 /**
  * A special JFrame used to manage the Simulation Properties State of the
@@ -37,7 +38,7 @@ import mavn.simModel.output.view.state.OutputModelStateInterface;
 public class SimulationPropertiesFrame extends javax.swing.JFrame
 {
 
-    private OutputModelStateInterface outputState;
+    private OutputViewStateInterface outputState;
     private PointGeneratorStateInterface pointGeneratorState;
     private SimulationPropertiesStateInterface simulationState;
 
@@ -45,18 +46,27 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
      * Initialize the state.
      * @param view the View this class is responsible for.
      */
-    public SimulationPropertiesFrame(OutputModelStateInterface outputState,
+    public SimulationPropertiesFrame(
             PointGeneratorStateInterface pointGeneratorState,
             SimulationPropertiesStateInterface simulationState)
     {
         initComponents();
-        this.outputState = outputState;
         this.simulationState = simulationState;
         this.pointGeneratorState = pointGeneratorState;
         
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.pack();
         initToolTips();
+    }
+
+    public JLabel getResolutionLabel()
+    {
+        return resolutionLabel;
+    }
+
+    public JSpinner getResolutionSpinner()
+    {
+        return resolutionSpinner;
     }
 
     /**
@@ -70,25 +80,7 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
     {
         return useUniformPointGeneratorCheckBox;
     }
-
-    /**
-     * Get the DartGunLabel.
-     * @return the DartGunLabel.
-     */
-    public JLabel getPointGeneratorLabel()
-    {
-        return pointGeneratorLabel;
-    }
-
-    /**
-     * Get the InputsLabel.
-     * @return the InputsLabel.
-     */
-    public JLabel getInputsLabel()
-    {
-        return inputsLabel;
-    }
-
+    
     /**
      * Get the NumPointsLabel.
      * @return the NumPointsLabel.
@@ -125,15 +117,6 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
     public JRadioButton getRandomSeedRadio()
     {
         return randomSeedRadio;
-    }
-
-    /**
-     * Get the SeedLabel.
-     * @return the SeedLabel.
-     */
-    public JLabel getSeedLabel()
-    {
-        return seedLabel;
     }
 
     /**
@@ -204,6 +187,11 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
         return cmwcRngRadio;
     }
 
+    public JCheckBox getGridPointCheckBox()
+    {
+        return gridPointCheckBox;
+    }
+
     /**
      * Get the MT RNG Radio Button. It indicates that the user wants to use the
      * Mersenne Twister RNG for the DartGun's RNG.
@@ -224,6 +212,11 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
         return xORShiftRngRadio;
     }
 
+    public void setOutputState(OutputViewStateInterface outputState)
+    {
+        this.outputState = outputState;
+    }
+    
     private void initToolTips()
     {
         randomRadio.setToolTipText("<html>Use java.util.Random: For non-critical random<br>"
@@ -268,32 +261,109 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        randomRadio = new javax.swing.JRadioButton();
-        mtRngRadio = new javax.swing.JRadioButton();
-        xORShiftRngRadio = new javax.swing.JRadioButton();
-        targetCheckBox = new javax.swing.JCheckBox();
-        useUniformPointGeneratorCheckBox = new javax.swing.JCheckBox();
         propertiesHeaderLabel = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        inputsLabel = new javax.swing.JLabel();
-        pointGeneratorLabel = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        targetCheckBox = new javax.swing.JCheckBox();
+        useUniformPointGeneratorCheckBox = new javax.swing.JCheckBox();
+        gridPointCheckBox = new javax.swing.JCheckBox();
+        jPanel3 = new javax.swing.JPanel();
+        xORShiftRngRadio = new javax.swing.JRadioButton();
+        caRngRadio = new javax.swing.JRadioButton();
+        randomRadio = new javax.swing.JRadioButton();
+        cmwcRngRadio = new javax.swing.JRadioButton();
+        mtRngRadio = new javax.swing.JRadioButton();
+        jPanel4 = new javax.swing.JPanel();
         randomSeedRadio = new javax.swing.JRadioButton();
-        specifiedSeedRadio = new javax.swing.JRadioButton();
-        seedLabel = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
         seedSpinner = new javax.swing.JSpinner();
         seedSpinnerLabel = new javax.swing.JLabel();
+        specifiedSeedRadio = new javax.swing.JRadioButton();
+        jPanel6 = new javax.swing.JPanel();
         numPointsLabel = new javax.swing.JLabel();
         numPointsSpinner = new javax.swing.JSpinner();
-        jSeparator2 = new javax.swing.JSeparator();
-        acceptButton = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
         cancelButton = new javax.swing.JButton();
-        cmwcRngRadio = new javax.swing.JRadioButton();
-        caRngRadio = new javax.swing.JRadioButton();
+        acceptButton = new javax.swing.JButton();
+        resolutionPanel = new javax.swing.JPanel();
+        resolutionLabel = new javax.swing.JLabel();
+        resolutionSpinner = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 formPropertyChange(evt);
+            }
+        });
+
+        propertiesHeaderLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        propertiesHeaderLabel.setForeground(new java.awt.Color(0, 102, 204));
+        propertiesHeaderLabel.setText("MAVN Simulation Properties:");
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Simulation Model", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 102, 204))); // NOI18N
+
+        targetCheckBox.setText("Single Point (Test Point)");
+        targetCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                targetCheckBoxActionPerformed(evt);
+            }
+        });
+
+        useUniformPointGeneratorCheckBox.setSelected(true);
+        useUniformPointGeneratorCheckBox.setText("Random Point (Monte Carlo)");
+        useUniformPointGeneratorCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                useUniformPointGeneratorCheckBoxActionPerformed(evt);
+            }
+        });
+
+        gridPointCheckBox.setText("Grid Point (Resolution)");
+        gridPointCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gridPointCheckBoxActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(useUniformPointGeneratorCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(gridPointCheckBox))
+                    .addComponent(targetCheckBox))
+                .addContainerGap(33, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(useUniformPointGeneratorCheckBox)
+                    .addComponent(gridPointCheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(targetCheckBox))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Point Generator", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 102, 204))); // NOI18N
+        jPanel3.setPreferredSize(new java.awt.Dimension(347, 81));
+
+        xORShiftRngRadio.setText("XORShiftRNG");
+        xORShiftRngRadio.setEnabled(false);
+        xORShiftRngRadio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                xORShiftRngRadioActionPerformed(evt);
+            }
+        });
+
+        caRngRadio.setText("CellularAutomatonRNG");
+        caRngRadio.setEnabled(false);
+        caRngRadio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                caRngRadioActionPerformed(evt);
             }
         });
 
@@ -306,6 +376,14 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
             }
         });
 
+        cmwcRngRadio.setText("CMWC4096RNG");
+        cmwcRngRadio.setEnabled(false);
+        cmwcRngRadio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmwcRngRadioActionPerformed(evt);
+            }
+        });
+
         mtRngRadio.setText("MersenneTwisterRNG");
         mtRngRadio.setEnabled(false);
         mtRngRadio.addActionListener(new java.awt.event.ActionListener() {
@@ -314,36 +392,42 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
             }
         });
 
-        xORShiftRngRadio.setText("XORShiftRNG");
-        xORShiftRngRadio.setEnabled(false);
-        xORShiftRngRadio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                xORShiftRngRadioActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmwcRngRadio)
+                    .addComponent(randomRadio))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(mtRngRadio)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(xORShiftRngRadio))
+                    .addComponent(caRngRadio))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(randomRadio)
+                        .addGap(2, 2, 2)
+                        .addComponent(cmwcRngRadio))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(mtRngRadio)
+                            .addComponent(xORShiftRngRadio))
+                        .addGap(2, 2, 2)
+                        .addComponent(caRngRadio)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
-        targetCheckBox.setSelected(true);
-        targetCheckBox.setText("Single Point (Test Point)");
-        targetCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                targetCheckBoxActionPerformed(evt);
-            }
-        });
-
-        useUniformPointGeneratorCheckBox.setText("Multiple Point (Monte Carlo)");
-        useUniformPointGeneratorCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                useUniformPointGeneratorCheckBoxActionPerformed(evt);
-            }
-        });
-
-        propertiesHeaderLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
-        propertiesHeaderLabel.setText("Set MAVN Simulation Run Properties:");
-
-        inputsLabel.setText("What inputs should the simulation use?");
-
-        pointGeneratorLabel.setText("What Uniform Point Generator would you like to use?");
-        pointGeneratorLabel.setEnabled(false);
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Point Generator Seed", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 102, 204))); // NOI18N
 
         randomSeedRadio.setSelected(true);
         randomSeedRadio.setText("Use Random Seed");
@@ -354,6 +438,13 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
             }
         });
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        seedSpinner.setEnabled(false);
+
+        seedSpinnerLabel.setText("Desired Seed:");
+        seedSpinnerLabel.setEnabled(false);
+
         specifiedSeedRadio.setText("Use Specified Seed");
         specifiedSeedRadio.setEnabled(false);
         specifiedSeedRadio.addActionListener(new java.awt.event.ActionListener() {
@@ -362,25 +453,77 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
             }
         });
 
-        seedLabel.setText("Do you want a seeded distribution?");
-        seedLabel.setEnabled(false);
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(specifiedSeedRadio, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(seedSpinnerLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(seedSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(specifiedSeedRadio)
+                    .addComponent(seedSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(seedSpinnerLabel))
+                .addContainerGap())
+        );
 
-        seedSpinner.setEnabled(false);
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(randomSeedRadio))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(randomSeedRadio)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
-        seedSpinnerLabel.setText("Desired Seed:");
-        seedSpinnerLabel.setEnabled(false);
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Number of Points", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 102, 204))); // NOI18N
 
         numPointsLabel.setText("How many points should be fired?");
         numPointsLabel.setEnabled(false);
 
         numPointsSpinner.setEnabled(false);
 
-        acceptButton.setText("Accept");
-        acceptButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                acceptButtonActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(numPointsLabel)
+                .addGap(18, 18, 18)
+                .addComponent(numPointsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(49, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(numPointsLabel)
+                    .addComponent(numPointsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -389,21 +532,61 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
             }
         });
 
-        cmwcRngRadio.setText("CMWC4096RNG");
-        cmwcRngRadio.setEnabled(false);
-        cmwcRngRadio.addActionListener(new java.awt.event.ActionListener() {
+        acceptButton.setText("Accept");
+        acceptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmwcRngRadioActionPerformed(evt);
+                acceptButtonActionPerformed(evt);
             }
         });
 
-        caRngRadio.setText("CellularAutomatonRNG");
-        caRngRadio.setEnabled(false);
-        caRngRadio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caRngRadioActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap(63, Short.MAX_VALUE)
+                .addComponent(acceptButton)
+                .addGap(59, 59, 59)
+                .addComponent(cancelButton)
+                .addGap(95, 95, 95))
+        );
+
+        jPanel7Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {acceptButton, cancelButton});
+
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(cancelButton)
+                .addComponent(acceptButton))
+        );
+
+        resolutionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Resolution", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 102, 204))); // NOI18N
+
+        resolutionLabel.setText("How many points per grid?");
+        resolutionLabel.setEnabled(false);
+
+        resolutionSpinner.setEnabled(false);
+
+        javax.swing.GroupLayout resolutionPanelLayout = new javax.swing.GroupLayout(resolutionPanel);
+        resolutionPanel.setLayout(resolutionPanelLayout);
+        resolutionPanelLayout.setHorizontalGroup(
+            resolutionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(resolutionPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(resolutionLabel)
+                .addGap(18, 18, 18)
+                .addComponent(resolutionSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(81, Short.MAX_VALUE))
+        );
+        resolutionPanelLayout.setVerticalGroup(
+            resolutionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(resolutionPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(resolutionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(resolutionLabel)
+                    .addComponent(resolutionSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -413,115 +596,57 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(propertiesHeaderLabel))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(acceptButton)
-                        .addGap(51, 51, 51)
-                        .addComponent(cancelButton))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(randomRadio)
-                                    .addComponent(cmwcRngRadio))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(caRngRadio)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(mtRngRadio)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(xORShiftRngRadio)))
-                                .addGap(41, 41, 41))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(inputsLabel)
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(useUniformPointGeneratorCheckBox)
-                                    .addComponent(targetCheckBox)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                            .addComponent(seedSpinnerLabel)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(seedSpinner))
-                                        .addComponent(seedLabel, javax.swing.GroupLayout.Alignment.LEADING))
-                                    .addComponent(numPointsLabel))
-                                .addGap(43, 43, 43)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(specifiedSeedRadio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(randomSeedRadio))
-                                        .addGap(169, 169, 169))
-                                    .addComponent(numPointsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(29, 29, 29))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(pointGeneratorLabel))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(propertiesHeaderLabel)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(resolutionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {acceptButton, cancelButton});
-
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(propertiesHeaderLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(resolutionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputsLabel)
-                    .addComponent(targetCheckBox))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(useUniformPointGeneratorCheckBox)
-                .addGap(13, 13, 13)
-                .addComponent(pointGeneratorLabel)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(randomRadio)
-                    .addComponent(mtRngRadio)
-                    .addComponent(xORShiftRngRadio))
-                .addGap(2, 2, 2)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmwcRngRadio)
-                    .addComponent(caRngRadio))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(seedLabel)
-                    .addComponent(randomSeedRadio))
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(seedSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(specifiedSeedRadio)
-                    .addComponent(seedSpinnerLabel))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(numPointsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(numPointsLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(acceptButton)
-                    .addComponent(cancelButton)))
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -538,7 +663,7 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
         boolean selected = abstractButton.getModel().isSelected();
         if (selected)
         {
-            this.simulationState.useTargets();
+            this.simulationState.useTargetModel();
         }
     }//GEN-LAST:event_targetCheckBoxActionPerformed
 
@@ -548,7 +673,7 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
         boolean selected = abstractButton.getModel().isSelected();
         if (selected)
         {
-            this.simulationState.useDarts();
+            this.simulationState.usePointGeneratorModel();
         }
     }//GEN-LAST:event_useUniformPointGeneratorCheckBoxActionPerformed
 
@@ -594,15 +719,21 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
 
     private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_acceptButtonActionPerformed
     {//GEN-HEADEREND:event_acceptButtonActionPerformed
-        if (this.simulationState.isDart())
+        if (this.simulationState.isPointGeneratedModel())
         {
             this.pointGeneratorState.setDartGunState(true);
             Globals.SEED = ((Double) this.simulationState.getSeedModel().getValue());
-            double darts = (Double) this.simulationState.getDartModel().getValue();
+            double darts = (Double) this.simulationState.getPointGeneratorModel().getValue();
             Globals.NUM_DARTS = (int) darts;
         }
 
-        if (this.simulationState.isTarget())
+        if (this.simulationState.isGridGeneratedModel())
+        {
+            this.pointGeneratorState.setDartGunState(false);
+            Globals.RESOLUTION = ((Integer) this.simulationState.getGridSpinnerModel().getValue());
+        }
+
+        if (this.simulationState.isTargetModel())
         {
             this.pointGeneratorState.setDartGunState(false);
         }
@@ -676,23 +807,40 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
             this.simulationState.caRng();
         }
     }//GEN-LAST:event_caRngRadioActionPerformed
+
+    private void gridPointCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_gridPointCheckBoxActionPerformed
+    {//GEN-HEADEREND:event_gridPointCheckBoxActionPerformed
+        AbstractButton abstractButton = (AbstractButton) evt.getSource();
+        boolean selected = abstractButton.getModel().isSelected();
+        if (selected)
+        {
+            this.simulationState.useGridGeneratedModel();
+        }
+    }//GEN-LAST:event_gridPointCheckBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton acceptButton;
     private javax.swing.JRadioButton caRngRadio;
     private javax.swing.JButton cancelButton;
     private javax.swing.JRadioButton cmwcRngRadio;
-    private javax.swing.JLabel inputsLabel;
+    private javax.swing.JCheckBox gridPointCheckBox;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JRadioButton mtRngRadio;
     private javax.swing.JLabel numPointsLabel;
     private javax.swing.JSpinner numPointsSpinner;
-    private javax.swing.JLabel pointGeneratorLabel;
     private javax.swing.JLabel propertiesHeaderLabel;
     private javax.swing.JRadioButton randomRadio;
     private javax.swing.JRadioButton randomSeedRadio;
-    private javax.swing.JLabel seedLabel;
+    private javax.swing.JLabel resolutionLabel;
+    private javax.swing.JPanel resolutionPanel;
+    private javax.swing.JSpinner resolutionSpinner;
     private javax.swing.JSpinner seedSpinner;
     private javax.swing.JLabel seedSpinnerLabel;
     private javax.swing.JRadioButton specifiedSeedRadio;

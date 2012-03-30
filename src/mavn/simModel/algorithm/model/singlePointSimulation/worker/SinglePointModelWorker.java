@@ -106,7 +106,7 @@ public class SinglePointModelWorker extends SwingWorker
         double[][] matrix3 = matrix.multiply(inputModelState.getW1(), outputModelState.getAndLayerOutput());
         double[][] theta1 = theta.calculateAnd(inputModelState.getW1());
         double[][] matrix4 = matrix.addMatrix(matrix3, theta1);
-        outputModelState.setOrLayerResult(shl.calculate(matrix4));
+        outputModelState.setOrLayerOutput(shl.calculate(matrix4));
 
         // SHL[(W0*P)+Theta0]
         double[][] theta2 = theta.calculateOr(inputModelState.getW0());

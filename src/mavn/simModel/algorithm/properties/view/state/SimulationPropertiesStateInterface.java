@@ -38,12 +38,14 @@ public interface SimulationPropertiesStateInterface
      */
     public void cmwcRng();
 
+    public SpinnerNumberModel getGridSpinnerModel();
+
     /**
      * Get the Dart Model.
      * @return SpinnerNumberModel representing the number of darts to be fired
      * during the simulation.
      */
-    public SpinnerNumberModel getDartModel();
+    public SpinnerNumberModel getPointGeneratorModel();
 
     /**
      * Get the Seed Model.
@@ -68,7 +70,9 @@ public interface SimulationPropertiesStateInterface
      * Check to see if the DartGun is desired.
      * @return boolean indicating if a DartGun is desired.
      */
-    public boolean isDart();
+    public boolean isPointGeneratedModel();
+
+    public boolean isGridGeneratedModel();
 
     /**
      * Check if Mt Rng is desired.
@@ -92,7 +96,7 @@ public interface SimulationPropertiesStateInterface
      * Check to see if a single dart target is desired.
      * @return boolean indicating if a single dart target is desired.
      */
-    public boolean isTarget();
+    public boolean isTargetModel();
 
     /**
      * Check if XORRng is desired.
@@ -110,16 +114,18 @@ public interface SimulationPropertiesStateInterface
      */
     public void randomRng();
 
+    public void useGridGeneratedModel();
+
     /**
      * Indicate that the Target Model should be used instead of the
      * DartGun.
      */
-    public void useTargets();
+    public void useTargetModel();
 
     /**
      * Indicate that the DartGun should be used instead of the Target Model.
      */
-    public void useDarts();
+    public void usePointGeneratorModel();
 
     /**
      * Indicate that the RNG should use a specific seed.

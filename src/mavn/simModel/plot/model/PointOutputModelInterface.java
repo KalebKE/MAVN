@@ -5,8 +5,8 @@
 
 package mavn.simModel.plot.model;
 
-import java.awt.Point;
 import java.util.ArrayList;
+import mavn.simModel.algorithm.model.point.Point;
 
 /**
  *
@@ -14,20 +14,20 @@ import java.util.ArrayList;
  */
 public abstract class PointOutputModelInterface
 {
-    protected boolean dartResultReady;
-    protected ArrayList modelResultObservers;
+    protected boolean pointsOutputReady;
+    protected ArrayList modeOutputObservers;
     protected ArrayList<Point> hit;
     protected ArrayList<Point> miss;
 
     public PointOutputModelInterface()
     {
-        dartResultReady = false;
+        pointsOutputReady = false;
     }
 
      /**
      * Notify all Observers that new data is available.
      */
-    public abstract void notifyObservers();
+    public abstract void notifyPointsObservers();
 
     public ArrayList<Point> getHit()
     {
@@ -39,25 +39,25 @@ public abstract class PointOutputModelInterface
         return miss;
     }
 
-    public boolean isDartResultReady()
+    public boolean isPointsReady()
     {
-        return dartResultReady;
+        return pointsOutputReady;
     }
 
     /**
      * Set the matrix.
      * @param matrix
      */
-    public void setDartResult(ArrayList<Point> hit, ArrayList<Point> miss)
+    public void setPointsOutput(ArrayList<Point> hit, ArrayList<Point> miss)
     {
-        setDartResultReady(true);
+        setPointsOutputReady(true);
         this.hit = hit;
         this.miss = miss;
-        notifyObservers();
+        notifyPointsObservers();
     }
 
-    public void setDartResultReady(boolean dartResultReady)
+    public void setPointsOutputReady(boolean pointsOutputReady)
     {
-        this.dartResultReady = dartResultReady;
+        this.pointsOutputReady = pointsOutputReady;
     }
 }

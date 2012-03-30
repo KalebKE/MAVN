@@ -5,7 +5,6 @@
 package mavn.simModel.output.model;
 
 import java.util.ArrayList;
-import mavn.simModel.algorithm.model.point.ImageRatioAlgorithmModelInterface;
 import mavn.simModel.algorithm.model.point.observer.ImageRatioAlgorithmModelObserver;
 import mavn.simModel.output.model.observer.ImageRatioOutputModelObserver;
 import simulyn.output.model.OutputModelInterface;

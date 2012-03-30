@@ -37,6 +37,7 @@ public abstract class NetworkLayerOutputModelStateAbstract implements AlgorithmM
     protected boolean andLayerResultReady;
     protected boolean orLayerResultReady;
     protected boolean outputLayerResultReady;
+    
     // Algorithm Output State
     protected double[][] andLayerResult;
     protected double[][] orLayerResult;
@@ -87,7 +88,7 @@ public abstract class NetworkLayerOutputModelStateAbstract implements AlgorithmM
      * Set the local copy of the OR Layer Output for the current set of inputs.
      * @param orLayerResult the Or Layer Output State.
      */
-    public void setOrLayerResult(double[][] orLayerResult)
+    public void setOrLayerOutput(double[][] orLayerResult)
     {
         this.orLayerResult = orLayerResult;
         this.orLayerResultReady = true;

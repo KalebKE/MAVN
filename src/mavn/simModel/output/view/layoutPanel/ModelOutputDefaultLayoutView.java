@@ -19,22 +19,28 @@ import javax.swing.JPanel;
  */
 public class ModelOutputDefaultLayoutView extends javax.swing.JPanel
 {
-    private JPanel outputPanel;
+
+    private JPanel outputViewRenderer;
     private JPanel plotPanel;
     private JPanel networkPanel;
+    private JPanel controlBar;
 
     /** Creates new form NetworkPanel */
-    public ModelOutputDefaultLayoutView(JPanel outputPanel,
+    public ModelOutputDefaultLayoutView(JPanel controlBar,
+            JPanel outputViewRenderer,
             JPanel plotPanel, JPanel networkPanel)
     {
         initComponents();
-
-        this.outputPanel = outputPanel;
+        this.controlBar = controlBar;
+        this.outputViewRenderer = outputViewRenderer;
         this.plotPanel = plotPanel;
         this.networkPanel = networkPanel;
 
+        this.controlPanel.setLayout(new BoxLayout(this.controlPanel, BoxLayout.LINE_AXIS));
+        this.controlPanel.add(this.controlBar);
+
         this.outputView.setLayout(new BoxLayout(this.outputView, BoxLayout.LINE_AXIS));
-        this.outputView.add(this.outputPanel);
+        this.outputView.add(this.outputViewRenderer);
 
         this.plotView.setLayout(new BoxLayout(this.plotView, BoxLayout.LINE_AXIS));
         this.plotView.add(this.plotPanel);
@@ -52,13 +58,13 @@ public class ModelOutputDefaultLayoutView extends javax.swing.JPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
         outputView = new javax.swing.JPanel();
         jLabelResults = new javax.swing.JLabel();
         plotView = new javax.swing.JPanel();
         networkView = new javax.swing.JPanel();
+        controlPanel = new javax.swing.JPanel();
 
+        outputView.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Simulation Output", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 102, 204))); // NOI18N
         outputView.setPreferredSize(new java.awt.Dimension(520, 480));
 
         javax.swing.GroupLayout outputViewLayout = new javax.swing.GroupLayout(outputView);
@@ -68,7 +74,7 @@ public class ModelOutputDefaultLayoutView extends javax.swing.JPanel
             .addGroup(outputViewLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabelResults)
-                .addContainerGap(536, Short.MAX_VALUE))
+                .addContainerGap(776, Short.MAX_VALUE))
         );
         outputViewLayout.setVerticalGroup(
             outputViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -78,79 +84,79 @@ public class ModelOutputDefaultLayoutView extends javax.swing.JPanel
                 .addGap(469, 469, 469))
         );
 
+        plotView.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Image", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 102, 204))); // NOI18N
         plotView.setPreferredSize(new java.awt.Dimension(520, 348));
 
         javax.swing.GroupLayout plotViewLayout = new javax.swing.GroupLayout(plotView);
         plotView.setLayout(plotViewLayout);
         plotViewLayout.setHorizontalGroup(
             plotViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 551, Short.MAX_VALUE)
+            .addGap(0, 408, Short.MAX_VALUE)
         );
         plotViewLayout.setVerticalGroup(
             plotViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 348, Short.MAX_VALUE)
+            .addGap(0, 311, Short.MAX_VALUE)
         );
+
+        networkView.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Network", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 102, 204))); // NOI18N
+        networkView.setPreferredSize(new java.awt.Dimension(1103, 400));
 
         javax.swing.GroupLayout networkViewLayout = new javax.swing.GroupLayout(networkView);
         networkView.setLayout(networkViewLayout);
         networkViewLayout.setHorizontalGroup(
             networkViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1103, Short.MAX_VALUE)
+            .addGap(0, 1222, Short.MAX_VALUE)
         );
         networkViewLayout.setVerticalGroup(
             networkViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 359, Short.MAX_VALUE)
+            .addGap(0, 437, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1146, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(networkView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(plotView, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(outputView, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)))
-                    .addGap(43, 43, 43)))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 724, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addComponent(networkView, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(outputView, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
-                        .addComponent(plotView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addContainerGap()))
-        );
+        controlPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jScrollPane1.setViewportView(jPanel1);
+        javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
+        controlPanel.setLayout(controlPanelLayout);
+        controlPanelLayout.setHorizontalGroup(
+            controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1250, Short.MAX_VALUE)
+        );
+        controlPanelLayout.setVerticalGroup(
+            controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 73, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1112, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1112, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(networkView, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1234, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(plotView, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(outputView, javax.swing.GroupLayout.DEFAULT_SIZE, 806, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 724, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(networkView, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(plotView, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                    .addComponent(outputView, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel controlPanel;
     private javax.swing.JLabel jLabelResults;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel networkView;
     protected javax.swing.JPanel outputView;
     private javax.swing.JPanel plotView;

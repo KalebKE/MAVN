@@ -19,9 +19,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.view;
 
 import java.awt.Frame;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.ScrollPaneConstants;
+import mavn.simModel.output.view.state.OutputViewStateInterface;
 
 /**
  * The main View for the Mavn application.
@@ -30,17 +32,27 @@ import javax.swing.ScrollPaneConstants;
 public class SimControlView extends JFrame
 {
 
+    private ActionListener action;
     private JPanel outputView;
     private JPanel inputView;
+    private OutputViewStateInterface outputViewState;
 
     /** Creates new form Main */
-    public SimControlView(JPanel inputView, JPanel outputView)
+    public SimControlView(ActionListener action, JPanel inputView, JPanel outputView, OutputViewStateInterface outputViewState)
     {
         initComponents();
+
+        this.action = action;
+        this.outputViewState = outputViewState;
+
+        importModelMenuItem.setActionCommand("importSimulationAction");
+        importModelMenuItem.addActionListener(action);
+
         this.inputView = inputView;
         this.outputView = outputView;
         this.inputView.setVisible(true);
         this.outputView.setVisible(true);
+
         this.setVisible(true);
         this.pack();
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -49,16 +61,19 @@ public class SimControlView extends JFrame
         mainScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainScrollPane.validate();
         mainScrollPane.updateUI();
+
     }
 
     public void setInputView()
     {
-        mainScrollPane.setViewportView(inputView); 
+        mainScrollPane.setViewportView(inputView);
+        this.outputViewState.onInputView();
     }
 
     public void setOutputView()
     {
         mainScrollPane.setViewportView(outputView);
+        this.outputViewState.onOutputView();
     }
 
     /** This method is called from within the constructor to
@@ -76,8 +91,8 @@ public class SimControlView extends JFrame
         importModelMenuItem = new javax.swing.JMenuItem();
         saveModelMenuItem = new javax.swing.JMenuItem();
         viewNetworkMenu = new javax.swing.JMenu();
-        viewNetworkMenuItem = new javax.swing.JMenuItem();
-        viewModelMenuItem = new javax.swing.JMenuItem();
+        viewOutputMenuItem = new javax.swing.JMenuItem();
+        viewInputsMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -93,40 +108,30 @@ public class SimControlView extends JFrame
         fileMenu.setText("File");
 
         importModelMenuItem.setText("Import Model");
-        importModelMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                importModelMenuItemActionPerformed(evt);
-            }
-        });
         fileMenu.add(importModelMenuItem);
 
         saveModelMenuItem.setText("Save Model");
-        saveModelMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveModelMenuItemActionPerformed(evt);
-            }
-        });
         fileMenu.add(saveModelMenuItem);
 
         jMenuBar1.add(fileMenu);
 
         viewNetworkMenu.setText("Views");
 
-        viewNetworkMenuItem.setText("Network");
-        viewNetworkMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        viewOutputMenuItem.setText("Model Outputs");
+        viewOutputMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewNetworkMenuItemActionPerformed(evt);
+                viewOutputMenuItemActionPerformed(evt);
             }
         });
-        viewNetworkMenu.add(viewNetworkMenuItem);
+        viewNetworkMenu.add(viewOutputMenuItem);
 
-        viewModelMenuItem.setText("Model");
-        viewModelMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        viewInputsMenuItem.setText("Model Inputs");
+        viewInputsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewModelMenuItemActionPerformed(evt);
+                viewInputsMenuItemActionPerformed(evt);
             }
         });
-        viewNetworkMenu.add(viewModelMenuItem);
+        viewNetworkMenu.add(viewInputsMenuItem);
 
         jMenuBar1.add(viewNetworkMenu);
 
@@ -136,52 +141,45 @@ public class SimControlView extends JFrame
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1136, Short.MAX_VALUE)
+            .addComponent(mainScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 904, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
+            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1085, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void importModelMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_importModelMenuItemActionPerformed
-    {//GEN-HEADEREND:event_importModelMenuItemActionPerformed
-        //OpenSpreadsheetDirectoryController importModel = new OpenSpreadsheetDirectoryController(controller.getModelInputFileControllersList());
-        //importModel.getDirectoryChooser();
-    }//GEN-LAST:event_importModelMenuItemActionPerformed
-    private void saveModelMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_saveModelMenuItemActionPerformed
-    {//GEN-HEADEREND:event_saveModelMenuItemActionPerformed
-    }//GEN-LAST:event_saveModelMenuItemActionPerformed
-
     private void formPropertyChange(java.beans.PropertyChangeEvent evt)//GEN-FIRST:event_formPropertyChange
     {//GEN-HEADEREND:event_formPropertyChange
     }//GEN-LAST:event_formPropertyChange
 
-    private void viewNetworkMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_viewNetworkMenuItemActionPerformed
-    {//GEN-HEADEREND:event_viewNetworkMenuItemActionPerformed
+    private void viewOutputMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_viewOutputMenuItemActionPerformed
+    {//GEN-HEADEREND:event_viewOutputMenuItemActionPerformed
         this.setOutputView();
-        mainScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        mainScrollPane.validate();
-        mainScrollPane.updateUI();
-    }//GEN-LAST:event_viewNetworkMenuItemActionPerformed
 
-    private void viewModelMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_viewModelMenuItemActionPerformed
-    {//GEN-HEADEREND:event_viewModelMenuItemActionPerformed
-        this.setInputView();
         mainScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainScrollPane.validate();
         mainScrollPane.updateUI();
-    }//GEN-LAST:event_viewModelMenuItemActionPerformed
+    }//GEN-LAST:event_viewOutputMenuItemActionPerformed
+
+    private void viewInputsMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_viewInputsMenuItemActionPerformed
+    {//GEN-HEADEREND:event_viewInputsMenuItemActionPerformed
+        this.setInputView();
+
+        mainScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        mainScrollPane.validate();
+        mainScrollPane.updateUI();
+    }//GEN-LAST:event_viewInputsMenuItemActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem importModelMenuItem;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane mainScrollPane;
     private javax.swing.JMenuItem saveModelMenuItem;
-    private javax.swing.JMenuItem viewModelMenuItem;
+    private javax.swing.JMenuItem viewInputsMenuItem;
     private javax.swing.JMenu viewNetworkMenu;
-    private javax.swing.JMenuItem viewNetworkMenuItem;
+    private javax.swing.JMenuItem viewOutputMenuItem;
     // End of variables declaration//GEN-END:variables
 }

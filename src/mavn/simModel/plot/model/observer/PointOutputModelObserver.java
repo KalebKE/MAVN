@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simModel.plot.model.observer;
 
-import java.awt.Point;
 import java.util.ArrayList;
+import mavn.simModel.algorithm.model.point.Point;
 
 /**
  * A hook for classes that want to be notified of when the results of the
@@ -33,5 +33,5 @@ public interface PointOutputModelObserver
      * @param hit the number of dart hits
      * @param miss the number of dart misses
      */
-    public void updateDartResults(ArrayList<Point> hit, ArrayList<Point> miss);
+    public void updatePoints(ArrayList<Point> hit, ArrayList<Point> miss);
 }

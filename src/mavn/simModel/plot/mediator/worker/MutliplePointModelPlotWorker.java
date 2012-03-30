@@ -5,10 +5,10 @@
 package mavn.simModel.plot.mediator.worker;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.SwingWorker;
+import mavn.simModel.algorithm.model.point.Point;
 import mavn.simModel.plot.mediator.PlotMediator;
 
 /**
@@ -20,13 +20,13 @@ public class MutliplePointModelPlotWorker extends SwingWorker
 
     private ArrayList<Point> hit;
     private ArrayList<Point> miss;
-    private PlotMediator controller;
+    private PlotMediator mediator;
 
-    public MutliplePointModelPlotWorker(ArrayList<Point> hit, ArrayList<Point> miss, PlotMediator controller)
+    public MutliplePointModelPlotWorker(ArrayList<Point> hit, ArrayList<Point> miss, PlotMediator mediator)
     {
         this.hit = hit;
         this.miss = miss;
-        this.controller = controller;
+        this.mediator = mediator;
     }
 
     @Override
@@ -60,9 +60,9 @@ public class MutliplePointModelPlotWorker extends SwingWorker
                 missCount++;
             }
 
-            controller.getPlot().addScatterPlot("Hit", Color.red, xHit, yHit);
-            controller.getPlot().addScatterPlot("Miss", Color.black, xMisses, yMisses);
-            controller.updateUI();
+            mediator.getPlot().addScatterPlot("Hit", Color.red, xHit, yHit);
+            mediator.getPlot().addScatterPlot("Miss", Color.black, xMisses, yMisses);
+            mediator.updateUI();
         } catch (Exception e)
         {
             e.printStackTrace();

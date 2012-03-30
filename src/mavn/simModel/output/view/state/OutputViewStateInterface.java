@@ -24,7 +24,7 @@ package mavn.simModel.output.view.state;
  * simluation. Implementations make the application more intuitive to work with.
  * @author Kaleb
  */
-public interface OutputModelStateInterface
+public interface OutputViewStateInterface
 {
 
     public void animate(boolean animate);
@@ -72,5 +72,19 @@ public interface OutputModelStateInterface
     /**
      * What state should be enabled when the simulation has been run.
      */
-    public void resultAvailable();
+    public void resultAvailable(boolean available);
+
+    public void onOutputView();
+
+    public void onInputView();
+
+    public void onMonteCarloSimulation();
+
+    public void onTargetSimluation();
+
+    public void onGridSimulation();
+
+    public void onScatterPlot();
+
+    public void onLinePlot();
 }

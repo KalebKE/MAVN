@@ -22,7 +22,6 @@ import simulyn.input.view.state.InputViewStateInterface;
 import simulyn.ui.components.BlinkerButton;
 import simulyn.ui.components.inputModelPanel.InputViewAbstract;
 
-
 /**
  * Implements the View's state control for the Target Model.
  * This class is an implementation of the applications
@@ -31,6 +30,7 @@ import simulyn.ui.components.inputModelPanel.InputViewAbstract;
  */
 public class InputViewState implements InputViewStateInterface
 {
+
     private InputViewAbstract view;
     private boolean matrixLoaded;
 
@@ -38,9 +38,8 @@ public class InputViewState implements InputViewStateInterface
      * Initialize the state.
      * @param view the View the class is responsible for.
      */
-    public InputViewState(InputViewAbstract view)
+    public InputViewState()
     {
-        this.view = view;
         matrixLoaded = false;
     }
 
@@ -52,26 +51,11 @@ public class InputViewState implements InputViewStateInterface
     {
         if (ready)
         {
-            view.getImportModelButton().setEnabled(false);
-            ((BlinkerButton) view.getImportModelButton()).setBlink(false);
-
-            // Enable these buttons
-            view.getSaveModelButton().setEnabled(true);
-            ((BlinkerButton) view.getSaveModelButton()).setBlink(true);
-
-            matrixLoaded = true;
+            inputModelLoaded();
         }
         if (!ready)
         {
-            // Disable these buttons
-           view.getImportModelButton().setEnabled(true);
-            ((BlinkerButton) view.getImportModelButton()).setBlink(true);
-
-            // Enable these buttons
-            view.getSaveModelButton().setEnabled(false);
-            ((BlinkerButton) view.getSaveModelButton()).setBlink(false);
-
-            matrixLoaded = false;
+            inputModelUnloaded();
         }
     }
 
@@ -83,5 +67,36 @@ public class InputViewState implements InputViewStateInterface
     public boolean isInputModelReady()
     {
         return matrixLoaded;
+    }
+
+    public void setView(InputViewAbstract view)
+    {
+        this.view = view;
+        inputModelUnloaded();
+    }
+
+    private void inputModelLoaded()
+    {
+        view.getImportModelButton().setEnabled(false);
+        ((BlinkerButton) view.getImportModelButton()).setBlink(false);
+
+        // Enable these buttons
+        view.getSaveModelButton().setEnabled(true);
+        ((BlinkerButton) view.getSaveModelButton()).setBlink(true);
+
+        matrixLoaded = true;
+    }
+
+    private void inputModelUnloaded()
+    {
+        // Disable these buttons
+        view.getImportModelButton().setEnabled(true);
+        ((BlinkerButton) view.getImportModelButton()).setBlink(true);
+
+        // Enable these buttons
+        view.getSaveModelButton().setEnabled(false);
+        ((BlinkerButton) view.getSaveModelButton()).setBlink(false);
+
+        matrixLoaded = false;
     }
 }

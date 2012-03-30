@@ -19,10 +19,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simModel.input.view;
 
+import java.awt.event.ActionListener;
 import mavn.simModel.input.view.changeEvent.InputModelChangeEvent;
 import mavn.simModel.input.model.observer.W2ModelObserver;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
+import simulyn.input.view.state.InputViewStateInterface;
 import simulyn.ui.components.inputModelPanel.InputViewAbstract;
 import simulyn.ui.components.spreadsheetTable.SimTable;
 
@@ -44,6 +46,7 @@ import simulyn.ui.components.spreadsheetTable.SimTable;
  */
 public class InputViewW2Model extends InputViewAbstract implements W2ModelObserver
 {
+
     /**
      * Initialize the InputViewAbtract.
      * @param inputController the Input Controller Interface you want to associate
@@ -51,9 +54,12 @@ public class InputViewW2Model extends InputViewAbstract implements W2ModelObserv
      * @param inputModel the Input Model Interface you want to associate with this View.
      * @param inputModelChanged the Input Model Manager for the application.
      */
-    public InputViewW2Model(InputControllerInterface inputController, InputModelInterface inputModel, InputModelChangeEvent modelChanged)
+    public InputViewW2Model(ActionListener action, InputControllerInterface inputController,
+            InputModelInterface inputModel,
+            InputViewStateInterface inputViewState,
+            InputModelChangeEvent modelChanged)
     {
-        super(inputController, inputModel, modelChanged);
+        super(action, inputController, inputModel, inputViewState, modelChanged);
         this.inputPanelHeaderLabel.setText("Weight Matrix: W2");
         this.inputPanelDescriptionLabel.setText("W2 Matrix: Defines Shape Vector Directions");
     }

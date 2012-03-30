@@ -35,7 +35,7 @@ import simulyn.algorithm.model.state.AlgorithmModelStateInterface;
  * will return true;
  * @author Kaleb
  */
-public class UniformMultiPointInputModelState implements AlgorithmModelStateInterface
+public class MultiPointInputModelState implements AlgorithmModelStateInterface
 {
     private boolean thetaUpdated;
     private boolean w0Updated;
@@ -49,7 +49,7 @@ public class UniformMultiPointInputModelState implements AlgorithmModelStateInte
     private double[][] w1;
     private double[][] w2;
 
-    public UniformMultiPointInputModelState()
+    public MultiPointInputModelState()
     {
         this.inputModelReady = false;
         this.thetaUpdated = false;
@@ -100,7 +100,7 @@ public class UniformMultiPointInputModelState implements AlgorithmModelStateInte
     public void setW1(double[][] w1)
     {
         this.w1 = w1;
-        this.w0Updated = true;
+        this.w1Updated = true;
         stateChanged();
     }
 

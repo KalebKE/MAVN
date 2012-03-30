@@ -19,9 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simModel.algorithm.model.multiplePointSimulation.state;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import mavn.simModel.algorithm.model.multiplePointSimulation.UniformMultiPointSimulation;
+import mavn.simModel.algorithm.model.point.Point;
 import simulyn.algorithm.model.state.AlgorithmModelStateInterface;
 
 /**
@@ -41,13 +41,18 @@ import simulyn.algorithm.model.state.AlgorithmModelStateInterface;
 public class UniformMutliPointOutputModelState implements AlgorithmModelStateInterface
 {
     // Booleans used to keep track of what State has been set.
+
     private boolean hitResultReady;
     private boolean missResultReady;
     private boolean shapesRatioReady;
     private boolean imageRatioReady;
+    private boolean timerPointsReady;
+
     // Algorithm Dart Output State
     private ArrayList<Point> hit;
     private ArrayList<Point> miss;
+    private ArrayList<Point> timerPoints;
+
     // Primitive used to put set bounds on the image
     // so the Dart Gun only produces points within the bounds.
     private double bounds;
@@ -65,6 +70,13 @@ public class UniformMutliPointOutputModelState implements AlgorithmModelStateInt
     public UniformMutliPointOutputModelState(UniformMultiPointSimulation model)
     {
         this.model = model;
+        hitResultReady = false;
+        missResultReady = false;
+        timerPointsReady = false;
+
+        hit = new ArrayList<Point>();
+        miss = new ArrayList<Point>();
+        timerPoints = new ArrayList<Point>();
     }
 
     /**
@@ -114,6 +126,13 @@ public class UniformMutliPointOutputModelState implements AlgorithmModelStateInt
     {
         return shapesRatio;
     }
+
+    public ArrayList<Point> getTimerPoints()
+    {
+        return timerPoints;
+    }
+
+
 
     /**
      * Set the bounds of the image currently loaded into the Input Model.
@@ -210,6 +229,16 @@ public class UniformMutliPointOutputModelState implements AlgorithmModelStateInt
         this.shapesRatioReady = shapesRatioReady;
     }
 
+    public void setTimerPoints(ArrayList<Point> timerPoints)
+    {
+        this.timerPoints = timerPoints;
+    }
+
+    public void setTimerPointsReady(boolean timerPointsReady)
+    {
+        this.timerPointsReady = timerPointsReady;
+    }
+
     /**
      * Indicate that the State has changed and check if the State should
      * be pushed to the Observers.
@@ -218,12 +247,29 @@ public class UniformMutliPointOutputModelState implements AlgorithmModelStateInt
     public void stateChanged()
     {
         if (this.hitResultReady && this.imageRatioReady && this.missResultReady
-                && this.shapesRatioReady)
+                && this.shapesRatioReady && this.timerPointsReady)
         {
-            model.notifyPointGeneratorModelObservers();
-            model.notifyImageRatioModelObservers();
-            model.notifyShapesRatioModelObservers();
+            try
+            {
+                model.notifyPointGeneratorModelObservers();
+                model.notifyImageRatioModelObservers();
+                model.notifyShapesRatioModelObservers();
+                model.notifyTimerModelObservers();
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
             resetState();
+        }
+        if (this.hitResultReady)
+        {
+            model.notifyPointHitModelObservers();
+            this.hitResultReady = false;
+        }
+        if (this.missResultReady)
+        {
+            model.notifyPointMissModelObservers();
+            this.missResultReady = false;
         }
     }
 
@@ -238,5 +284,6 @@ public class UniformMutliPointOutputModelState implements AlgorithmModelStateInt
         this.imageRatioReady = false;
         this.missResultReady = false;
         this.shapesRatioReady = false;
+        this.timerPointsReady = false;
     }
 }

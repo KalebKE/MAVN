@@ -16,17 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package mavn.simModel.output.mediator;
+package mavn.simModel.output.view.mediator;
 
-import file.save.controller.SaveFileControllerInterface;
-import java.awt.Point;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-import mavn.simModel.algorithm.model.multiplePointSimulation.UniformMultiPointSimulation;
-import mavn.simModel.algorithm.model.singlePointSimulation.SinglePointSimulation;
+import mavn.simModel.algorithm.model.point.Point;
 import mavn.simModel.input.model.observer.TargetModelObserver;
 import mavn.simModel.algorithm.properties.view.state.SimulationPropertiesStateInterface;
+import mavn.simModel.input.model.TargetInputModel;
 import mavn.simModel.output.mediator.worker.SinglePointModelTableWorker;
 import mavn.simModel.output.mediator.state.MediatorMultiplePointTableState;
 import mavn.simModel.output.mediator.state.SinglePointInputModelState;
@@ -36,14 +34,12 @@ import mavn.simModel.output.model.ShapesRatioOutputModel;
 import mavn.simModel.output.model.observer.ImageRatioOutputModelObserver;
 import mavn.simModel.output.model.observer.OutputModelObserver;
 import mavn.simModel.output.model.observer.ShapesRatioOutputModelObserver;
-import mavn.simModel.output.view.state.OutputModelStateInterface;
-import simulyn.algorithm.model.AlgorithmModelInterface;
-import simulyn.output.mediator.OutputMediatorInterface;
+import mavn.simModel.output.view.state.OutputViewStateInterface;
+import simulyn.input.model.InputModelInterface;
 import simulyn.output.mediators.state.MediatorStateInterface;
 import simulyn.output.model.OutputModelInterface;
 import simulyn.output.view.mediator.OutputViewMediatorInterface;
 import simulyn.ui.components.modelRenderer.SimulynDefaultTableRenderer;
-
 
 /**
  * ModelViewMediatorInterface implementations are used to completely decouple
@@ -72,34 +68,30 @@ import simulyn.ui.components.modelRenderer.SimulynDefaultTableRenderer;
  * TableModel used to back a JTable within the View.
  * @author Kaleb
  */
-public class OutputMediator implements OutputViewMediatorInterface, OutputMediatorInterface, OutputModelObserver,
-        ShapesRatioOutputModelObserver, ImageRatioOutputModelObserver, TargetModelObserver
+public class OutputViewMediator implements OutputViewMediatorInterface, OutputModelObserver,
+        ShapesRatioOutputModelObserver, ImageRatioOutputModelObserver,
+        TargetModelObserver
 {
-
-    // Model Algorithm Models are responsible for running the simulation
-    // with their algorithm. They use a Command Pattern and a SwingWorker
-    // so the GUI won't hang on big computations. 
-    private AlgorithmModelInterface singlePointSimulation;
-    private AlgorithmModelInterface multiplePointSimulation;
     // Table Model for the View's JTable that is pushed to the View
     // once the the Result Model State has been added to the tableModel.
+
     private DefaultTableModel tableModel;
+    private InputModelInterface targetModel;
+    // Mediator State Managers are responsbile for keeping
+    // track of what State has been updated by the ResultModel
+    // and when that State should be pushed to the View.
+    private MediatorStateInterface multiplePointSimulationTableState;
+    private MediatorStateInterface singlePointSimInputModelState;
     // Model Result Models are Observers of the Algorithm Models
     private OutputModelInterface simulationModelResult;
     private OutputModelInterface shapesRatioModelResult;
     private OutputModelInterface imageRatioModelResult;
-    // Mediator State Managers are responsbile for keeping
-    // track of what State has been updated by the ResultModel
-    // and when that State should be pushed to the View. 
-    private MediatorStateInterface multiplePointSimulationTableState;
-    private MediatorStateInterface singlePointSimInputModelState;
+    // Simulation Model State Manger
+    private OutputViewStateInterface modelResultState;
     // The View the Mediator manages
     private SimulynDefaultTableRenderer view;
     // Simulation Properties State Manager
     private SimulationPropertiesStateInterface simulationPropertiesState;
-    // Simulation Model State Manger
-    private OutputModelStateInterface modelResultState;
-    private SaveFileControllerInterface saveFileController;
     // The SwingWorker is used to create the new TableModel for the
     // View.
     private SwingWorker loadTargetResult;
@@ -107,16 +99,6 @@ public class OutputMediator implements OutputViewMediatorInterface, OutputMediat
     /**
      * Initialize a new ResultTableMediator.
      *
-     * @param singlePointSimulation the SinglePointSimulation implementation to
-     * be used by the Mediator. It knows how to run a MAVN SinglePointSimulation.
-     * It is a Subject in a Observer Pattern and is Observed by the Simulation
-     * Result Models.
-     *
-     * @param multiplePointSimulation the MultiplePointSimulatoin implenation to
-     * be used by the Mediator. It knows how to run a MAVN MultiplePointSimulation.
-     * It is a Subject in a Observer Pattern and is Observed by the Simulation
-     * Result Models.
-     * 
      * @param simulationModelResult the Simulation Result Model implementation to be
      * used by the Mediator. It Observes the SinglePointSimulations and
      * MultiplePointSimluations for new Model Results. It is also a Subject
@@ -134,42 +116,51 @@ public class OutputMediator implements OutputViewMediatorInterface, OutputMediat
      * results into a ratio of point misses/hits from the image. It is also a
      * Subject Obsererved by this class for new Model Results.
      */
-    public OutputMediator(AlgorithmModelInterface singlePointSimulation,
-            AlgorithmModelInterface multiplePointSimulation,
+    public OutputViewMediator(InputModelInterface targetModel,
             OutputModelInterface simulationModelResult,
             OutputModelInterface shapesRatioModelResult,
-            OutputModelInterface imageRatioModelResult)
+            OutputModelInterface imageRatioModelResult,
+            SimulationPropertiesStateInterface simulationPropertiesState)
     {
-        // Create a new View to Mediate.
-        view = new SimulynDefaultTableRenderer();
-
         // local instances of the simulation model
-        this.singlePointSimulation = singlePointSimulation;
-        this.multiplePointSimulation = multiplePointSimulation;
+        this.targetModel = targetModel;
+
+        this.simulationPropertiesState = simulationPropertiesState;
 
         // local instance of the result model
         this.simulationModelResult = simulationModelResult;
         // this class should observe changes to the result model
         ((SimulationOutputModel) this.simulationModelResult).registerObserver(this);
         // have the result model observe changes to the simulation model
-        ((SinglePointSimulation) this.singlePointSimulation).registerObserver((SimulationOutputModel) this.simulationModelResult);
+        ((TargetInputModel) this.targetModel).registerObserver((TargetModelObserver) this);
 
         // local instance of the result model
         this.shapesRatioModelResult = shapesRatioModelResult;
         // this class should observe changes to the result model
         ((ShapesRatioOutputModel) this.shapesRatioModelResult).registerObserver(this);
-        // have the result model observe changes to the simulation model
-        ((UniformMultiPointSimulation) this.multiplePointSimulation).registerObserver((ShapesRatioOutputModel) this.shapesRatioModelResult);
 
         // local instance of the result model
         this.imageRatioModelResult = imageRatioModelResult;
         // this class should observe changes to the result model
         ((ImageRatioOutputModel) this.imageRatioModelResult).registerObserver(this);
-        // have the result model observe changes to the simulation model
-        ((UniformMultiPointSimulation) this.multiplePointSimulation).registerObserver((ImageRatioOutputModel) this.imageRatioModelResult);
+
+        // Create a new View to Mediate.
+        this.view = new SimulynDefaultTableRenderer();
+        this.tableModel = new DefaultTableModel();
+        this.singlePointSimInputModelState = new SinglePointInputModelState();
+        this.multiplePointSimulationTableState = new MediatorMultiplePointTableState(this);
     }
 
-    @Override
+    public OutputViewStateInterface getModelResultState()
+    {
+        return modelResultState;
+    }
+
+    public SimulationPropertiesStateInterface getSimulationPropertiesState()
+    {
+        return simulationPropertiesState;
+    }
+
     public JPanel getView()
     {
         return view;
@@ -181,68 +172,14 @@ public class OutputMediator implements OutputViewMediatorInterface, OutputMediat
      * for managing the TableModel's State. 
      * @return the DefaultTableModel used to back the JTable in the View.
      */
-    @Override
     public DefaultTableModel getTableModel()
     {
         return tableModel;
     }
 
-    /**
-     * Provides the logic for when a View Action requests that
-     * the Model Result be cleared from the View.
-     */
-    @Override
-    public void onClearModelResult()
+    public void setModelResultState(OutputViewStateInterface modelResultState)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /**
-     * Provides the logic for when a View Action requests that a new
-     * Input Model should be loaded into the simulation. 
-     */
-    @Override
-    public void onLoadModel()
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /**
-     * Provides the logic for when a View Action requests that a new
-     * set of Simulation Properties should be selected.
-     */
-    @Override
-    public void onLoadProperties()
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /**
-     * Provides the logic for when a View Action requests that a new simulation
-     * should be run using the current Input Models and the result should be
-     * made available to the Result Models.
-     */
-    @Override
-    public void onRunSimulation()
-    {
-        if (simulationPropertiesState.isTarget())
-        {
-            singlePointSimulation.execute();
-        }
-        if (simulationPropertiesState.isDart())
-        {
-            multiplePointSimulation.execute();
-        }
-    }
-
-    /**
-     * Provides the logic for when a View Action requests that the Result
-     * Models should be persisted.
-     */
-    @Override
-    public void onSaveResults()
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.modelResultState = modelResultState;
     }
 
     /**
@@ -251,7 +188,6 @@ public class OutputMediator implements OutputViewMediatorInterface, OutputMediat
      * @param tableModel the TableModel containing the State
      * from the Result Models that will be pushed to the View.
      */
-    @Override
     public void setTableModel(DefaultTableModel tableModel)
     {
         this.tableModel = tableModel;
@@ -265,12 +201,9 @@ public class OutputMediator implements OutputViewMediatorInterface, OutputMediat
     @Override
     public void updateModelResult(double[][] modelResult)
     {
-        // Indicate that Simulation Model Results are now available.
-        modelResultState.resultAvailable();
-
         // If a Single Point Simluation from a Target Point is being used AND
         // the Input Model for the Single Point Simluation is available.
-        if (simulationPropertiesState.isTarget() && ((SinglePointInputModelState) singlePointSimInputModelState).isInputModelTargetReady())
+        if (simulationPropertiesState.isTargetModel() && ((SinglePointInputModelState) singlePointSimInputModelState).isInputModelTargetReady())
         {
             // Create a new new Point from the X and Y coordinates from the Target Input Model.
             Point point = new Point();
@@ -351,6 +284,10 @@ public class OutputMediator implements OutputViewMediatorInterface, OutputMediat
     @Override
     public void updateUI()
     {
+
         view.setModel(tableModel);
+        // Indicate that Simulation Model Results are now available.
+        modelResultState.resultAvailable(true);
+        this.tableModel = new DefaultTableModel();
     }
 }

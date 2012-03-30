@@ -28,6 +28,8 @@ public class Globals
     
     public static int NUM_DARTS = 1000;
     public static double SEED = 0;
+    
+    public static int RESOLUTION = 1;
 
     public final static int TARGET_CONTROLLER = 0;
     public final static int THETA_CONTROLLER = 1;

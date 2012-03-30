@@ -19,13 +19,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simModel.input.view;
 
+import java.awt.event.ActionListener;
 import mavn.simModel.input.view.changeEvent.InputModelChangeEvent;
 import mavn.simModel.input.model.observer.ThetaModelObserver;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
+import simulyn.input.view.state.InputViewStateInterface;
 import simulyn.ui.components.inputModelPanel.InputViewAbstract;
 import simulyn.ui.components.spreadsheetTable.SimTable;
-
 
 /**
  * InputViewThetaModel is the View for the Theta Input Model within MAVN.
@@ -53,9 +54,11 @@ public class InputViewThetaModel extends InputViewAbstract implements ThetaModel
      * @param inputModel the Input Model Interface you want to associate with this View.
      * @param inputModelChanged the Input Model Manager for the application.
      */
-    public InputViewThetaModel(InputControllerInterface inputController, InputModelInterface inputModel, InputModelChangeEvent modelChanged)
+    public InputViewThetaModel(ActionListener action, InputControllerInterface inputController,
+            InputModelInterface inputModel, InputViewStateInterface inputViewState,
+            InputModelChangeEvent modelChanged)
     {
-        super(inputController, inputModel, modelChanged);
+        super(action, inputController, inputModel, inputViewState, modelChanged);
         this.inputPanelHeaderLabel.setText("Theta Matrix: Theta2");
         this.inputPanelDescriptionLabel.setText("Theta Matrix: Defines Vector Boundaries");
     }

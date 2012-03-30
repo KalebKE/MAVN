@@ -5,8 +5,6 @@
 package mavn.simModel.output.model;
 
 import java.util.ArrayList;
-import mavn.simModel.algorithm.model.multiplePointSimulation.MultiplePointModelInterface;
-import mavn.simModel.algorithm.model.singlePointSimulation.SinglePointModelInterface;
 import mavn.simModel.algorithm.model.multiplePointSimulation.observer.MultiplePointAlgorithmModelObserver;
 import mavn.simModel.algorithm.model.singlePointSimulation.observer.SinglePointAlgorithmModelObserver;
 import mavn.simModel.output.model.observer.OutputModelObserver;
@@ -16,16 +14,15 @@ import simulyn.output.model.OutputModelInterface;
  *
  * @author Kaleb
  */
-public class SimulationOutputModel extends OutputModelInterface implements MultiplePointAlgorithmModelObserver, SinglePointAlgorithmModelObserver
+public class SimulationOutputModel extends OutputModelInterface implements
+        MultiplePointAlgorithmModelObserver, SinglePointAlgorithmModelObserver
 {
 
     /**
      * Initialize the state.
      */
-    public SimulationOutputModel(MultiplePointModelInterface multiModel, SinglePointModelInterface singleModel)
+    public SimulationOutputModel()
     {
-        singleModel.registerObserver(this);
-        multiModel.registerObserver(this);
         modelResultObservers = new ArrayList<OutputModelObserver>();
     }
 
@@ -57,10 +54,16 @@ public class SimulationOutputModel extends OutputModelInterface implements Multi
     @Override
     public void notifyObservers()
     {
-        for (int i = 0; i < modelResultObservers.size(); i++)
+        try
         {
-            OutputModelObserver matrixObserver = (OutputModelObserver) modelResultObservers.get(i);
-            matrixObserver.updateModelResult(matrix);
+            for (int i = 0; i < modelResultObservers.size(); i++)
+            {
+                OutputModelObserver matrixObserver = (OutputModelObserver) modelResultObservers.get(i);
+                matrixObserver.updateModelResult(matrix);
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 

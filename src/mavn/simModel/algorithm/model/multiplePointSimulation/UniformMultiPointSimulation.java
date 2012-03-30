@@ -22,7 +22,7 @@ package mavn.simModel.algorithm.model.multiplePointSimulation;
 import mavn.simModel.algorithm.model.network.OutputLayerAlgorithmModelInterface;
 import mavn.simModel.algorithm.model.network.AndLayerAlgorithmModelInterface;
 import mavn.simModel.algorithm.model.network.OrLayerAlgorithmModelInterface;
-import mavn.simModel.algorithm.model.point.PointModelInterface;
+import mavn.simModel.algorithm.model.point.PointAlgorithmModelInterface;
 import java.util.ArrayList;
 import javax.swing.SwingWorker;
 import mavn.simModel.algorithm.model.point.observer.ImageRatioAlgorithmModelObserver;
@@ -33,12 +33,19 @@ import mavn.simModel.algorithm.model.multiplePointSimulation.state.UniformMutliP
 import mavn.simModel.algorithm.model.point.ImageRatioAlgorithmModelInterface;
 import mavn.simModel.algorithm.model.point.ShapesRatioAlgorithmModelInterface;
 import mavn.simModel.algorithm.model.network.observer.AndLayerAlgorithmModelObserver;
-import mavn.simModel.algorithm.model.point.observer.PointGeneratorModelObserver;
+import mavn.simModel.algorithm.model.point.observer.PointGeneratorAlgorithmModelObserver;
 import mavn.simModel.algorithm.model.network.observer.OrLayerAlgorithmModelObserver;
 import mavn.simModel.algorithm.model.network.observer.OutputLayerAlgorithmModelObserver;
 import mavn.simModel.algorithm.model.multiplePointSimulation.observer.MultiplePointAlgorithmModelObserver;
-import mavn.simModel.algorithm.model.multiplePointSimulation.state.UniformMultiPointInputModelState;
+import mavn.simModel.algorithm.model.multiplePointSimulation.state.MultiPointInputModelState;
+import mavn.simModel.algorithm.model.multiplePointSimulation.state.UniformMultiPointLayerOutputModelState;
 import mavn.simModel.algorithm.model.multiplePointSimulation.worker.UniformMultiPointSimulationWorker;
+import mavn.simModel.algorithm.model.point.PointHitAlgorithmModelInterface;
+import mavn.simModel.algorithm.model.point.PointMissAlgorithmModelInterface;
+import mavn.simModel.algorithm.model.point.observer.PointHitAlgorithmModelObserver;
+import mavn.simModel.algorithm.model.point.observer.PointMissAlgorithmModelObserver;
+import mavn.simModel.algorithm.model.timer.TimerAlgorithmModelInterface;
+import mavn.simModel.algorithm.model.timer.observer.TimerAlgorithmModelObserver;
 import mavn.simModel.input.model.observer.ThetaModelObserver;
 import mavn.simModel.input.model.observer.W0ModelObserver;
 import mavn.simModel.input.model.observer.W1ModelObserver;
@@ -61,20 +68,25 @@ import simulyn.algorithm.model.AlgorithmModelInterface;
  * @author Kaleb
  */
 public class UniformMultiPointSimulation implements AlgorithmModelInterface,
-        MultiplePointModelInterface, PointModelInterface, AndLayerAlgorithmModelInterface,
-        OrLayerAlgorithmModelInterface, OutputLayerAlgorithmModelInterface, ShapesRatioAlgorithmModelInterface,
-        ImageRatioAlgorithmModelInterface, ThetaModelObserver,
+        MultiplePointModelInterface, PointAlgorithmModelInterface, AndLayerAlgorithmModelInterface,
+        OrLayerAlgorithmModelInterface, OutputLayerAlgorithmModelInterface,
+        ShapesRatioAlgorithmModelInterface, PointHitAlgorithmModelInterface,
+        PointMissAlgorithmModelInterface, ImageRatioAlgorithmModelInterface,
+        TimerAlgorithmModelInterface, ThetaModelObserver,
         W0ModelObserver, W1ModelObserver, W2ModelObserver
 {
     // Implements seven Subject interfaces for an Observer Pattern.
 
     private ArrayList<MultiplePointAlgorithmModelObserver> resultObservers;
-    private ArrayList<PointGeneratorModelObserver> dartObservers;
+    private ArrayList<PointGeneratorAlgorithmModelObserver> pointObservers;
     private ArrayList<AndLayerAlgorithmModelObserver> andLayerObservers;
     private ArrayList<OrLayerAlgorithmModelObserver> orLayerObservers;
     private ArrayList<OutputLayerAlgorithmModelObserver> outputLayerObservers;
     private ArrayList<ShapesRatioAlgorithmModelObserver> shapesRatioObservers;
     private ArrayList<ImageRatioAlgorithmModelObserver> imageRatioObservers;
+    private ArrayList<PointHitAlgorithmModelObserver> pointHitObservers;
+    private ArrayList<PointMissAlgorithmModelObserver> pointMissObservers;
+    private ArrayList<TimerAlgorithmModelObserver> timerObservers;
     // Algorithm Network State
     private NetworkLayerOutputModelStateAbstract outputLayerModelState;
     // The Point Simulator for Simulation.
@@ -82,7 +94,7 @@ public class UniformMultiPointSimulation implements AlgorithmModelInterface,
     // SwingWorker to execute the simluation
     private SwingWorker simulation;
     // Uniform Multiple Point Algorithm Specific State
-    private UniformMultiPointInputModelState inputModelState;
+    private MultiPointInputModelState inputModelState;
     private UniformMutliPointOutputModelState outputModelResultState;
 
     /**
@@ -97,12 +109,19 @@ public class UniformMultiPointSimulation implements AlgorithmModelInterface,
         this.pointGenerator = pointGenerator;
 
         andLayerObservers = new ArrayList<AndLayerAlgorithmModelObserver>();
-        dartObservers = new ArrayList<PointGeneratorModelObserver>();
+        pointObservers = new ArrayList<PointGeneratorAlgorithmModelObserver>();
         imageRatioObservers = new ArrayList<ImageRatioAlgorithmModelObserver>();
         orLayerObservers = new ArrayList<OrLayerAlgorithmModelObserver>();
         outputLayerObservers = new ArrayList<OutputLayerAlgorithmModelObserver>();
         resultObservers = new ArrayList<MultiplePointAlgorithmModelObserver>();
         shapesRatioObservers = new ArrayList<ShapesRatioAlgorithmModelObserver>();
+        pointHitObservers = new ArrayList<PointHitAlgorithmModelObserver>();
+        pointMissObservers = new ArrayList<PointMissAlgorithmModelObserver>();
+        timerObservers = new ArrayList<TimerAlgorithmModelObserver>();
+
+        inputModelState = new MultiPointInputModelState();
+        outputModelResultState = new UniformMutliPointOutputModelState(this);
+        outputLayerModelState = new UniformMultiPointLayerOutputModelState(this);
     }
 
     /**
@@ -113,6 +132,7 @@ public class UniformMultiPointSimulation implements AlgorithmModelInterface,
     {
         if (inputModelState.isInputModelReady())
         {
+
             simulation = new UniformMultiPointSimulationWorker(
                     pointGenerator,
                     inputModelState,
@@ -129,10 +149,10 @@ public class UniformMultiPointSimulation implements AlgorithmModelInterface,
     @Override
     public void notifyPointGeneratorModelObservers()
     {
-        for (int i = 0; i < dartObservers.size(); i++)
+        for (int i = 0; i < pointObservers.size(); i++)
         {
-            PointGeneratorModelObserver dartObserver = (PointGeneratorModelObserver) dartObservers.get(i);
-            dartObserver.updateDartResults(outputModelResultState.getHit(), outputModelResultState.getMiss());
+            PointGeneratorAlgorithmModelObserver dartObserver = (PointGeneratorAlgorithmModelObserver) pointObservers.get(i);
+            dartObserver.updatePoints(outputModelResultState.getHit(), outputModelResultState.getMiss());
         }
     }
 
@@ -214,6 +234,36 @@ public class UniformMultiPointSimulation implements AlgorithmModelInterface,
         }
     }
 
+    @Override
+    public void notifyPointHitModelObservers()
+    {
+        for (int i = 0; i < pointHitObservers.size(); i++)
+        {
+            PointHitAlgorithmModelObserver observer = (PointHitAlgorithmModelObserver) pointHitObservers.get(i);
+            observer.updatePointHit(outputModelResultState.getHit().get(outputModelResultState.getHit().size() - 1));
+        }
+    }
+
+    @Override
+    public void notifyPointMissModelObservers()
+    {
+        for (int i = 0; i < pointMissObservers.size(); i++)
+        {
+            PointMissAlgorithmModelObserver observer = (PointMissAlgorithmModelObserver) pointMissObservers.get(i);
+            observer.updatePointMiss(outputModelResultState.getMiss().get(outputModelResultState.getMiss().size() - 1));
+        }
+    }
+
+    @Override
+    public void notifyTimerModelObservers()
+    {
+        for (int i = 0; i < timerObservers.size(); i++)
+        {
+            TimerAlgorithmModelObserver observer = (TimerAlgorithmModelObserver) timerObservers.get(i);
+            observer.updateTimerModel(outputModelResultState.getTimerPoints());
+        }
+    }
+
     /**
      * Register a new Results Observer.
      * @param o the observer.
@@ -243,9 +293,9 @@ public class UniformMultiPointSimulation implements AlgorithmModelInterface,
      * @param o the DartsObserver.
      */
     @Override
-    public void registerObserver(PointGeneratorModelObserver o)
+    public void registerObserver(PointGeneratorAlgorithmModelObserver o)
     {
-        dartObservers.add(o);
+        pointObservers.add(o);
     }
 
     /**
@@ -253,12 +303,12 @@ public class UniformMultiPointSimulation implements AlgorithmModelInterface,
      * @param o the DartsObserver.
      */
     @Override
-    public void removeObserver(PointGeneratorModelObserver o)
+    public void removeObserver(PointGeneratorAlgorithmModelObserver o)
     {
-        int i = dartObservers.indexOf(o);
+        int i = pointObservers.indexOf(o);
         if (i >= 0)
         {
-            dartObservers.remove(o);
+            pointObservers.remove(o);
         }
     }
 
@@ -391,6 +441,61 @@ public class UniformMultiPointSimulation implements AlgorithmModelInterface,
             imageRatioObservers.remove(o);
         }
     }
+
+    @Override
+    public void registerObserver(PointHitAlgorithmModelObserver o)
+    {
+        pointHitObservers.add(o);
+    }
+
+    @Override
+    public void registerObserver(PointMissAlgorithmModelObserver o)
+    {
+        pointMissObservers.add(o);
+    }
+
+    @Override
+    public void registerObserver(TimerAlgorithmModelObserver o)
+    {
+        timerObservers.add(o);
+    }
+
+    @Override
+    public void removeObserver(PointHitAlgorithmModelObserver o)
+    {
+        int i = pointHitObservers.indexOf(o);
+        if (i >= 0)
+        {
+            pointHitObservers.remove(o);
+        }
+    }
+
+    @Override
+    public void removeObserver(PointMissAlgorithmModelObserver o)
+    {
+        int i = pointMissObservers.indexOf(o);
+        if (i >= 0)
+        {
+            pointMissObservers.remove(o);
+        }
+    }
+
+    @Override
+    public void removeObserver(TimerAlgorithmModelObserver o)
+    {
+        int i = timerObservers.indexOf(o);
+        if (i >= 0)
+        {
+            timerObservers.remove(o);
+        }
+    }
+
+    public void setPointGenerator(PointGeneratorInterface pointGenerator)
+    {
+        this.pointGenerator = pointGenerator;
+    }
+
+
 
     /**
      * Observer Hook for Theta Input Model Subject.

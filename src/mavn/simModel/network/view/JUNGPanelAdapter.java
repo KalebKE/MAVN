@@ -136,7 +136,7 @@ public class JUNGPanelAdapter extends JPanel implements Printable
         this.w2 = w2;
         this.w1 = w1;
         this.w0 = w0;
-        this.setPreferredSize(new Dimension(600, 300));
+        this.setPreferredSize(new Dimension(600, 400));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         // create a simple graph for the demo
         graph = new DirectedSparseMultigraph<Number, Number>();

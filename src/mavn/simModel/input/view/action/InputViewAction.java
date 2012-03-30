@@ -23,27 +23,33 @@ public class InputViewAction implements ActionListener
     private InputModelInterface inputModel;
     private InputViewAbstract view;
 
-    public InputViewAction(InputControllerInterface inputController, InputModelInterface inputModel, InputViewAbstract view)
+    public InputViewAction(InputControllerInterface inputController, InputModelInterface inputModel)
     {
         this.inputController = inputController;
         this.inputModel = inputModel;
-        this.view = view;
     }
     
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (e.getActionCommand().equals("importModelAction"))
+        String actionCommand = e.getActionCommand();
+        System.out.println(actionCommand);
+        if (actionCommand.equals("importModelAction"))
         {
             inputController.onImportInputModel();
         }
-        if (e.getActionCommand().equals("saveModelAction"))
+        if (actionCommand.equals("saveModelAction"))
         {
             inputController.onExportInputModel();
         }
-        if (e.getActionCommand().equals("setModelAction"))
+        if (actionCommand.equals("setModelAction"))
         {
             inputModel.setModelInput(((SimTable) view.getInputPane()).getModel());
         }
     }
+
+    public void setView(InputViewAbstract view)
+    {
+        this.view = view;
+    }    
 }

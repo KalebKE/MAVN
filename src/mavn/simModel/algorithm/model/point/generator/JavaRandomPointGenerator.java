@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simModel.algorithm.model.point.generator;
 
-import java.awt.Point;
+import mavn.simModel.algorithm.model.point.Point;
 import java.util.Random;
 
 /**

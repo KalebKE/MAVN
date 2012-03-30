@@ -158,7 +158,7 @@ public class InputModelState implements AlgorithmModelStateInterface
     public void setW1(double[][] w1)
     {
         this.w1 = w1;
-        this.w0Updated = true;
+        this.w1Updated = true;
         stateChanged();
     }
 

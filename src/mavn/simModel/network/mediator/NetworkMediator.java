@@ -21,9 +21,7 @@ package mavn.simModel.network.mediator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
-import mavn.simModel.algorithm.model.network.AndLayerAlgorithmModelInterface;
-import mavn.simModel.algorithm.model.network.OrLayerAlgorithmModelInterface;
-import mavn.simModel.algorithm.model.network.OutputLayerAlgorithmModelInterface;
+import mavn.simModel.algorithm.properties.view.state.SimulationPropertiesStateInterface;
 import mavn.simModel.network.mediator.state.NetworkMediatorState;
 import mavn.simModel.network.model.AndLayerOutputModel;
 import mavn.simModel.network.model.OrLayerOutputModel;
@@ -33,7 +31,7 @@ import mavn.simModel.network.model.observer.OrLayerOutputModelObserver;
 import mavn.simModel.network.model.observer.OutputLayerOutputModelObserver;
 import mavn.simModel.output.view.layoutPanel.ModelOutputDefaultLayoutView;
 import mavn.simModel.network.view.MavnNetworkRenderer;
-import simulyn.algorithm.model.AlgorithmModelInterface;
+import mavn.simModel.output.view.state.OutputViewStateInterface;
 import simulyn.output.mediators.state.MediatorStateInterface;
 import simulyn.output.model.OutputModelInterface;
 import simulyn.output.view.mediator.OutputViewMediatorInterface;
@@ -70,14 +68,14 @@ public class NetworkMediator implements OutputViewMediatorInterface, NetworkRend
 {
     // Model Algorithm Model
 
-    private AlgorithmModelInterface singlePointSimulation;
-    private AlgorithmModelInterface multiplePointSimulation;
     private MediatorStateInterface multiPointNetworkState;
     private MavnNetworkRenderer view;
     // Model Result Models
     private OutputModelInterface andLayerModelResult;
     private OutputModelInterface orLayerModelResult;
     private OutputModelInterface outputLayerModelResult;
+    private OutputViewStateInterface modelResultState;
+    private SimulationPropertiesStateInterface simulationPropertiesState;
 
     /**
      * Initialize the state.
@@ -85,50 +83,41 @@ public class NetworkMediator implements OutputViewMediatorInterface, NetworkRend
      * @param dartGunIterator the DartGunInterface collection 
      */
     public NetworkMediator(
-            AlgorithmModelInterface singlePointSimulation,
-            AlgorithmModelInterface multiplePointSimulation,
             OutputModelInterface andLayerModelResult,
             OutputModelInterface orLayerModelResult,
-            OutputModelInterface outputLayerModelResult)
+            OutputModelInterface outputLayerModelResult,
+            SimulationPropertiesStateInterface simulationPropertiesState)
     {
-        view = new MavnNetworkRenderer();
 
-        // local instances of the simulation model
-        this.singlePointSimulation = singlePointSimulation;
-        this.multiplePointSimulation = multiplePointSimulation;
-
+        this.simulationPropertiesState = simulationPropertiesState;
         // local instance of the result model
         this.andLayerModelResult = andLayerModelResult;
         // this class should observe changes to the result model
         ((AndLayerOutputModel) this.andLayerModelResult).registerObserver(this);
-        // have the result model observe changes to the simulation model
-        ((AndLayerAlgorithmModelInterface) this.singlePointSimulation).registerObserver((AndLayerOutputModel) this.andLayerModelResult);
-        // have the result model observe changes to the simulation model
-        ((AndLayerAlgorithmModelInterface) this.multiplePointSimulation).registerObserver((AndLayerOutputModel) this.andLayerModelResult);
 
         // local instance of the result model
         this.orLayerModelResult = orLayerModelResult;
         // this class should observe changes to the result model
         ((OrLayerOutputModel) this.orLayerModelResult).registerObserver(this);
-        // have the result model observe changes to the simulation model
-        ((OrLayerAlgorithmModelInterface) this.singlePointSimulation).registerObserver((OrLayerOutputModel) this.orLayerModelResult);
-        // have the result model observe changes to the simulation model
-        ((OrLayerAlgorithmModelInterface) this.multiplePointSimulation).registerObserver((OrLayerOutputModel) this.orLayerModelResult);
 
         // local instance of the result model
         this.outputLayerModelResult = outputLayerModelResult;
         // this class should observe changes to the result model
         ((OutputLayerOutputModel) this.outputLayerModelResult).registerObserver(this);
-        // have the result model observe changes to the simulation model
-        ((OutputLayerAlgorithmModelInterface) this.singlePointSimulation).registerObserver((OutputLayerOutputModel) this.outputLayerModelResult);
-        // have the result model observe changes to the simulation model
-        ((OutputLayerAlgorithmModelInterface) this.multiplePointSimulation).registerObserver((OutputLayerOutputModel) this.outputLayerModelResult);
+
+        view = new MavnNetworkRenderer();
+        multiPointNetworkState = new NetworkMediatorState(this);
     }
 
     @Override
     public JPanel getView()
     {
         return view;
+    }
+
+    public void setModelResultState(OutputViewStateInterface modelResultState)
+    {
+        this.modelResultState = modelResultState;
     }
 
     @Override
@@ -156,7 +145,7 @@ public class NetworkMediator implements OutputViewMediatorInterface, NetworkRend
         // initialized and set. At that point, the State Pattern will call
         // updateUI() and push the entire Network's State to the View. The
         // State Pattern will then reset for the next Network State.
-        ((NetworkMediatorState) multiPointNetworkState).setAndLayerResult(andLayerResult);
+        ((NetworkMediatorState) multiPointNetworkState).setAndLayerOutput(andLayerResult);
     }
 
     /**
@@ -178,7 +167,7 @@ public class NetworkMediator implements OutputViewMediatorInterface, NetworkRend
         // initialized and set. At that point, the State Pattern will call
         // updateUI() and push the entire Network's State to the View. The
         // State Pattern will then reset for the next Network State.
-        ((NetworkMediatorState) multiPointNetworkState).setOrLayerResult(orLayerResult);
+        ((NetworkMediatorState) multiPointNetworkState).setOrLayerOutput(orLayerResult);
     }
 
     /**
@@ -200,7 +189,7 @@ public class NetworkMediator implements OutputViewMediatorInterface, NetworkRend
         // initialized and set. At that point, the State Pattern will call
         // updateUI() and push the entire Network's State to the View. The
         // State Pattern will then reset for the next Network State.
-        ((NetworkMediatorState) multiPointNetworkState).setOutputLayerResult(outputLayerResult);
+        ((NetworkMediatorState) multiPointNetworkState).setOutputLayerOutput(outputLayerResult);
     }
 
     /**
@@ -210,14 +199,20 @@ public class NetworkMediator implements OutputViewMediatorInterface, NetworkRend
     public void updateUI()
     {
         // Thread.sleep() is called to pause the animation so it can be
-        // seen by the human eye. 
-        try
+        // seen by the human eye.
+
+        if (this.modelResultState.isAnimated() || simulationPropertiesState.isTargetModel())
         {
-            Thread.sleep(20);
-        } catch (InterruptedException ex)
-        {
-            Logger.getLogger(ModelOutputDefaultLayoutView.class.getName()).log(Level.SEVERE, null, ex);
+            try
+            {
+                Thread.sleep(20);
+            } catch (InterruptedException ex)
+            {
+                Logger.getLogger(ModelOutputDefaultLayoutView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            view.fireNodes(((NetworkMediatorState) multiPointNetworkState).getNodeOutput());
+            view.repaint();
         }
-        view.fireNodes(((NetworkMediatorState) multiPointNetworkState).getNodeResults());
     }
 }

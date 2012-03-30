@@ -19,13 +19,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simModel.input.view;
 
+import java.awt.event.ActionListener;
 import mavn.simModel.input.model.observer.TargetModelObserver;
 import mavn.simModel.input.view.changeEvent.InputModelChangeEvent;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
+import simulyn.input.view.state.InputViewStateInterface;
 import simulyn.ui.components.inputModelPanel.InputViewAbstract;
 import simulyn.ui.components.spreadsheetTable.SimTable;
-
 
 /**
  * InputViewTargetModel is the View for the Target Input Model within MAVN.
@@ -54,9 +55,12 @@ public class InputViewTargetModel extends InputViewAbstract implements TargetMod
      * @param inputModel the Input Model Interface you want to associate with this View.
      * @param inputModelChanged the Input Model Manager for the application.
      */
-    public InputViewTargetModel(InputControllerInterface inputController, InputModelInterface inputModel, InputModelChangeEvent inputModelChanged)
+    public InputViewTargetModel(ActionListener action, InputControllerInterface inputController,
+            InputModelInterface inputModel,
+            InputViewStateInterface inputViewState,
+            InputModelChangeEvent inputModelChanged)
     {
-        super(inputController, inputModel, inputModelChanged);
+        super(action, inputController, inputModel, inputViewState, inputModelChanged);
         this.inputPanelHeaderLabel.setText("Target Matrix: Target");
         this.inputPanelDescriptionLabel.setText("Current Targets: Defines Node Inputs");
     }
@@ -70,6 +74,7 @@ public class InputViewTargetModel extends InputViewAbstract implements TargetMod
     {
         // Set the model for the Rendering View.
         ((SimTable) super.inputPane).setModel(modelInput);
+        this.repaint();
         // Indicate that the Input View State should change to reflect
         // that an Input Model has been loaded.
         this.inputViewState.inputModelReady(true);

@@ -4,11 +4,11 @@
  */
 package mavn.simModel.output.mediator.worker;
 
-import java.awt.Color;
-import java.awt.Point;
+
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-import mavn.simModel.output.mediator.OutputMediator;
+import mavn.simModel.algorithm.model.point.Point;
+import mavn.simModel.output.view.mediator.OutputViewMediator;
 
 /**
  *
@@ -18,10 +18,10 @@ public class SinglePointModelTableWorker extends SwingWorker
 {
 
     private double[][] modelResult;
-    private OutputMediator controller;
+    private OutputViewMediator controller;
     private Point point;
 
-    public SinglePointModelTableWorker(double[][] modelResult, OutputMediator controller, Point point)
+    public SinglePointModelTableWorker(double[][] modelResult, OutputViewMediator controller, Point point)
     {
         this.modelResult = modelResult;
         this.controller = controller;
@@ -60,7 +60,7 @@ public class SinglePointModelTableWorker extends SwingWorker
         int count = 0;
         for (String s : columnNames)
         {
-            columnNames[count] = "" + count;
+            columnNames[count] = "Simulation Results";
             count++;
         }
 

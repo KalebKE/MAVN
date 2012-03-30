@@ -29,32 +29,27 @@ import mavn.simModel.algorithm.properties.view.SimulationPropertiesFrame;
  */
 public class SimulationPropertiesState implements SimulationPropertiesStateInterface
 {
-
     private boolean caRng;
     private boolean cmwcRng;
-    private boolean dart;
+    private boolean point;
+    private boolean grid;
     private boolean mtRng;
     private boolean target;
     private boolean randomSeed;
     private boolean randomRng;
     private boolean xORRng;
-    private SimulationPropertiesFrame propertiesView;
-    private SpinnerNumberModel seedModel;
-    private SpinnerNumberModel dartModel;
+    private SimulationPropertiesFrame view;
+    private SpinnerNumberModel seedSpinnerModel;
+    private SpinnerNumberModel pointSpinnerModel;
+    private SpinnerNumberModel gridSpinnerModel;
 
     /**
      * Initialize the state.
      * @param propertiesView the View this class is reponsible for.
      */
-    public SimulationPropertiesState(SimulationPropertiesFrame propertiesView)
+    public SimulationPropertiesState()
     {
-        this.propertiesView = propertiesView;
-        seedModel = new SpinnerNumberModel(1000.0, 0.0, 100000.0, 1);
-        dartModel = new SpinnerNumberModel(1000.0, 0.0, 100000.0, 1);
-        propertiesView.getSeedSpinner().setModel(seedModel);
-        propertiesView.getNumPointsSpinner().setModel(dartModel);
-        randomRng = true;
-        this.useTargets();
+        super();
     }
 
     /**
@@ -63,10 +58,10 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     @Override
     public void caRng()
     {
-        propertiesView.getCmwcRngRadio().setSelected(false);
-        propertiesView.getMTRngRadio().setSelected(false);
-        propertiesView.getXORShiftRngRadio().setSelected(false);
-        propertiesView.getRandomRadio().setSelected(false);
+        view.getCmwcRngRadio().setSelected(false);
+        view.getMTRngRadio().setSelected(false);
+        view.getXORShiftRngRadio().setSelected(false);
+        view.getRandomRadio().setSelected(false);
 
         caRng = true;
         randomRng = false;
@@ -81,10 +76,10 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     @Override
     public void cmwcRng()
     {
-        propertiesView.getXORShiftRngRadio().setSelected(false);
-        propertiesView.getMTRngRadio().setSelected(false);
-        propertiesView.getRandomRadio().setSelected(false);
-        propertiesView.getCaRngRadio().setSelected(false);
+        view.getXORShiftRngRadio().setSelected(false);
+        view.getMTRngRadio().setSelected(false);
+        view.getRandomRadio().setSelected(false);
+        view.getCaRngRadio().setSelected(false);
 
         caRng = false;
         randomRng = false;
@@ -93,15 +88,21 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
         mtRng = false;
     }
 
+    @Override
+    public SpinnerNumberModel getGridSpinnerModel()
+    {
+        return gridSpinnerModel;
+    }
+    
     /**
      * Get the Dart Model.
      * @return SpinnerNumberModel representing the number of darts to be fired
      * during the simulation.
      */
     @Override
-    public SpinnerNumberModel getDartModel()
+    public SpinnerNumberModel getPointGeneratorModel()
     {
-        return dartModel;
+        return pointSpinnerModel;
     }
 
     /**
@@ -112,7 +113,7 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     @Override
     public SpinnerNumberModel getSeedModel()
     {
-        return seedModel;
+        return seedSpinnerModel;
     }
 
     /**
@@ -140,9 +141,9 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
      * @return boolean indicating if a DartGun is desired.
      */
     @Override
-    public boolean isDart()
+    public boolean isPointGeneratedModel()
     {
-        return dart;
+        return point;
     }
 
     /**
@@ -180,7 +181,7 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
      * @return boolean indicating if a single dart target is desired.
      */
     @Override
-    public boolean isTarget()
+    public boolean isTargetModel()
     {
         return target;
     }
@@ -201,10 +202,10 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     @Override
     public void mtRng()
     {
-        propertiesView.getCmwcRngRadio().setSelected(false);
-        propertiesView.getXORShiftRngRadio().setSelected(false);
-        propertiesView.getRandomRadio().setSelected(false);
-        propertiesView.getCaRngRadio().setSelected(false);
+        view.getCmwcRngRadio().setSelected(false);
+        view.getXORShiftRngRadio().setSelected(false);
+        view.getRandomRadio().setSelected(false);
+        view.getCaRngRadio().setSelected(false);
 
         caRng = false;
         randomRng = false;
@@ -213,16 +214,29 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
         mtRng = true;
     }
 
+    public void setView(SimulationPropertiesFrame propertiesView)
+    {
+        this.view = propertiesView;
+        seedSpinnerModel = new SpinnerNumberModel(1000.0, 0.0, 100000.0, 1);
+        pointSpinnerModel = new SpinnerNumberModel(1000.0, 0.0, 100000.0, 1);
+        gridSpinnerModel = new SpinnerNumberModel(1, 1, 100, 1);
+        view.getSeedSpinner().setModel(seedSpinnerModel);
+        view.getNumPointsSpinner().setModel(pointSpinnerModel);
+        view.getResolutionSpinner().setModel(gridSpinnerModel);
+        randomRng = true;
+        this.usePointGeneratorModel();
+    }
+
     /**
      * Indicate that java.util.random RNG is desired.
      */
     @Override
     public void randomRng()
     {
-        propertiesView.getCmwcRngRadio().setSelected(false);
-        propertiesView.getMTRngRadio().setSelected(false);
-        propertiesView.getXORShiftRngRadio().setSelected(false);
-        propertiesView.getCaRngRadio().setSelected(false);
+        view.getCmwcRngRadio().setSelected(false);
+        view.getMTRngRadio().setSelected(false);
+        view.getXORShiftRngRadio().setSelected(false);
+        view.getCaRngRadio().setSelected(false);
 
         caRng = false;
         randomRng = true;
@@ -235,52 +249,58 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
      * DartGun.
      */
     @Override
-    public void useTargets()
+    public void useTargetModel()
     {
-        propertiesView.getUseUniformPointGeneratorCheckBox().setSelected(false);
-        propertiesView.getPointGeneratorLabel().setEnabled(false);
-        propertiesView.getMTRngRadio().setEnabled(false);
-        propertiesView.getInputsLabel().setEnabled(false);
-        propertiesView.getRandomRadio().setEnabled(false);
-        propertiesView.getNumPointsLabel().setEnabled(false);
-        propertiesView.getNumPointsSpinner().setEnabled(false);
-        propertiesView.getRandomSeedRadio().setEnabled(false);
-        propertiesView.getSeedLabel().setEnabled(false);
-        propertiesView.getSeedSpinner().setEnabled(false);
-        propertiesView.getSeedSpinnerLabel().setEnabled(false);
-        propertiesView.getSpecifiedSeedRadio().setEnabled(false);
-        propertiesView.getXORShiftRngRadio().setEnabled(false);
-        propertiesView.getCmwcRngRadio().setEnabled(false);
-        propertiesView.getCaRngRadio().setEnabled(false);
+        view.getTargetCheckBox().setSelected(true);
+        view.getUseUniformPointGeneratorCheckBox().setSelected(false);
+        view.getGridPointCheckBox().setSelected(false);
+        view.getMTRngRadio().setEnabled(false);
+        view.getRandomRadio().setEnabled(false);
+        view.getNumPointsLabel().setEnabled(false);
+        view.getNumPointsSpinner().setEnabled(false);
+        view.getRandomSeedRadio().setEnabled(false);
+        view.getSeedSpinner().setEnabled(false);
+        view.getSeedSpinnerLabel().setEnabled(false);
+        view.getSpecifiedSeedRadio().setEnabled(false);
+        view.getXORShiftRngRadio().setEnabled(false);
+        view.getCmwcRngRadio().setEnabled(false);
+        view.getCaRngRadio().setEnabled(false);
+
+        view.getResolutionSpinner().setEnabled(false);
+        view.getResolutionLabel().setEnabled(false);
 
         target = true;
-        dart = false;
+        point = false;
+        grid = false;
     }
 
     /**
      * Indicate that the DartGun should be used instead of the Target Model.
      */
     @Override
-    public void useDarts()
+    public void usePointGeneratorModel()
     {
-        propertiesView.getTargetCheckBox().setSelected(false);
-        propertiesView.getPointGeneratorLabel().setEnabled(true);
-        propertiesView.getMTRngRadio().setEnabled(true);
-        propertiesView.getInputsLabel().setEnabled(true);
-        propertiesView.getRandomRadio().setEnabled(true);
-        propertiesView.getNumPointsLabel().setEnabled(true);
-        propertiesView.getNumPointsSpinner().setEnabled(true);
-        propertiesView.getRandomSeedRadio().setEnabled(true);
-        propertiesView.getSeedLabel().setEnabled(true);
-        propertiesView.getSeedSpinner().setEnabled(false);
-        propertiesView.getSeedSpinnerLabel().setEnabled(false);
-        propertiesView.getSpecifiedSeedRadio().setEnabled(true);
-        propertiesView.getXORShiftRngRadio().setEnabled(true);
-        propertiesView.getCmwcRngRadio().setEnabled(true);
-        propertiesView.getCaRngRadio().setEnabled(true);
+        view.getUseUniformPointGeneratorCheckBox().setSelected(true);
+        view.getTargetCheckBox().setSelected(false);
+        view.getGridPointCheckBox().setSelected(false);
+        view.getMTRngRadio().setEnabled(true);
+        view.getRandomRadio().setEnabled(true);
+        view.getNumPointsLabel().setEnabled(true);
+        view.getNumPointsSpinner().setEnabled(true);
+        view.getRandomSeedRadio().setEnabled(true);
+        view.getSeedSpinner().setEnabled(false);
+        view.getSeedSpinnerLabel().setEnabled(false);
+        view.getSpecifiedSeedRadio().setEnabled(true);
+        view.getXORShiftRngRadio().setEnabled(true);
+        view.getCmwcRngRadio().setEnabled(true);
+        view.getCaRngRadio().setEnabled(true);
+
+        view.getResolutionSpinner().setEnabled(false);
+        view.getResolutionLabel().setEnabled(false);
 
         target = false;
-        dart = true;
+        point = true;
+        grid = false;
     }
 
     /**
@@ -289,9 +309,9 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     @Override
     public void useSpecifiedSeed()
     {
-        propertiesView.getSeedSpinner().setEnabled(true);
-        propertiesView.getSeedSpinnerLabel().setEnabled(true);
-        propertiesView.getRandomSeedRadio().setSelected(false);
+        view.getSeedSpinner().setEnabled(true);
+        view.getSeedSpinnerLabel().setEnabled(true);
+        view.getRandomSeedRadio().setSelected(false);
 
         randomSeed = false;
     }
@@ -302,9 +322,9 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     @Override
     public void useRandomSeed()
     {
-        propertiesView.getSeedSpinner().setEnabled(false);
-        propertiesView.getSeedSpinnerLabel().setEnabled(false);
-        propertiesView.getSpecifiedSeedRadio().setSelected(false);
+        view.getSeedSpinner().setEnabled(false);
+        view.getSeedSpinnerLabel().setEnabled(false);
+        view.getSpecifiedSeedRadio().setSelected(false);
 
         randomSeed = true;
     }
@@ -315,15 +335,47 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     @Override
     public void xORRng()
     {
-        propertiesView.getCmwcRngRadio().setSelected(false);
-        propertiesView.getMTRngRadio().setSelected(false);
-        propertiesView.getRandomRadio().setSelected(false);
-        propertiesView.getCaRngRadio().setSelected(false);
+        view.getCmwcRngRadio().setSelected(false);
+        view.getMTRngRadio().setSelected(false);
+        view.getRandomRadio().setSelected(false);
+        view.getCaRngRadio().setSelected(false);
 
         caRng = false;
         randomRng = false;
         xORRng = true;
         cmwcRng = false;
         mtRng = false;
+    }
+
+    @Override
+    public void useGridGeneratedModel()
+    {
+        view.getResolutionSpinner().setEnabled(true);
+        view.getResolutionLabel().setEnabled(true);
+
+        view.getGridPointCheckBox().setSelected(true);
+        view.getUseUniformPointGeneratorCheckBox().setSelected(false);
+        view.getTargetCheckBox().setSelected(false);
+        view.getMTRngRadio().setEnabled(false);
+        view.getRandomRadio().setEnabled(false);
+        view.getNumPointsLabel().setEnabled(false);
+        view.getNumPointsSpinner().setEnabled(false);
+        view.getRandomSeedRadio().setEnabled(false);
+        view.getSeedSpinner().setEnabled(false);
+        view.getSeedSpinnerLabel().setEnabled(false);
+        view.getSpecifiedSeedRadio().setEnabled(false);
+        view.getXORShiftRngRadio().setEnabled(false);
+        view.getCmwcRngRadio().setEnabled(false);
+        view.getCaRngRadio().setEnabled(false);
+
+        target = false;
+        point = false;
+        grid = true;
+    }
+
+    @Override
+    public boolean isGridGeneratedModel()
+    {
+        return grid;
     }
 }

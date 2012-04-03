@@ -6,6 +6,8 @@ package mavn.simModel.output.view.actions;
 
 import file.open.controller.directory.OpenSpreadsheetDirectoryController;
 import file.open.observer.OpenFileObserver;
+import file.save.controller.directory.SaveDirectoryControllerInterface;
+import file.save.controller.directory.SaveSpreadsheetDirectoryController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -24,10 +26,12 @@ public class SimulationBarAction implements ActionListener
 
     private ArrayList<InputModelInterface> inputModels;
     private ArrayList<OpenFileObserver> fileObservers;
+    private SaveDirectoryControllerInterface saveDirectoryController;
     private NetworkMediatorInterface networkMediator;
     private OutputMediatorInterface outputMediator;
     private OutputViewStateInterface outputViewState;
     private PlotMediatorInterface plotMediator;
+    private final String[] fileNames = {"target", "theta", "w0", "w1", "w2"};
 
     public SimulationBarAction(ArrayList<InputModelInterface> inputModels,
             NetworkMediatorInterface networkMediator,
@@ -55,8 +59,17 @@ public class SimulationBarAction implements ActionListener
             OpenSpreadsheetDirectoryController importModel = new OpenSpreadsheetDirectoryController(fileObservers);
             importModel.getDirectoryChooser();
         }
+
         if (e.getActionCommand().equals("exportSimulationAction"))
         {
+            ArrayList<double[][]> models = new ArrayList<double[][]>();
+            
+            for (int i = 0; i < inputModels.size(); i++)
+            {
+                models.add(this.inputModels.get(i).getModelInput());
+            }
+
+            saveDirectoryController = new SaveSpreadsheetDirectoryController(models, fileNames);
         }
         if (e.getActionCommand().equals("clearSimluationAction"))
         {

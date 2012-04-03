@@ -35,19 +35,17 @@ public class MutliplePointModelPlotWorker extends SwingWorker
         try
         {
             Iterator hits = hit.iterator();
-            double[] xHit = new double[hit.size()];
-            double[] yHit = new double[hit.size()];
+            double[][] hitArray = new double[hit.size()][2];
             Iterator misses = miss.iterator();
-            double[] xMisses = new double[miss.size()];
-            double[] yMisses = new double[miss.size()];
+            double[][] missArray = new double[miss.size()][2];
 
             int hitCount = 0;
             while (hits.hasNext())
             {
                 Point pointHit = (Point) hits.next();
 
-                xHit[hitCount] = pointHit.getX();
-                yHit[hitCount] = pointHit.getY();
+                hitArray[hitCount][0] = pointHit.getX();
+                hitArray[hitCount][1] = pointHit.getY();
                 hitCount++;
             }
 
@@ -55,13 +53,16 @@ public class MutliplePointModelPlotWorker extends SwingWorker
             while (misses.hasNext())
             {
                 Point pointMiss = (Point) misses.next();
-                xMisses[missCount] = pointMiss.getX();
-                yMisses[missCount] = pointMiss.getY();
+
+                missArray[missCount][0] = pointMiss.getX();
+                missArray[missCount][1] = pointMiss.getY();
                 missCount++;
             }
 
-            mediator.getPlot().addScatterPlot("Hit", Color.red, xHit, yHit);
-            mediator.getPlot().addScatterPlot("Miss", Color.black, xMisses, yMisses);
+            mediator.getPlot().addScatterPlot("Hit", Color.red, hitArray);
+
+            mediator.getPlot().addScatterPlot("Miss", Color.black, missArray);
+
             mediator.updateUI();
         } catch (Exception e)
         {

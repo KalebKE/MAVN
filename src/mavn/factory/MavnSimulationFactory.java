@@ -89,7 +89,6 @@ import mavn.simModel.plot.model.PointMissOutputModel;
 import mavn.simModel.plot.model.PointOutputModel;
 import mavn.simModel.plot.model.TimerOutputModel;
 import mavn.view.SimControlView;
-import mavn.view.action.SimControlAction;
 import simulyn.input.controller.InputController;
 import simulyn.input.model.InputModelInterface;
 import simulyn.ui.components.inputModelPanel.InputViewAbstract;
@@ -211,7 +210,7 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
                 plotViewBarAction, runSimulationAction);
 
         outputViewState = new OutputViewState((ControlBar) ouputControlBar, (ControlBar) inputControlBar);
-
+        propertiesState.setOutputViewState(outputViewState);
         ((SimulationPropertiesFrame) propertiesFrame).setOutputState(outputViewState);
         ((OutputViewMediator) outputMediator).setModelResultState(outputViewState);
         ((NetworkMediator) networkMediator).setModelResultState(outputViewState);
@@ -268,17 +267,16 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
         ((W2InputModel) w2Model).registerObserver((InputViewW2Model) w2Panel);
 
         inputView = new InputViewGridLayoutPanel(inputViews, inputControlBar);
-        simControlAction = new SimControlAction(inputModels);
         view = new SimControlView(newtorkViewBarAction, modelOuputBarAction,
-                simControlAction, plotViewBarAction, propertiesBarAction,
+                simulationBarAction, plotViewBarAction, propertiesBarAction,
                 runSimulationAction, viewBarAction, inputView,
                 outputLayoutPanel, outputViewState);
         modelChanged.setView(view);
         ((ViewBarAction) viewBarAction).setView(view);
         ((PlotBarAction) plotViewBarAction).setViewState(outputViewState);
         ((SimulationBarAction) simulationBarAction).setOutputViewState(outputViewState);
-        ((OutputViewState)outputViewState).setView(view);
-        ((OutputViewState)outputViewState).init();
+        ((OutputViewState) outputViewState).setView(view);
+        ((OutputViewState) outputViewState).init();
     }
 
     /**

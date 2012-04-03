@@ -324,7 +324,7 @@ public class GridMultiPointSimulationWorker extends SwingWorker
                 count = -1;
             } else
             {
-                y = y + increment;
+                    y = y + increment;    
             }
             count++;
         }

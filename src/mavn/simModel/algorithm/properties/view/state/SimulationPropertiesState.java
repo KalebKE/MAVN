@@ -20,6 +20,7 @@ package mavn.simModel.algorithm.properties.view.state;
 
 import javax.swing.SpinnerNumberModel;
 import mavn.simModel.algorithm.properties.view.SimulationPropertiesFrame;
+import mavn.simModel.output.view.state.OutputViewStateInterface;
 
 /**
  * A implentation of the applications State pattern. This class is responsible
@@ -29,6 +30,7 @@ import mavn.simModel.algorithm.properties.view.SimulationPropertiesFrame;
  */
 public class SimulationPropertiesState implements SimulationPropertiesStateInterface
 {
+
     private boolean caRng;
     private boolean cmwcRng;
     private boolean point;
@@ -42,6 +44,7 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     private SpinnerNumberModel seedSpinnerModel;
     private SpinnerNumberModel pointSpinnerModel;
     private SpinnerNumberModel gridSpinnerModel;
+    private OutputViewStateInterface outputViewState;
 
     /**
      * Initialize the state.
@@ -93,7 +96,7 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     {
         return gridSpinnerModel;
     }
-    
+
     /**
      * Get the Dart Model.
      * @return SpinnerNumberModel representing the number of darts to be fired
@@ -214,6 +217,12 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
         mtRng = true;
     }
 
+    @Override
+    public void setOutputViewState(OutputViewStateInterface outputViewState)
+    {
+        this.outputViewState = outputViewState;
+    }
+
     public void setView(SimulationPropertiesFrame propertiesView)
     {
         this.view = propertiesView;
@@ -224,7 +233,6 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
         view.getNumPointsSpinner().setModel(pointSpinnerModel);
         view.getResolutionSpinner().setModel(gridSpinnerModel);
         randomRng = true;
-        this.usePointGeneratorModel();
     }
 
     /**
@@ -251,6 +259,8 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     @Override
     public void useTargetModel()
     {
+        outputViewState.onTargetSimluation();
+
         view.getTargetCheckBox().setSelected(true);
         view.getUseUniformPointGeneratorCheckBox().setSelected(false);
         view.getGridPointCheckBox().setSelected(false);
@@ -280,6 +290,8 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     @Override
     public void usePointGeneratorModel()
     {
+        outputViewState.onMonteCarloSimulation();
+
         view.getUseUniformPointGeneratorCheckBox().setSelected(true);
         view.getTargetCheckBox().setSelected(false);
         view.getGridPointCheckBox().setSelected(false);
@@ -350,6 +362,8 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     @Override
     public void useGridGeneratedModel()
     {
+        outputViewState.onGridSimulation();
+
         view.getResolutionSpinner().setEnabled(true);
         view.getResolutionLabel().setEnabled(true);
 

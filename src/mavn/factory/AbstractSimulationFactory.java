@@ -65,7 +65,6 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
     protected ActionListener w2PanelAction;
 
     // Control Bar Actions
-    protected ActionListener simControlAction;
     protected ActionListener simulationBarAction;
     protected ActionListener propertiesBarAction;
     protected ActionListener modelOuputBarAction;

@@ -245,9 +245,12 @@ public class PlotMediator implements OutputViewMediatorInterface,
         this.hit = hit;
         this.miss = miss;
 
-        plot = new Plot2DPanel();
-        loadDartSimResult = new MutliplePointModelPlotWorker(this.hit, this.miss, this);
-        loadDartSimResult.execute();
+        if (!outputViewState.isAnimated())
+        {
+            plot = new Plot2DPanel();
+            loadDartSimResult = new MutliplePointModelPlotWorker(this.hit, this.miss, this);
+            loadDartSimResult.execute();
+        }
     }
 
     /**
@@ -286,10 +289,7 @@ public class PlotMediator implements OutputViewMediatorInterface,
             double[][] points =
             {
                 {
-                    point.getX()
-                },
-                {
-                    point.getY()
+                    point.getX(), point.getY()
                 }
             };
 
@@ -305,10 +305,7 @@ public class PlotMediator implements OutputViewMediatorInterface,
             double[][] points =
             {
                 {
-                    point.getX()
-                },
-                {
-                    point.getY()
+                    point.getX(), point.getY()
                 }
             };
 

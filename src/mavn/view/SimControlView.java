@@ -46,7 +46,7 @@ public class SimControlView extends JFrame
     private OutputViewStateInterface outputViewState;
 
     /** Creates new form Main */
-    public SimControlView(ActionListener networkAction, 
+    public SimControlView(ActionListener networkAction,
             ActionListener outputAction, ActionListener simulationAction,
             ActionListener plotterAction, ActionListener propertiesAction,
             ActionListener runSimulationAction, ActionListener viewAction,
@@ -86,62 +86,62 @@ public class SimControlView extends JFrame
 
     public void initActions()
     {
-        this.importModelMenuItem.setActionCommand("importSimulationAction");
         this.importModelMenuItem.addActionListener(simulationAction);
+        this.importModelMenuItem.setActionCommand("importSimulationAction");
 
-        this.saveModelMenuItem.setActionCommand("exportSimulationAction");
         this.saveModelMenuItem.addActionListener(simulationAction);
+        this.saveModelMenuItem.setActionCommand("exportSimulationAction");
 
-        this.closeSimulationMenuItem.setActionCommand("clearSimulationAction");
         this.closeSimulationMenuItem.addActionListener(simulationAction);
+        this.closeSimulationMenuItem.setActionCommand("clearSimulationAction");
 
-        this.saveOutputMenuItem.setActionCommand("saveOutputAction");
         this.saveOutputMenuItem.addActionListener(outputAction);
+        this.saveOutputMenuItem.setActionCommand("saveOutputAction");
 
-        this.clearOutputMenuItem.setActionCommand("clearOutputAction");
         this.clearOutputMenuItem.addActionListener(outputAction);
+        this.clearOutputMenuItem.setActionCommand("clearOutputAction");
 
-        this.viewInputMenuItem.setActionCommand("useInputViewAction");
         this.viewInputMenuItem.addActionListener(viewAction);
+        this.viewInputMenuItem.setActionCommand("useInputViewAction");
 
-        this.viewOutputMenuItem.setActionCommand("useOutputViewAction");
         this.viewOutputMenuItem.addActionListener(viewAction);
+        this.viewOutputMenuItem.setActionCommand("useOutputViewAction");
 
-        this.editPropertiesMenuItem.setActionCommand("loadPropertiesAction");
         this.editPropertiesMenuItem.addActionListener(propertiesAction);
+        this.editPropertiesMenuItem.setActionCommand("loadPropertiesAction");
 
-        this.monteCarloMenuItem.setActionCommand("useMonteCaroloSimuationAction");
         this.monteCarloMenuItem.addActionListener(propertiesAction);
+        this.monteCarloMenuItem.setActionCommand("useMonteCaroloSimuationAction");
 
-        this.pixelResolutionMenuItem.setActionCommand("useGridSimulationAction");
         this.pixelResolutionMenuItem.addActionListener(propertiesAction);
+        this.pixelResolutionMenuItem.setActionCommand("useGridSimulationAction");
 
-        this.diagnosticPointMenuItem.setActionCommand("useTargetSimulationAction");
         this.diagnosticPointMenuItem.addActionListener(propertiesAction);
+        this.diagnosticPointMenuItem.setActionCommand("useTargetSimulationAction");
 
-        this.runSimulationMenuItem.setActionCommand("runSimulationAction");
         this.runSimulationMenuItem.addActionListener(runSimulationAction);
+        this.runSimulationMenuItem.setActionCommand("runSimulationAction");
 
-        this.resetSimulationMenuItem.setActionCommand("resetSimulationAction");
         this.resetSimulationMenuItem.addActionListener(runSimulationAction);
+        this.resetSimulationMenuItem.setActionCommand("resetSimulationAction");
 
-        this.animateNetworkMenuItem.setActionCommand("animateNetworkAction");
         this.animateNetworkMenuItem.addActionListener(networkAction);
+        this.animateNetworkMenuItem.setActionCommand("animateNetworkAction");
 
-        this.renderNetworkMenuItem.setActionCommand("renderNetworkAction");
         this.renderNetworkMenuItem.addActionListener(networkAction);
+        this.renderNetworkMenuItem.setActionCommand("renderNetworkAction");
 
-        this.clearNetworkMenuItem.setActionCommand("clearNetworkAction");
         this.clearNetworkMenuItem.addActionListener(networkAction);
+        this.clearNetworkMenuItem.setActionCommand("clearNetworkAction");
 
-        this.renderPointsMenuItem.setActionCommand("useScatterPlotAction");
         this.renderPointsMenuItem.addActionListener(plotterAction);
+        this.renderPointsMenuItem.setActionCommand("useScatterPlotAction");
 
-        this.renderTimeMenuItem.setActionCommand("useLinePlotAction");
         this.renderTimeMenuItem.addActionListener(plotterAction);
+        this.renderTimeMenuItem.setActionCommand("useLinePlotAction");
 
-        this.clearPlotterMenuItem.setActionCommand("clearPlotAction");
         this.clearPlotterMenuItem.addActionListener(plotterAction);
+        this.clearPlotterMenuItem.setActionCommand("clearPlotAction");
     }
 
     public JCheckBoxMenuItem getAnimateNetworkMenuItem()
@@ -547,9 +547,8 @@ public class SimControlView extends JFrame
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitMenuItemActionPerformed
     {//GEN-HEADEREND:event_exitMenuItemActionPerformed
-       this.dispose();
+        this.dispose();
     }//GEN-LAST:event_exitMenuItemActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBoxMenuItem animateNetworkMenuItem;
     private javax.swing.JMenuItem clearNetworkMenuItem;

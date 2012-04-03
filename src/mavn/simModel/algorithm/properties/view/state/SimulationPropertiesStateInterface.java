@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.simModel.algorithm.properties.view.state;
 
 import javax.swing.SpinnerNumberModel;
+import mavn.simModel.output.view.state.OutputViewStateInterface;
 
 /**
  * An interface for the applications State Pattern. Implementations define
@@ -113,6 +114,8 @@ public interface SimulationPropertiesStateInterface
      * Indicate that java.util.random RNG is desired.
      */
     public void randomRng();
+
+    public void setOutputViewState(OutputViewStateInterface outputViewState);
 
     public void useGridGeneratedModel();
 

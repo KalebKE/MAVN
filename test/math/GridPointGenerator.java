@@ -5,7 +5,7 @@
 
 package math;
 
-import mavn.simModel.algorithm.model.point.Point;
+import mavn.algorithm.model.point.Point;
 
 /**
  *

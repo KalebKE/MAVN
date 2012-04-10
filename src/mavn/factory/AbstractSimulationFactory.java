@@ -22,25 +22,29 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import mavn.simModel.algorithm.model.point.generator.PointGeneratorInterface;
-import mavn.simModel.algorithm.properties.view.SimulationPropertiesFrame;
-import mavn.simModel.algorithm.properties.view.state.PointGeneratorStateInterface;
-import mavn.simModel.algorithm.properties.view.state.SimulationPropertiesStateInterface;
-import mavn.simModel.input.view.changeEvent.InputModelChangeEvent;
-import mavn.simModel.input.view.layoutPanel.InputViewGridLayoutPanel;
-import mavn.simModel.network.mediator.NetworkMediatorInterface;
-import mavn.simModel.output.view.layoutPanel.ModelOutputDefaultLayoutView;
-import mavn.simModel.output.view.state.OutputViewStateInterface;
-import mavn.simModel.plot.model.PointHitOutputModelInterface;
-import mavn.simModel.plot.model.PointMissOutputModelInterface;
-import mavn.simModel.plot.model.PointOutputModelInterface;
-import mavn.simModel.plot.model.TimerOutputModelInterface;
-import mavn.view.SimControlView;
+import mavn.algorithm.model.point.generator.PointGeneratorInterface;
+import mavn.algorithm.properties.view.SimulationPropertiesFrame;
+import mavn.algorithm.properties.view.state.PointGeneratorStateInterface;
+import mavn.algorithm.properties.view.state.SimulationPropertiesStateInterface;
+import mavn.input.view.changeEvent.InputModelChangeEvent;
+import mavn.input.view.layout.InputViewGridLayoutPanel;
+import mavn.network.mediator.NetworkMediatorInterface;
+import mavn.network.mediator.state.NetworkMediatorViewStateInterface;
+import mavn.output.view.layout.ModelOutputDefaultLayoutView;
+import mavn.plot.mediator.state.PlotMediatorViewStateInterface;
+import mavn.simulation.view.state.input.SimulationViewInputStateInterface;
+import mavn.plot.model.PointHitOutputModelInterface;
+import mavn.plot.model.PointMissOutputModelInterface;
+import mavn.plot.model.PointOutputModelInterface;
+import mavn.plot.model.TimerOutputModelInterface;
+import mavn.simulation.view.SimControlView;
+import mavn.simulation.view.state.output.SimulationViewOutputStateInterface;
+import mavn.simulation.view.state.simulator.SimulationTypeViewStateInterface;
 import simulyn.algorithm.model.AlgorithmModelInterface;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
 import simulyn.input.view.state.InputViewStateInterface;
-import simulyn.output.mediator.OutputMediatorInterface;
+import simulyn.mediator.SimulationMediatorInterface;
 import simulyn.output.model.OutputModelInterface;
 import simulyn.output.view.mediator.OutputViewMediatorInterface;
 import simulyn.ui.components.inputModelPanel.InputViewAbstract;
@@ -95,7 +99,7 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
     protected InputModelInterface w1Model;
     protected InputModelInterface w0Model;
     protected InputModelInterface thetaModel;
-    protected InputModelInterface targetModel;
+    protected InputModelInterface targetInputModel;
 
     // Model Input Change Event
     protected InputModelChangeEvent modelChanged;
@@ -115,29 +119,29 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
     protected InputViewStateInterface targetState;
     protected InputViewStateInterface thetaState;
     
-    protected JPanel ouputControlBar;
+    protected JPanel outputControlBar;
     protected JPanel inputControlBar;
 
     protected ModelOutputDefaultLayoutView outputLayoutPanel;
 
     protected NetworkMediatorInterface networkRendererMediator;
+    protected NetworkMediatorViewStateInterface networkViewState;
 
-    protected OutputMediatorInterface controlBarMediator;
+    protected SimulationMediatorInterface simulationMediator;
 
     // Model Result Models
     protected OutputModelInterface andLayerModelResult;
     protected OutputModelInterface orLayerModelResult;
     protected OutputModelInterface outputLayerModelResult;
-    protected OutputModelInterface simulationModelResult;
+    protected OutputModelInterface plotOutputModel;
     protected OutputModelInterface shapesRatioOutputModel;
     protected OutputModelInterface imageRatioOutputModel;
 
-    protected OutputViewMediatorInterface outputMediator;
+    protected OutputViewMediatorInterface ssMediator;
     protected OutputViewMediatorInterface networkMediator;
     protected OutputViewMediatorInterface plotMediator;
 
-    // Model Result State
-    protected OutputViewStateInterface outputViewState;
+    protected PlotMediatorViewStateInterface plotMediatorViewState;
 
     // Model Algorithm Dart Gun's
     protected PointGeneratorInterface cmwcPointGenerator;
@@ -158,43 +162,12 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
     protected SimulationPropertiesStateInterface propertiesState;
     protected SimulationPropertiesFrame propertiesFrame;
 
+    protected SimulationTypeViewStateInterface simulationTypeViewState;
+
+    // Model Result State
+    protected SimulationViewInputStateInterface simulationInputState;
+
+    protected SimulationViewOutputStateInterface ssMediatorViewState;
+
     protected TimerOutputModelInterface timerOutputModel;
-
-    public SimulationPropertiesFrame getPropertiesFrame()
-    {
-        return propertiesFrame;
-    }
-
-    public SimulationPropertiesStateInterface getPropertiesState()
-    {
-        return propertiesState;
-    }
-
-    /**
-     * Return the View.
-     * @return the View being used by the application.
-     */
-    public SimControlView getView()
-    {
-        return view;
-    }
-
-    /**
-     * Set the View.
-     * @param view the View being used by the application.
-     */
-    public void setView(SimControlView view)
-    {
-        this.view = view;
-    }
-
-    public ModelOutputDefaultLayoutView getNetworkPanel()
-    {
-        return outputLayoutPanel;
-    }
-
-    public InputViewGridLayoutPanel getModelPanel()
-    {
-        return inputView;
-    }
 }

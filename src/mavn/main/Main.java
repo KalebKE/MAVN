@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.main;
 
 import mavn.factory.MavnSimulationFactory;
-import mavn.view.SimControlView;
+import mavn.simulation.view.SimControlView;
 
 /**
  * The main class for the MAVN application.

@@ -1,5 +1,6 @@
 /*
-PropertiesStateInterface -- an interface within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+SimulationPropertiesStateInterface -- an interface within the Machine Artificial
+Vision Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -19,27 +20,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.algorithm.properties.view.state;
 
 import javax.swing.SpinnerNumberModel;
-import mavn.simulation.view.state.input.SimulationViewInputStateInterface;
 
 /**
- * An interface for the applications State Pattern. Implementations define
- * what state should be enabled for the application.
+ * An interface for the Simulation Properties State. Simulation Properties
+ * State manages all of the State related to running a simulation. 
+ * Implementations define what State should be enabled for the application under
+ * specific conditions.
  * @author Kaleb
  */
 public interface SimulationPropertiesStateInterface
 {
 
-    public SpinnerNumberModel getGridSpinnerModel();
+    /**
+     * Get the Spinner Model for the Pixel Grid Simulation.
+     * @return a Spinner Model containing the desired resolution for the
+     * Pixel Grid Simulation.
+     */
+    public SpinnerNumberModel getPixelGridSpinnerModel();
 
     /**
-     * Get the Dart Model.
-     * @return SpinnerNumberModel representing the number of darts to be fired
+     * Get the Spinner Model for the Monte Carlo Simulation.
+     * @return SpinnerNumberModel representing the number of Points to be fired
      * during the simulation.
      */
-    public SpinnerNumberModel getPointGeneratorModel();
+    public SpinnerNumberModel getMonteCarloSpinnerModel();
 
     /**
-     * Get the Seed Model.
+     * Get the Monte Carlo Simulation Seed Model.
      * @return SpinnerNumberModel representing the random number seed that should
      * be used during the simulation.
      */
@@ -58,18 +65,28 @@ public interface SimulationPropertiesStateInterface
     public boolean isCmwcRng();
 
     /**
-     * Check to see if the DartGun is desired.
-     * @return boolean indicating if a DartGun is desired.
+     * Check to see if the Diagnostic Simulation is enabled.
+     * @return boolean indicating if a single dart target is desired.
      */
-    public boolean isPointGeneratedModel();
+    public boolean isDiagnosticSimulation();
 
-    public boolean isGridGeneratedModel();
+    /**
+     * Check to see if the Monte Carlo Simulation is enabled.
+     * @return boolean indicating if the Monte Carlo Simulation is enabled.
+     */
+    public boolean isMonteCarloSimulation();
 
     /**
      * Check if Mt Rng is desired.
      * @return boolean indicating Mt Rng is desired.
      */
     public boolean isMtRng();
+
+    /**
+     * Check to see if the Pixel Grid Simulation is enabled.
+     * @return boolean indicating if the Pixel Grid Simulation is enabled.
+     */
+    public boolean isPixelGridSimulation();
 
     /**
      * Check if java.util.random RNG is desired.
@@ -82,12 +99,6 @@ public interface SimulationPropertiesStateInterface
      * @return boolean indicating if a random seed is desired.
      */
     public boolean isRandomSeed();
-
-    /**
-     * Check to see if a single dart target is desired.
-     * @return boolean indicating if a single dart target is desired.
-     */
-    public boolean isTargetModel();
 
     /**
      * Check if XORRng is desired.
@@ -110,18 +121,20 @@ public interface SimulationPropertiesStateInterface
      */
     public void onCmwcRng();
 
-    public void onPixelGridSimulation();
-
     /**
-     * Indicate that the Target Model should be used instead of the
-     * DartGun.
+     * Indicate that the Diagnostic Simulation should be enabled.
      */
     public void onDiagnosticSimulation();
 
     /**
-     * Indicate that the DartGun should be used instead of the Target Model.
+     * Indicate that the Monte Carolo Simulation should be enabled.
      */
     public void onMonteCarloSimulation();
+
+    /**
+     * Indicate that the Pixel Grid Simulation should be enabled.
+     */
+    public void onPixelGridSimulation();
 
     /**
      * Indicate that the RNG should use a specific seed.
@@ -137,11 +150,8 @@ public interface SimulationPropertiesStateInterface
      * Inidcate that XORSHIFT RNG should be used.
      */
     public void onXORRng();
-
-     /**
+    /**
      * Indicate that java.util.random RNG is desired.
      */
     public void randomRng();
-
-    public void setOutputViewState(SimulationViewInputStateInterface outputViewState);
 }

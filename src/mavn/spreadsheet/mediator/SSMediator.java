@@ -25,19 +25,18 @@ import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import mavn.algorithm.model.point.Point;
-import mavn.input.model.observer.TargetModelObserver;
+import mavn.input.model.observer.TargetInputModelObserver;
 import mavn.algorithm.properties.view.state.SimulationPropertiesStateInterface;
 import mavn.input.model.TargetInputModel;
 import mavn.spreadsheet.mediator.worker.DiagnosticSimulationTableWorker;
 import mavn.spreadsheet.mediator.state.SSMediatorOutputModelState;
-import mavn.output.view.state.OutputMediatorInputModelState;
+import mavn.simulation.inputModel.state.SimulationTargetInputModelState;
 import mavn.spreadsheet.model.SimulationOutputModel;
 import mavn.spreadsheet.model.ImageRatioOutputModel;
 import mavn.spreadsheet.model.ShapesRatioOutputModel;
 import mavn.spreadsheet.model.observer.ImageRatioOutputModelObserver;
 import mavn.spreadsheet.model.observer.OutputModelObserver;
 import mavn.spreadsheet.model.observer.ShapesRatioOutputModelObserver;
-import mavn.simulation.view.state.input.SimulationViewInputStateInterface;
 import simulyn.input.model.InputModelInterface;
 import simulyn.output.mediators.state.MediatorStateInterface;
 import simulyn.output.model.OutputModelInterface;
@@ -74,7 +73,7 @@ import simulyn.ui.components.modelRenderer.SimulynDefaultTableRenderer;
 public class SSMediator implements OutputViewMediatorInterface,
         SSMediatorInterface, OutputModelObserver,
         ShapesRatioOutputModelObserver, ImageRatioOutputModelObserver,
-        TargetModelObserver
+        TargetInputModelObserver
 {
     // Table Model for the View's JTable that is pushed to the View
     // once the the Result Model State has been added to the tableModel.
@@ -137,7 +136,7 @@ public class SSMediator implements OutputViewMediatorInterface,
         // this class should observe changes to the result model
         ((SimulationOutputModel) this.simulationModelResult).registerObserver(this);
         // have the result model observe changes to the simulation model
-        ((TargetInputModel) this.targetModel).registerObserver((TargetModelObserver) this);
+        ((TargetInputModel) this.targetModel).registerObserver((TargetInputModelObserver) this);
 
         // local instance of the result model
         this.shapesRatioModelResult = shapesRatioModelResult;
@@ -152,7 +151,7 @@ public class SSMediator implements OutputViewMediatorInterface,
         // Create a new View to Mediate.
         this.view = new SimulynDefaultTableRenderer();
         this.tableModel = new DefaultTableModel();
-        this.ssMediatorInputModelState = new OutputMediatorInputModelState();
+        this.ssMediatorInputModelState = new SimulationTargetInputModelState();
         this.ssMediatorOutputModelState = new SSMediatorOutputModelState(this);
     }
 
@@ -226,12 +225,12 @@ public class SSMediator implements OutputViewMediatorInterface,
     {
         // If a Single Point Simluation from a Target Point is being used AND
         // the Input Model for the Single Point Simluation is available.
-        if (simulationPropertiesState.isTargetModel() && ((OutputMediatorInputModelState) ssMediatorInputModelState).isInputModelTargetReady())
+        if (simulationPropertiesState.isDiagnosticSimulation() && ((SimulationTargetInputModelState) ssMediatorInputModelState).isTargetInputModelReady())
         {
             // Create a new new Point from the X and Y coordinates from the Target Input Model.
             Point point = new Point();
-            point.setLocation(((OutputMediatorInputModelState) ssMediatorInputModelState).getInputModelTarget()[0][0],
-                    ((OutputMediatorInputModelState) ssMediatorInputModelState).getInputModelTarget()[1][0]);
+            point.setLocation(((SimulationTargetInputModelState) ssMediatorInputModelState).getTargetInputModel()[0][0],
+                    ((SimulationTargetInputModelState) ssMediatorInputModelState).getTargetInputModel()[1][0]);
 
             // Pass off the creation of the TableModel to a Command Pattern with a SwingWorker
             // to ensure the GUI doesn't hang. The Command Pattern will create a new TableModel,
@@ -298,7 +297,7 @@ public class SSMediator implements OutputViewMediatorInterface,
     public void updateTargetModelInput(double[][] modelInput)
     {
         // Set the modelInput to the Mediators State so it can be worked with locally.
-        ((OutputMediatorInputModelState) ssMediatorInputModelState).setInputModelTarget(modelInput);
+        ((SimulationTargetInputModelState) ssMediatorInputModelState).setTargetInputModel(modelInput);
     }
 
     /**

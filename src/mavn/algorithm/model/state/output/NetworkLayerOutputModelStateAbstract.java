@@ -23,7 +23,7 @@ import simulyn.algorithm.model.state.AlgorithmModelStateInterface;
 
 /**
  * NetworkLayerOutputModelStateAbstract manages the State of the Network Layers
- * in the UniformMultiPointSimulation. A MAVN Network has four layers. They are
+ * in the Multiple Point Simulations. A MAVN Network has four layers. They are
  * the Input Layer, AND Layer, OR Layer and Output Layer.
  * Since different MAVN Simulations may need to have their Network Layer State
  * managed differently, NetworkLayerOutputModelStateAbstract provides
@@ -34,14 +34,14 @@ import simulyn.algorithm.model.state.AlgorithmModelStateInterface;
 public abstract class NetworkLayerOutputModelStateAbstract implements AlgorithmModelStateInterface
 {
 
-    protected boolean andLayerResultReady;
-    protected boolean orLayerResultReady;
-    protected boolean outputLayerResultReady;
+    protected boolean andLayerOutputReady;
+    protected boolean orLayerOutputReady;
+    protected boolean outputLayerOutputReady;
     
     // Algorithm Output State
-    protected double[][] andLayerResult;
-    protected double[][] orLayerResult;
-    protected double[][] outputLayerResult;
+    protected double[][] andLayerOutput;
+    protected double[][] orLayerOutput;
+    protected double[][] outputLayerOutput;
 
     /**
      * Get the output from the AND Layer within the Network for the
@@ -50,7 +50,7 @@ public abstract class NetworkLayerOutputModelStateAbstract implements AlgorithmM
      */
     public double[][] getAndLayerOutput()
     {
-        return andLayerResult;
+        return andLayerOutput;
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class NetworkLayerOutputModelStateAbstract implements AlgorithmM
      */
     public double[][] getOrLayerOutput()
     {
-        return orLayerResult;
+        return orLayerOutput;
     }
 
     /**
@@ -70,40 +70,40 @@ public abstract class NetworkLayerOutputModelStateAbstract implements AlgorithmM
      */
     public double[][] getOutputLayerOutput()
     {
-        return outputLayerResult;
+        return outputLayerOutput;
     }
 
     /**
      * Set the local copy of the AND Layer Output for the current set of inputs.
-     * @param andLayerResult the AND Layer Output State.
+     * @param andLayerOutput the AND Layer Output State.
      */
-    public void setAndLayerOutput(double[][] andLayerResult)
+    public void setAndLayerOutput(double[][] andLayerOutput)
     {
-        this.andLayerResult = andLayerResult;
-        this.andLayerResultReady = true;
+        this.andLayerOutput = andLayerOutput;
+        this.andLayerOutputReady = true;
         stateChanged();
     }
 
     /**
      * Set the local copy of the OR Layer Output for the current set of inputs.
-     * @param orLayerResult the Or Layer Output State.
+     * @param orLayerOutput the Or Layer Output State.
      */
-    public void setOrLayerOutput(double[][] orLayerResult)
+    public void setOrLayerOutput(double[][] orLayerOutput)
     {
-        this.orLayerResult = orLayerResult;
-        this.orLayerResultReady = true;
+        this.orLayerOutput = orLayerOutput;
+        this.orLayerOutputReady = true;
         stateChanged();
     }
 
     /**
      * Set the local compy of the Output Layer Output for the current set of
      * inputs.
-     * @param outputLayerResult the Output Layer Output State.
+     * @param outputLayerOutput the Output Layer Output State.
      */
-    public void setOutputLayerResult(double[][] outputLayerResult)
+    public void setOutputLayerResult(double[][] outputLayerOutput)
     {
-        this.outputLayerResult = outputLayerResult;
-        this.outputLayerResultReady = true;
+        this.outputLayerOutput = outputLayerOutput;
+        this.outputLayerOutputReady = true;
         stateChanged();
     }
 }

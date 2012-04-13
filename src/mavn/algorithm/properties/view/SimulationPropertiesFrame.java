@@ -1,6 +1,6 @@
 /*
-PropertiesFrame --
-A class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+SimulationPropertiesFrame -- a class within the Machine Artificial Vision
+Network (Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -24,10 +24,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 import mavn.globals.Globals;
 import mavn.algorithm.properties.view.state.SimulationPropertiesStateInterface;
-import mavn.algorithm.properties.view.state.PointGeneratorStateInterface;
 import mavn.simulation.view.state.input.SimulationViewInputStateInterface;
 
 /**
@@ -38,49 +36,45 @@ import mavn.simulation.view.state.input.SimulationViewInputStateInterface;
 public class SimulationPropertiesFrame extends javax.swing.JFrame
 {
 
-    private SimulationViewInputStateInterface outputState;
-    private PointGeneratorStateInterface pointGeneratorState;
+    private SimulationViewInputStateInterface simulationViewState;
     private SimulationPropertiesStateInterface simulationState;
 
     /**
      * Initialize the state.
-     * @param view the View this class is responsible for.
+     * @param simulationState the Simulation Properties State that will be set.
      */
-    public SimulationPropertiesFrame(
-            PointGeneratorStateInterface pointGeneratorState,
-            SimulationPropertiesStateInterface simulationState)
+    public SimulationPropertiesFrame(SimulationPropertiesStateInterface simulationState)
     {
         initComponents();
         this.simulationState = simulationState;
-        this.pointGeneratorState = pointGeneratorState;
-        
+
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.pack();
         initToolTips();
     }
 
-    public JLabel getResolutionLabel()
+    /**
+     * Get the diagnosticSimulationCheckBox. This check box indicates if the
+     * Diagnostic Simulation is desired.
+     * @return the diagnosticSimulationCheckBox.
+     */
+    public JCheckBox getDiagnosticSimulationCheckBox()
     {
-        return resolutionLabel;
-    }
-
-    public JSpinner getResolutionSpinner()
-    {
-        return resolutionSpinner;
+        return diagnosticSimulationCheckBox;
     }
 
     /**
-     * Get the useUniformPointGeneratorCheckBox. This check box indicates if the
-     * Uniformly Distributed Multiple Point Simulation is desired. If this
-     * check box is selected, the user can select from a number of different
-     * Uniform Point Generators to use with the simulation.
-     * @return the useUniformPointGeneratorCheckBox.
+     * Get the monteCarloSimulationCheckBox. This check box indicates if the
+     * Monte Carlo Simulation is desired. If this check box is selected,
+     * the user can select from a number of different Point Generators to use
+     * with the simulation.
+     * @return the useMonteCarloSimulationCheckBox.
      */
-    public JCheckBox getUseUniformPointGeneratorCheckBox()
+    public JCheckBox getMonteCarloSimulationCheckBox()
     {
-        return useUniformPointGeneratorCheckBox;
+        return monteCarloSimulationCheckBox;
     }
-    
+
     /**
      * Get the NumPointsLabel.
      * @return the NumPointsLabel.
@@ -120,6 +114,24 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
     }
 
     /**
+     * Get the Pixel Grid Resolution Label.
+     * @return the Resolution Label.
+     */
+    public JLabel getResolutionLabel()
+    {
+        return resolutionLabel;
+    }
+
+    /**
+     * Get the Pixel Grid Resolution Spinner.
+     * @return
+     */
+    public JSpinner getResolutionSpinner()
+    {
+        return resolutionSpinner;
+    }
+
+    /**
      * Get the Seed JSpinner. It allows the user to specify a seed for the RNG.
      * @return Get the Seed JSpinner.
      */
@@ -148,26 +160,6 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
     }
 
     /**
-     * Get the Target JCheckBox. It allows the user to indicate that
-     * they want to use the Target Model instead of the DartGun.
-     * @return
-     */
-    public JCheckBox getTargetCheckBox()
-    {
-        return targetCheckBox;
-    }
-
-    /**
-     * Get the Random Radio Button. It allows the user to indicate that
-     * they want to use java.random.util as the DartGun's RNG.
-     * @return the Random Radio Button.
-     */
-    public JRadioButton getRandomRadio()
-    {
-        return randomRadio;
-    }
-
-    /**
      * Get the CA RNG Radio Button. Indicates that the user wants to
      * use the CellularAutomatonRNG for the DartGun RNG.
      * @return the CA RNG Radio Button.
@@ -187,11 +179,6 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
         return cmwcRngRadio;
     }
 
-    public JCheckBox getGridPointCheckBox()
-    {
-        return gridPointCheckBox;
-    }
-
     /**
      * Get the MT RNG Radio Button. It indicates that the user wants to use the
      * Mersenne Twister RNG for the DartGun's RNG.
@@ -200,6 +187,28 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
     public JRadioButton getMTRngRadio()
     {
         return mtRngRadio;
+    }
+
+    /**
+     * Get the pixelGridSimulationCheckBox. This check box indicates if the
+     * Pixel Grid Simulation is desired. If this check box is selected,
+     * the user can select from a number of different Pixel Resolutions
+     * to use with the simulation.
+     * @return the pixelGridSimulationCheckBox.
+     */
+    public JCheckBox getPixelGridSimulationCheckBox()
+    {
+        return pixelGridSimulationCheckBox;
+    }
+
+    /**
+     * Get the Random Radio Button. It allows the user to indicate that
+     * they want to use java.random.util as the DartGun's RNG.
+     * @return the Random Radio Button.
+     */
+    public JRadioButton getRandomRadio()
+    {
+        return randomRadio;
     }
 
     /**
@@ -212,11 +221,11 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
         return xORShiftRngRadio;
     }
 
-    public void setOutputState(SimulationViewInputStateInterface outputState)
+    public void setSimulationViewState(SimulationViewInputStateInterface simulationViewState)
     {
-        this.outputState = outputState;
+        this.simulationViewState = simulationViewState;
     }
-    
+
     private void initToolTips()
     {
         randomRadio.setToolTipText("<html>Use java.util.Random: For non-critical random<br>"
@@ -264,9 +273,9 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
         propertiesHeaderLabel = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
-        targetCheckBox = new javax.swing.JCheckBox();
-        useUniformPointGeneratorCheckBox = new javax.swing.JCheckBox();
-        gridPointCheckBox = new javax.swing.JCheckBox();
+        diagnosticSimulationCheckBox = new javax.swing.JCheckBox();
+        monteCarloSimulationCheckBox = new javax.swing.JCheckBox();
+        pixelGridSimulationCheckBox = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         xORShiftRngRadio = new javax.swing.JRadioButton();
         caRngRadio = new javax.swing.JRadioButton();
@@ -302,25 +311,25 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Simulation Model", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 102, 204))); // NOI18N
 
-        targetCheckBox.setText("Single Point (Test Point)");
-        targetCheckBox.addActionListener(new java.awt.event.ActionListener() {
+        diagnosticSimulationCheckBox.setText("Single Point (Test Point)");
+        diagnosticSimulationCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                targetCheckBoxActionPerformed(evt);
+                diagnosticSimulationCheckBoxActionPerformed(evt);
             }
         });
 
-        useUniformPointGeneratorCheckBox.setSelected(true);
-        useUniformPointGeneratorCheckBox.setText("Random Point (Monte Carlo)");
-        useUniformPointGeneratorCheckBox.addActionListener(new java.awt.event.ActionListener() {
+        monteCarloSimulationCheckBox.setSelected(true);
+        monteCarloSimulationCheckBox.setText("Random Point (Monte Carlo)");
+        monteCarloSimulationCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                useUniformPointGeneratorCheckBoxActionPerformed(evt);
+                monteCarloSimulationCheckBoxActionPerformed(evt);
             }
         });
 
-        gridPointCheckBox.setText("Grid Point (Resolution)");
-        gridPointCheckBox.addActionListener(new java.awt.event.ActionListener() {
+        pixelGridSimulationCheckBox.setText("Grid Point (Resolution)");
+        pixelGridSimulationCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gridPointCheckBoxActionPerformed(evt);
+                pixelGridSimulationCheckBoxActionPerformed(evt);
             }
         });
 
@@ -332,20 +341,20 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(useUniformPointGeneratorCheckBox)
+                        .addComponent(monteCarloSimulationCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(gridPointCheckBox))
-                    .addComponent(targetCheckBox))
+                        .addComponent(pixelGridSimulationCheckBox))
+                    .addComponent(diagnosticSimulationCheckBox))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(useUniformPointGeneratorCheckBox)
-                    .addComponent(gridPointCheckBox))
+                    .addComponent(monteCarloSimulationCheckBox)
+                    .addComponent(pixelGridSimulationCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(targetCheckBox))
+                .addComponent(diagnosticSimulationCheckBox))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Point Generator", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 102, 204))); // NOI18N
@@ -657,25 +666,25 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_formPropertyChange
 
-    private void targetCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_targetCheckBoxActionPerformed
-    {//GEN-HEADEREND:event_targetCheckBoxActionPerformed
+    private void diagnosticSimulationCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_diagnosticSimulationCheckBoxActionPerformed
+    {//GEN-HEADEREND:event_diagnosticSimulationCheckBoxActionPerformed
         AbstractButton abstractButton = (AbstractButton) evt.getSource();
         boolean selected = abstractButton.getModel().isSelected();
         if (selected)
         {
             this.simulationState.onDiagnosticSimulation();
         }
-    }//GEN-LAST:event_targetCheckBoxActionPerformed
+    }//GEN-LAST:event_diagnosticSimulationCheckBoxActionPerformed
 
-    private void useUniformPointGeneratorCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_useUniformPointGeneratorCheckBoxActionPerformed
-    {//GEN-HEADEREND:event_useUniformPointGeneratorCheckBoxActionPerformed
+    private void monteCarloSimulationCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_monteCarloSimulationCheckBoxActionPerformed
+    {//GEN-HEADEREND:event_monteCarloSimulationCheckBoxActionPerformed
         AbstractButton abstractButton = (AbstractButton) evt.getSource();
         boolean selected = abstractButton.getModel().isSelected();
         if (selected)
         {
             this.simulationState.onMonteCarloSimulation();
         }
-    }//GEN-LAST:event_useUniformPointGeneratorCheckBoxActionPerformed
+    }//GEN-LAST:event_monteCarloSimulationCheckBoxActionPerformed
 
     private void randomRadioActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_randomRadioActionPerformed
     {//GEN-HEADEREND:event_randomRadioActionPerformed
@@ -719,71 +728,18 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
 
     private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_acceptButtonActionPerformed
     {//GEN-HEADEREND:event_acceptButtonActionPerformed
-        if (this.simulationState.isPointGeneratedModel())
+        if (this.simulationState.isMonteCarloSimulation())
         {
-            this.pointGeneratorState.setDartGunState(true);
             Globals.SEED = ((Double) this.simulationState.getSeedModel().getValue());
-            double darts = (Double) this.simulationState.getPointGeneratorModel().getValue();
+            double darts = (Double) this.simulationState.getMonteCarloSpinnerModel().getValue();
             Globals.NUM_DARTS = (int) darts;
         }
 
-        if (this.simulationState.isGridGeneratedModel())
+        if (this.simulationState.isPixelGridSimulation())
         {
-            this.pointGeneratorState.setDartGunState(false);
-            Globals.RESOLUTION = ((Integer) this.simulationState.getGridSpinnerModel().getValue());
+            Globals.RESOLUTION = ((Integer) this.simulationState.getPixelGridSpinnerModel().getValue());
         }
-
-        if (this.simulationState.isTargetModel())
-        {
-            this.pointGeneratorState.setDartGunState(false);
-        }
-
-        if (this.simulationState.isCaRng())
-        {
-            this.pointGeneratorState.setCaRng(true);
-            this.pointGeneratorState.setCmwcRng(false);
-            this.pointGeneratorState.setMtRng(false);
-            this.pointGeneratorState.setRandomRng(false);
-            this.pointGeneratorState.setxORRng(false);
-        }
-
-        if (this.simulationState.isCmwcRng())
-        {
-            this.pointGeneratorState.setCaRng(false);
-            this.pointGeneratorState.setCmwcRng(true);
-            this.pointGeneratorState.setMtRng(false);
-            this.pointGeneratorState.setRandomRng(false);
-            this.pointGeneratorState.setxORRng(false);
-        }
-
-        if (this.simulationState.isMtRng())
-        {
-            this.pointGeneratorState.setCaRng(false);
-            this.pointGeneratorState.setCmwcRng(false);
-            this.pointGeneratorState.setMtRng(true);
-            this.pointGeneratorState.setRandomRng(false);
-            this.pointGeneratorState.setxORRng(false);
-        }
-
-        if (this.simulationState.isRandomRng())
-        {
-            this.pointGeneratorState.setCaRng(false);
-            this.pointGeneratorState.setCmwcRng(false);
-            this.pointGeneratorState.setMtRng(false);
-            this.pointGeneratorState.setRandomRng(true);
-            this.pointGeneratorState.setxORRng(false);
-        }
-
-        if (this.simulationState.isXORRng())
-        {
-            this.pointGeneratorState.setCaRng(false);
-            this.pointGeneratorState.setCmwcRng(false);
-            this.pointGeneratorState.setMtRng(false);
-            this.pointGeneratorState.setRandomRng(false);
-            this.pointGeneratorState.setxORRng(true);
-        }
-
-        outputState.onPropertiesLoaded();
+        simulationViewState.onPropertiesLoaded();
         this.dispose();
     }//GEN-LAST:event_acceptButtonActionPerformed
 
@@ -808,22 +764,21 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
         }
     }//GEN-LAST:event_caRngRadioActionPerformed
 
-    private void gridPointCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_gridPointCheckBoxActionPerformed
-    {//GEN-HEADEREND:event_gridPointCheckBoxActionPerformed
+    private void pixelGridSimulationCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_pixelGridSimulationCheckBoxActionPerformed
+    {//GEN-HEADEREND:event_pixelGridSimulationCheckBoxActionPerformed
         AbstractButton abstractButton = (AbstractButton) evt.getSource();
         boolean selected = abstractButton.getModel().isSelected();
         if (selected)
         {
             this.simulationState.onPixelGridSimulation();
         }
-    }//GEN-LAST:event_gridPointCheckBoxActionPerformed
-
+    }//GEN-LAST:event_pixelGridSimulationCheckBoxActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton acceptButton;
     private javax.swing.JRadioButton caRngRadio;
     private javax.swing.JButton cancelButton;
     private javax.swing.JRadioButton cmwcRngRadio;
-    private javax.swing.JCheckBox gridPointCheckBox;
+    private javax.swing.JCheckBox diagnosticSimulationCheckBox;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -832,9 +787,11 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JCheckBox monteCarloSimulationCheckBox;
     private javax.swing.JRadioButton mtRngRadio;
     private javax.swing.JLabel numPointsLabel;
     private javax.swing.JSpinner numPointsSpinner;
+    private javax.swing.JCheckBox pixelGridSimulationCheckBox;
     private javax.swing.JLabel propertiesHeaderLabel;
     private javax.swing.JRadioButton randomRadio;
     private javax.swing.JRadioButton randomSeedRadio;
@@ -844,8 +801,6 @@ public class SimulationPropertiesFrame extends javax.swing.JFrame
     private javax.swing.JSpinner seedSpinner;
     private javax.swing.JLabel seedSpinnerLabel;
     private javax.swing.JRadioButton specifiedSeedRadio;
-    private javax.swing.JCheckBox targetCheckBox;
-    private javax.swing.JCheckBox useUniformPointGeneratorCheckBox;
     private javax.swing.JRadioButton xORShiftRngRadio;
     // End of variables declaration//GEN-END:variables
 }

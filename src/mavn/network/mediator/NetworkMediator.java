@@ -1,5 +1,6 @@
 /*
-ResultNetworkMediator -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+NetworkMediator -- a class within the Machine Artificial Vision Network
+(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -39,6 +40,7 @@ import simulyn.output.view.mediator.OutputViewMediatorInterface;
  * ModelViewMediatorInterface implementations are used to completely decouple
  * the Model from the View using a Model-View-Mediator (MVM) architecture. This
  * pattern is also known as a Model-View-Presenter using a Passive View strategy.
+ * It uses a single method to push new State to the View, updateUI(). 
  *
  * Mediators differ from Controllers in how they couple the View to the Model.
  * With a Controller, the View requests Actions to be taken upon the Model via
@@ -54,8 +56,8 @@ import simulyn.output.view.mediator.OutputViewMediatorInterface;
  * But we don't know how the UI's might be used in the future. This is why
  * the MVM is used.
  *
- * ResultNetworkMediator is a implementation of the Simulyn Framework that
- * provides a coupling between MAVN's Result Models, Input Models, and Result Views.
+ * NetworkMediator is a implementation that provides a coupling between
+ * MAVN's Output Models and Output View's. 
  * It manages a Network UI View that is designed to allow the user
  * to view a simulation network rendering once the Input Model has been loaded into the simluation.
  * It provides the logic for the View's Actions and renders the Model Results with a
@@ -67,87 +69,116 @@ public class NetworkMediator implements AndLayerOutputModelObserver,
         OrLayerOutputModelObserver, OutputLayerOutputModelObserver
 {
     // Model Algorithm Model
-
-    private MediatorStateInterface networkState;
     private MavnNetworkRenderer networkView;
+    private MediatorStateInterface networkModelState;
     private NetworkMediatorViewStateInterface networkViewState;
     // Model Result Models
-    private OutputModelInterface andLayerModelResult;
-    private OutputModelInterface orLayerModelResult;
-    private OutputModelInterface outputLayerModelResult;
+    private OutputModelInterface andLayerOutputModel;
+    private OutputModelInterface orLayerOutputModel;
+    private OutputModelInterface outputLayerOutputModel;
 
     /**
-     * Initialize the state.
-     * @param mainView the View that will be updated with the output
-     * @param dartGunIterator the DartGunInterface collection 
+     * Initialize the Network Mediator.
+     * @param andLayerOutputModel
+     * @param orLayerOutputModel
+     * @param outputLayerModelResult
      */
     public NetworkMediator(
-            OutputModelInterface andLayerModelResult,
-            OutputModelInterface orLayerModelResult,
-            OutputModelInterface outputLayerModelResult)
+            OutputModelInterface andLayerOutputModel,
+            OutputModelInterface orLayerOutputModel,
+            OutputModelInterface outputLayerOutputModel)
     {
 
         // local instance of the result model
-        this.andLayerModelResult = andLayerModelResult;
+        this.andLayerOutputModel = andLayerOutputModel;
         // this class should observe changes to the result model
-        ((AndLayerOutputModel) this.andLayerModelResult).registerObserver(this);
+        ((AndLayerOutputModel) this.andLayerOutputModel).registerObserver(this);
 
         // local instance of the result model
-        this.orLayerModelResult = orLayerModelResult;
+        this.orLayerOutputModel = orLayerOutputModel;
         // this class should observe changes to the result model
-        ((OrLayerOutputModel) this.orLayerModelResult).registerObserver(this);
+        ((OrLayerOutputModel) this.orLayerOutputModel).registerObserver(this);
 
         // local instance of the result model
-        this.outputLayerModelResult = outputLayerModelResult;
+        this.outputLayerOutputModel = outputLayerOutputModel;
         // this class should observe changes to the result model
-        ((OutputLayerOutputModel) this.outputLayerModelResult).registerObserver(this);
+        ((OutputLayerOutputModel) this.outputLayerOutputModel).registerObserver(this);
 
         networkView = new MavnNetworkRenderer();
-        networkState = new NetworkMediatorModelState(this);
+        networkModelState = new NetworkMediatorModelState(this);
     }
 
+    /**
+     * Animate the network.
+     * @param animate boolean indicating if the network should be animated.
+     */
     @Override
     public void animateNetwork(boolean animate)
     {
-        ((NetworkMediatorModelState) networkState).setAnimated(animate);
+        ((NetworkMediatorModelState) networkModelState).setAnimated(animate);
         networkViewState.setAnimated(animate);
     }
 
-    public NetworkMediatorModelState getNetworkState()
+    /**
+     * Get the network's Model State.
+     * @return the State of the network's Model.
+     */
+    public NetworkMediatorModelState getNetworkModelState()
     {
-        return (NetworkMediatorModelState) networkState;
+        return (NetworkMediatorModelState) networkModelState;
     }
 
+    /**
+     * Get the network View.
+     * @return the network View.
+     */
     @Override
     public JPanel getView()
     {
         return networkView;
     }
 
+    /**
+     * Check if the network is animated.
+     * @return boolean indicating if the network is animated.
+     */
     @Override
     public boolean isAnimateNetwork()
     {
-        return ((NetworkMediatorModelState) networkState).isAnimated();
+        return ((NetworkMediatorModelState) networkModelState).isAnimated();
     }
 
+    /**
+     * Reset the network.
+     */
     @Override
     public void resetNetwork()
     {
-        this.setNetwork(((NetworkMediatorModelState) networkState).getW2(),
-                ((NetworkMediatorModelState) networkState).getW1(),
-                ((NetworkMediatorModelState) networkState).getW0());
+        this.setNetwork(((NetworkMediatorModelState) networkModelState).getW2(),
+                ((NetworkMediatorModelState) networkModelState).getW1(),
+                ((NetworkMediatorModelState) networkModelState).getW0());
     }
 
+    /**
+     * Set the network.
+     * @param w2 the W2 Input Model.
+     * @param w1 the W1 Input Model.
+     * @param w0 the W0 Input Model.
+     */
     @Override
     public void setNetwork(double[][] w2, double[][] w1, double[][] w0)
     {
-        ((NetworkMediatorModelState) networkState).setW2(w2);
-        ((NetworkMediatorModelState) networkState).setW1(w1);
-        ((NetworkMediatorModelState) networkState).setW0(w0);
+        ((NetworkMediatorModelState) networkModelState).setW2(w2);
+        ((NetworkMediatorModelState) networkModelState).setW1(w1);
+        ((NetworkMediatorModelState) networkModelState).setW0(w0);
 
         networkView.setNetwork(w2, w1, w0);
     }
 
+    /**
+     * Set the network's View State.
+     * @param networkViewState the State of the network View.
+     */
     public void setNetworkViewState(NetworkMediatorViewStateInterface networkViewState)
     {
         this.networkViewState = networkViewState;
@@ -172,7 +203,7 @@ public class NetworkMediator implements AndLayerOutputModelObserver,
         // initialized and set. At that point, the State Pattern will call
         // updateUI() and push the entire Network's State to the View. The
         // State Pattern will then reset for the next Network State.
-        ((NetworkMediatorModelState) networkState).setAndLayerOutput(andLayerResult);
+        ((NetworkMediatorModelState) networkModelState).setAndLayerOutput(andLayerResult);
     }
 
     /**
@@ -194,7 +225,7 @@ public class NetworkMediator implements AndLayerOutputModelObserver,
         // initialized and set. At that point, the State Pattern will call
         // updateUI() and push the entire Network's State to the View. The
         // State Pattern will then reset for the next Network State.
-        ((NetworkMediatorModelState) networkState).setOrLayerOutput(orLayerResult);
+        ((NetworkMediatorModelState) networkModelState).setOrLayerOutput(orLayerResult);
     }
 
     /**
@@ -216,11 +247,11 @@ public class NetworkMediator implements AndLayerOutputModelObserver,
         // initialized and set. At that point, the State Pattern will call
         // updateUI() and push the entire Network's State to the View. The
         // State Pattern will then reset for the next Network State.
-        ((NetworkMediatorModelState) networkState).setOutputLayerOutput(outputLayerResult);
+        ((NetworkMediatorModelState) networkModelState).setOutputLayerOutput(outputLayerResult);
     }
 
     /**
-     * Called when the Mediator has new State ready to be pushed to the View.
+     * Called when the Mediator has new View State ready to be pushed to the View.
      */
     @Override
     public void updateUI()
@@ -228,7 +259,7 @@ public class NetworkMediator implements AndLayerOutputModelObserver,
         // Thread.sleep() is called to pause the animation so it can be
         // seen by the human eye.
 
-        if (((NetworkMediatorModelState) networkState).isAnimated())
+        if (((NetworkMediatorModelState) networkModelState).isAnimated())
         {
             try
             {
@@ -238,7 +269,7 @@ public class NetworkMediator implements AndLayerOutputModelObserver,
                 Logger.getLogger(ModelOutputDefaultLayoutView.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            networkView.fireNodes(((NetworkMediatorModelState) networkState).getNodeOutput());
+            networkView.fireNodes(((NetworkMediatorModelState) networkModelState).getNodeOutput());
             networkView.repaint();
         }
     }

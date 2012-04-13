@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.input.model;
 
 import java.util.ArrayList;
-import mavn.input.model.observer.ThetaModelObserver;
+import mavn.input.model.observer.ThetaInputModelObserver;
 import simulyn.input.model.InputModelInterface;
 
 /**
@@ -36,14 +36,14 @@ public class ThetaInputModel extends InputModelInterface
      */
     public ThetaInputModel()
     {
-        modelInputObservers = new ArrayList<ThetaModelObserver>();
+        modelInputObservers = new ArrayList<ThetaInputModelObserver>();
     }
 
     /**
      * Register Observer.
      * @param o the ThetaObserver
      */
-    public void registerObserver(ThetaModelObserver o)
+    public void registerObserver(ThetaInputModelObserver o)
     {
         modelInputObservers.add(o);
     }
@@ -52,7 +52,7 @@ public class ThetaInputModel extends InputModelInterface
      * Remove Observer.
      * @param o the ThetaObserver
      */
-    public void removeObserver(ThetaModelObserver o)
+    public void removeObserver(ThetaInputModelObserver o)
     {
         int i = modelInputObservers.indexOf(o);
         if (i >= 0)
@@ -69,7 +69,7 @@ public class ThetaInputModel extends InputModelInterface
     {
         for (int i = 0; i < modelInputObservers.size(); i++)
         {
-            ThetaModelObserver matrixObserver = (ThetaModelObserver) modelInputObservers.get(i);
+            ThetaInputModelObserver matrixObserver = (ThetaInputModelObserver) modelInputObservers.get(i);
             matrixObserver.updateThetaModelInput(matrix);
         }
     }

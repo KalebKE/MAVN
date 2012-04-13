@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+JUNGPanelAdapter -- a class within the Machine Artificial Vision Network
+(Machine Artificial Vision Network).
+Copyright (C) 2012, Kaleb Kircher.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.network.view;
 
@@ -44,14 +59,8 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 
 /**
- * Shows how  to create a graph editor with JUNG.
- * Mouse modes and actions are explained in the help text.
- * The application version of GraphEditorDemo provides a
- * File menu with an option to save the visible graph as
- * a jpeg file.
- *
- * @author Tom Nelson
- *
+ * JUNG Panel Adaptor class uses an Adaptor Pattern to take
+ * the MANV Network's and render the them with the JUNG Framework's Graphical Network.
  */
 public class JUNGPanelAdapter extends JPanel implements Printable
 {
@@ -128,7 +137,7 @@ public class JUNGPanelAdapter extends JPanel implements Printable
     int edgeCount = 0;
 
     /**
-     * create an instance of a simple graph with popup controls to
+     * Create an instance of a simple graph with popup controls to
      * create a graph.
      *
      */
@@ -184,6 +193,7 @@ public class JUNGPanelAdapter extends JPanel implements Printable
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener()
         {
+
             @Override
             public void actionPerformed(ActionEvent e)
             {
@@ -193,6 +203,7 @@ public class JUNGPanelAdapter extends JPanel implements Printable
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener()
         {
+
             @Override
             public void actionPerformed(ActionEvent e)
             {
@@ -203,6 +214,7 @@ public class JUNGPanelAdapter extends JPanel implements Printable
         JButton help = new JButton("Help");
         help.addActionListener(new ActionListener()
         {
+
             @Override
             public void actionPerformed(ActionEvent e)
             {
@@ -468,6 +480,7 @@ public class JUNGPanelAdapter extends JPanel implements Printable
 
     class VertexFactory implements Factory<Number>
     {
+
         @Override
         public Number create()
         {
@@ -477,6 +490,7 @@ public class JUNGPanelAdapter extends JPanel implements Printable
 
     class EdgeFactory implements Factory<Number>
     {
+
         @Override
         public Number create()
         {

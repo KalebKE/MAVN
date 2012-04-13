@@ -1,5 +1,6 @@
 /*
-ResultPlotMediator -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+PlotMediator -- a class within the Machine Artificial Vision Network
+(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -22,14 +23,13 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 import mavn.algorithm.model.point.Point;
-import mavn.input.model.observer.TargetModelObserver;
+import mavn.input.model.observer.TargetInputModelObserver;
 import mavn.input.model.TargetInputModel;
 import mavn.network.mediator.NetworkMediator;
 import mavn.network.mediator.NetworkMediatorInterface;
-import mavn.network.mediator.state.NetworkMediatorModelState;
-import mavn.plot.mediator.worker.MutliplePointModelPlotWorker;
+import mavn.plot.mediator.worker.MultiplePointModelPlotWorker;
 import mavn.plot.mediator.worker.SinglePointModelPlotWorker;
-import mavn.output.view.state.OutputMediatorInputModelState;
+import mavn.simulation.inputModel.state.SimulationTargetInputModelState;
 import mavn.spreadsheet.model.SimulationOutputModel;
 import mavn.plot.model.PointOutputModelInterface;
 import mavn.plot.model.PointOutputModel;
@@ -54,50 +54,58 @@ import simulyn.output.view.mediator.OutputViewMediatorInterface;
 import simulyn.ui.components.plotter.SimulynDefaultPlotView;
 
 /**
- * ModelViewMediatorInterface implementations are used to completely decouple
+ * OutputViewMediatorInterface implementations are used to completely decouple
  * the Model from the View using a Model-View-Mediator (MVM) architecture. This
  * pattern is also known as a Model-View-Presenter using a Passive View strategy.
+ * It has a single method used to update the view with new state: updateUI().
  *
  * Mediators differ from Controllers in how they couple the View to the Model.
- * With a Controller, the View requests Actions to be taken upon the Model via
- * the Controller and the Model will then update the View with the new State.
- * With a Mediator, the View requests Actions to be taken upon the Model via the
- * Mediator and the Model will update the Mediator with the new State. The Mediator
- * will then provide the View with the new State.
  *
- * An MVM is used to manage the Views for the Network UI, Plot UI, and Result UI.
+ * With a Controller, the View requests Actions to be taken upon the Model via
+ * the Controller. The Controller will call the Model and when the the Model is
+ * ready it will update the View with the new State.
+ * With a Mediator, the View requests Actions to be taken upon the Model via the
+ * Mediator and the Model will update the Mediator (not the View) with the new
+ * State. After the the Mediator appropriately renders the State, the
+ * Mediator will then provide the View with the rendered State.
+ *
+ * An MVM is used to manage the Views for the Network UI, Plot UI, and Spreadsheet UI.
  * This is because we want the UI's to be completely decoupled from any form
  * of a model or controller, mediator, presenter, etc... We want the UI's to be as
  * decoupled and as portable as possible so they can be reused in many ways.
- * But we don't know how the UI's might be used in the future. This is why
- * the MVM is used.
  *
- * ResultPlotMediator is a implementation of the Simulyn Framework that
- * provides a coupling between MAVN's Result Models, Input Models, and Result Views.
- * It manages a Plot UI View that is designed to allow the user
- * to view the simulation results once the Input Model has been loaded into the simluation.
- * It provides the logic for the View's Actions and renders the Model Results with a
- * Plot used to back a Scatter Plot within the View.
+ * PlotMediator is a implementation providing a coupling between
+ * the Output Models and the Output Views. It manages a Plot UI View that is
+ * designed to allow the user to view the simulations Output Models in a graphical
+ * environment. It provides the logic for the View's Actions and renders the
+ * Output Models with a two-dimensional Plot used to render a Scatter Plot
+ * and Line Plot.
  * @author Kaleb
  */
 public class PlotMediator implements OutputViewMediatorInterface,
         OutputModelObserver, PlotMediatorInterface,
         PointOutputModelObserver, PointHitOutputModelObserver,
-        PointMissOutputModelObserver, TargetModelObserver,
+        PointMissOutputModelObserver, TargetInputModelObserver,
         TimerOutputModelObserver
 {
     // Lists to keep track of model outputs locally so they can
     // be rendered and pushed to the Plot View.
+
     private ArrayList<Point> timerPointList;
     private ArrayList<Point> hitPointList;
     private ArrayList<Point> missPointList;
     // Target Input Model is used to render the Diagnostic Simulation
     // Plot View.
     private InputModelInterface targetInputModel;
+    // Target Input Model State used for Diagnostic Simulations
     private MediatorStateInterface plotMediatorInputModelState;
-    private NetworkMediatorInterface networkMediator;;
+    // Network Mediator for Animated Simulations.
+    private NetworkMediatorInterface networkMediator;
+    // The Plot Mediator's View State.
     private PlotMediatorViewStateInterface plotViewState;
+    // The Point Output Model for non-Animated Simulations.
     private PointOutputModelInterface pointOutputModel;
+    // The Point Output Models for Animated Simulations
     private PointHitOutputModelInterface pointHitOutputModel;
     private PointMissOutputModelInterface pointMissOutputModel;
     // The Plot2DPanel that backs the Plot View. The Plot2DPanel has its
@@ -109,16 +117,34 @@ public class PlotMediator implements OutputViewMediatorInterface,
     // Plot View. This SwingWorker manages results from MultiplePointSimulations.
     // The View the Mediator manages
     private SimulynDefaultPlotView view;
-    private SwingWorker loadDartSimResult;
+    // Swing Worker to render Multiple Point Simulation Output Models when
+    // the Simulation is not Animated. Keeps the UI from hanging for a second
+    // while the simulations Output Models render. 
+    private SwingWorker renderPointOutputModels;
     // The SwingWorker is used to create the new Plot for the
-    // Plot View. This SwingWorker manages results from SinglePointSimulations.
-    private SwingWorker loadTargetResult;
+    // Plot View. This SwingWorker manages results from Single Point
+    // Diagnostic Simulations.
+    private SwingWorker renderDiagnosticOutputModels;
+    // The Timer Output Model for simulations that are timed and rendered
+    // with a Line Plot. 
     private TimerOutputModelInterface timerOutputModel;
 
     /**
-     * Initialize the state.
-     * @param mainView the View that will be updated with the output
-     * @param dartGunIterator the DartGunInterface collection 
+     * Initialized the Plot Mediator.
+     *
+     * @param targetInputModel the Target Input Model used for Diagnostic Single Point
+     * Simulations
+     * @param networkMediator the Network Mediator for Animated simulation State.
+     * @param plotOutputModel the Plot Output Model Subject to Register as a Simulation
+     * Output Model Observer.
+     * @param pointOutputModel the Point Output Model Subject to Register as a Point
+     * Output Model Observer.
+     * @param pointHitOutputModel the Point Hit Output Model Subject to Register
+     * as a Point Hit Output Model Observer.
+     * @param pointMissOutputModel the Point Miss Output Model Subject to Register
+     * as a Point Miss Output Model Observer.
+     * @param timerOutputModel the Timer Output Model Subject to Register as a
+     * Timer Output Model Observer. 
      */
     public PlotMediator(
             InputModelInterface targetInputModel,
@@ -134,7 +160,7 @@ public class PlotMediator implements OutputViewMediatorInterface,
         this.pointMissOutputModel = pointMissOutputModel;
         this.timerOutputModel = timerOutputModel;
         this.targetInputModel = targetInputModel;
-        ((TargetInputModel) this.targetInputModel).registerObserver((TargetModelObserver) this);
+        ((TargetInputModel) this.targetInputModel).registerObserver((TargetInputModelObserver) this);
 
         // local instance of the result model
         this.plotOutputModel = plotOutputModel;
@@ -151,17 +177,19 @@ public class PlotMediator implements OutputViewMediatorInterface,
         ((PointMissOutputModel) this.pointMissOutputModel).registerObserver((PointMissOutputModelObserver) this);
         ((TimerOutputModel) this.timerOutputModel).registerObserver((TimerOutputModelObserver) this);
 
+        // Create a new instance of the View.
         view = new SimulynDefaultPlotView();
-        plotMediatorInputModelState = new OutputMediatorInputModelState();
+        // Create a new instance of the Input Model State required
+        // for Single Point Diagnostic Simulations.
+        plotMediatorInputModelState = new SimulationTargetInputModelState();
+        // Create a new Plot that will eventually be set with
+        // the simulations Output Model State and then pushed to the View.
         plot = new Plot2DPanel();
+
+        // Lists to keep track of the point hits and misses that will be
+        // rendered with the Plot.
         hitPointList = new ArrayList<Point>();
         missPointList = new ArrayList<Point>();
-    }
-
-    @Override
-    public JPanel getView()
-    {
-        return view;
     }
 
     /**
@@ -176,6 +204,31 @@ public class PlotMediator implements OutputViewMediatorInterface,
         return plot;
     }
 
+    /**
+     * Get the Plot Mediator View. 
+     * @return the JPanel representing the Plot Mediator View.
+     */
+    @Override
+    public JPanel getView()
+    {
+        return view;
+    }
+
+    /**
+     * Remove all plots from the current Plot and update the View.
+     */
+    @Override
+    public void onClearUI()
+    {
+        plot.removeAllPlots();
+        updateUI();
+    }
+
+    /**
+     * Renders a Line Plot representing the amount of time the simulation
+     * took to run versus the number of inputs fed into the simulations
+     * network. 
+     */
     @Override
     public void onLinePlot()
     {
@@ -195,16 +248,69 @@ public class PlotMediator implements OutputViewMediatorInterface,
         this.plotViewState.onLinePlot();
     }
 
+    /**
+     * Renders a Scatter Plot representing the Points that hit shapes and Points
+     * that missed shapes during the simulation
+     */
     @Override
     public void onScatterPlot()
     {
         this.updatePoints(this.hitPointList, this.missPointList);
+        this.plotViewState.onScatterPlot();
     }
 
+    /**
+     * Set the Plot View State for the Plot Mediator. Plot View State
+     * keeps track of what View should be rendered and when. 
+     * @param plotViewState the Plot View State implementation that will
+     * be used by the Plot Mediator. 
+     */
     public void setPlotViewState(PlotMediatorViewStateInterface plotViewState)
     {
         this.plotViewState = plotViewState;
         this.plotViewState.onScatterPlot();
+    }
+
+    /**
+     * The Hook to Observe Point Hit Output Model Subjects to be notified
+     * when new Point Hit State is available.
+     * @param point the Point representing a hit on the image.
+     */
+    @Override
+    public void updatePointHit(Point point)
+    {
+        if (point != null && ((NetworkMediator) networkMediator).getNetworkModelState().isAnimated())
+        {
+            double[][] points =
+            {
+                {
+                    point.getX(), point.getY()
+                }
+            };
+
+            ((PlotViewInterface) view).setHitVector(points);
+        }
+    }
+
+    /**
+     * The Hook to Observe Point Miss Output Model Subjects to be notified
+     * when new Point Miss State is available.
+     * @param point the Point representing a miss on the image.
+     */
+    @Override
+    public void updatePointMiss(Point point)
+    {
+        if (point != null && ((NetworkMediator) networkMediator).getNetworkModelState().isAnimated())
+        {
+            double[][] points =
+            {
+                {
+                    point.getX(), point.getY()
+                }
+            };
+
+            ((PlotViewInterface) view).setMissVector(points);
+        }
     }
 
     /**
@@ -220,15 +326,15 @@ public class PlotMediator implements OutputViewMediatorInterface,
             plot = new Plot2DPanel();
             // Create a new new Point from the X and Y coordinates from the Target Input Model.
             Point point = new Point();
-            point.setLocation(((OutputMediatorInputModelState) plotMediatorInputModelState).getInputModelTarget()[0][0],
-                    ((OutputMediatorInputModelState) plotMediatorInputModelState).getInputModelTarget()[1][0]);
+            point.setLocation(((SimulationTargetInputModelState) plotMediatorInputModelState).getTargetInputModel()[0][0],
+                    ((SimulationTargetInputModelState) plotMediatorInputModelState).getTargetInputModel()[1][0]);
 
             // Pass off the creation of the Plot to a Command Pattern with a SwingWorker
             // to ensure the GUI doesn't hang. The Command Pattern will use the new Plot,
             // add the Simulation Model Result's State to the Plot, and call updateUI()
             // to push the Plot to the View.
-            loadTargetResult = new SinglePointModelPlotWorker(modelResult, this, point);
-            loadTargetResult.execute();
+            renderDiagnosticOutputModels = new SinglePointModelPlotWorker(modelResult, this, point);
+            renderDiagnosticOutputModels.execute();
         }
     }
 
@@ -245,11 +351,11 @@ public class PlotMediator implements OutputViewMediatorInterface,
         this.hitPointList = hit;
         this.missPointList = miss;
 
-        if (!((NetworkMediator)networkMediator).getNetworkState().isAnimated())
+        if (!((NetworkMediator) networkMediator).getNetworkModelState().isAnimated())
         {
             plot = new Plot2DPanel();
-            loadDartSimResult = new MutliplePointModelPlotWorker(this.hitPointList, this.missPointList, this);
-            loadDartSimResult.execute();
+            renderPointOutputModels = new MultiplePointModelPlotWorker(this.hitPointList, this.missPointList, this);
+            renderPointOutputModels.execute();
         }
     }
 
@@ -262,7 +368,18 @@ public class PlotMediator implements OutputViewMediatorInterface,
     public void updateTargetModelInput(double[][] modelInput)
     {
         // Set the modelInput to the Mediators State so it can be worked with locally.
-        ((OutputMediatorInputModelState) plotMediatorInputModelState).setInputModelTarget(modelInput);
+        ((SimulationTargetInputModelState) plotMediatorInputModelState).setTargetInputModel(modelInput);
+    }
+
+    /**
+     * Hook to Observe the Timer Output Model Subject to be notified when
+     * new Timer State is available.
+     * @param timerPoints the Timer Points from the simualtion.
+     */
+    @Override
+    public void updateTimerOutput(ArrayList<Point> timerPoints)
+    {
+        this.timerPointList = timerPoints;
     }
 
     /**
@@ -272,51 +389,6 @@ public class PlotMediator implements OutputViewMediatorInterface,
     public void updateUI()
     {
         ((PlotViewInterface) view).setPlot(plot);
-    }
-
-    @Override
-    public void onClearUI()
-    {
-        plot.removeAllPlots();
-        updateUI();
-    }
-
-    @Override
-    public void updatePointHit(Point point)
-    {
-        if (point != null && ((NetworkMediator)networkMediator).getNetworkState().isAnimated())
-        {
-            double[][] points =
-            {
-                {
-                    point.getX(), point.getY()
-                }
-            };
-
-            ((PlotViewInterface) view).setHitVector(points);
-        }
-    }
-
-    @Override
-    public void updatePointMiss(Point point)
-    {
-        if (point != null && ((NetworkMediator)networkMediator).getNetworkState().isAnimated())
-        {
-            double[][] points =
-            {
-                {
-                    point.getX(), point.getY()
-                }
-            };
-
-            ((PlotViewInterface) view).setMissVector(points);
-        }
-    }
-
-    @Override
-    public void updateTimerOutput(ArrayList<Point> timerPoints)
-    {
-        this.timerPointList = timerPoints;
     }
 }
 

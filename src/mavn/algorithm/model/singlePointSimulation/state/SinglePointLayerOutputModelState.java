@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.algorithm.model.singlePointSimulation.state;
 
 import mavn.algorithm.model.state.output.NetworkLayerOutputModelStateAbstract;
-import mavn.algorithm.model.singlePointSimulation.SinglePointSimulation;
+import mavn.algorithm.model.singlePointSimulation.DiagnosticSimulation;
 
 /**
  * This class acts as a State Manager for the Network Layer Models within
@@ -37,14 +37,14 @@ import mavn.algorithm.model.singlePointSimulation.SinglePointSimulation;
 public class SinglePointLayerOutputModelState extends NetworkLayerOutputModelStateAbstract
 {
 
-    private SinglePointSimulation model;
+    private DiagnosticSimulation model;
 
     /**
      * Initialize a new Single Point Output Model State Manager.
      * @param model the Single Point Model that this class will
      * manage the Output State for. 
      */
-    public SinglePointLayerOutputModelState(SinglePointSimulation model)
+    public SinglePointLayerOutputModelState(DiagnosticSimulation model)
     {
         this.model = model;
     }
@@ -58,7 +58,7 @@ public class SinglePointLayerOutputModelState extends NetworkLayerOutputModelSta
     @Override
     public void stateChanged()
     {
-        if (this.andLayerResultReady && this.orLayerResultReady && this.outputLayerResultReady)
+        if (this.andLayerOutputReady && this.orLayerOutputReady && this.outputLayerOutputReady)
         {
             model.notifyAndLayerObservers();
             model.notifyOrLayerObservers();
@@ -75,8 +75,8 @@ public class SinglePointLayerOutputModelState extends NetworkLayerOutputModelSta
     @Override
     public void resetState()
     {
-        this.andLayerResultReady = false;
-        this.orLayerResultReady = false;
-        this.outputLayerResultReady = false;
+        this.andLayerOutputReady = false;
+        this.orLayerOutputReady = false;
+        this.outputLayerOutputReady = false;
     }
 }

@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.input.view;
 
 import java.awt.event.ActionListener;
-import mavn.input.model.observer.TargetModelObserver;
+import mavn.input.model.observer.TargetInputModelObserver;
 import mavn.input.view.changeEvent.InputModelChangeEvent;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
@@ -45,7 +45,7 @@ import simulyn.ui.components.spreadsheetTable.SimTable;
  * implementation instance is intended to manage one simulation model input.
  * @author Kaleb
  */
-public class InputViewTargetModel extends InputViewAbstract implements TargetModelObserver
+public class InputViewTargetModel extends InputViewAbstract implements TargetInputModelObserver
 {
 
     /**

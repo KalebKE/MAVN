@@ -4,18 +4,27 @@
  */
 package mavn.simulation.mediator;
 
-import mavn.spreadsheet.mediator.SSMediator;
-import file.save.controller.SaveFileControllerInterface;
-import mavn.algorithm.model.multiplePointSimulation.UniformMultiPointSimulation;
+import file.open.controller.directory.OpenSpreadsheetDirectoryController;
+import file.open.observer.OpenFileObserver;
+import file.save.controller.directory.SaveDirectoryControllerInterface;
+import file.save.controller.directory.SaveSpreadsheetDirectoryController;
+import java.util.ArrayList;
+import mavn.algorithm.model.multiplePointSimulation.MonteCarloSimulation;
 import mavn.algorithm.model.point.generator.CMWC4096PointGenerator;
 import mavn.algorithm.model.point.generator.CellularAutomatonPointGenerator;
 import mavn.algorithm.model.point.generator.JavaRandomPointGenerator;
 import mavn.algorithm.model.point.generator.MersenneTwisterPointGenerator;
 import mavn.algorithm.model.point.generator.XORShiftPointGenerator;
 import mavn.algorithm.properties.view.SimulationPropertiesFrame;
+import mavn.algorithm.properties.view.state.SimulationPropertiesStateInterface;
+import mavn.network.mediator.NetworkMediatorInterface;
+import mavn.plot.mediator.PlotMediatorInterface;
+import mavn.simulation.view.state.input.SimulationViewInputStateInterface;
+import mavn.simulation.view.state.simulator.SimulationTypeViewStateInterface;
+import mavn.spreadsheet.mediator.SSMediatorInterface;
 import simulyn.algorithm.model.AlgorithmModelInterface;
+import simulyn.input.model.InputModelInterface;
 import simulyn.mediator.SimulationMediatorInterface;
-import simulyn.output.view.mediator.OutputViewMediatorInterface;
 
 /**
  *
@@ -24,15 +33,25 @@ import simulyn.output.view.mediator.OutputViewMediatorInterface;
 public class SimulationMediator implements SimulationMediatorInterface
 {
 
+    private ArrayList<InputModelInterface> inputModels;
+    private ArrayList<OpenFileObserver> fileObservers;
     // Model Algorithm Models are responsible for running the simulation
     // with their algorithm. They use a Command Pattern and a SwingWorker
     // so the GUI won't hang on big computations.
     private AlgorithmModelInterface singlePointSimulation;
     private AlgorithmModelInterface uniformPointSimulation;
     private AlgorithmModelInterface gridPointSimulation;
-    private OutputViewMediatorInterface mediator;
-    private SaveFileControllerInterface saveFileController;
+    private NetworkMediatorInterface networkMediator;
+    private PlotMediatorInterface plotMediator;
+    private SimulationPropertiesStateInterface simulationPropertiesState;
     private SimulationPropertiesFrame propertiesView;
+    private SimulationViewInputStateInterface simulationViewState;
+    private SimulationTypeViewStateInterface simulationTypeState;
+    private SSMediatorInterface ssMediator;
+    private final String[] fileNames =
+    {
+        "target", "theta", "w0", "w1", "w2"
+    };
 
     /**
      * @param singlePointSimulation the SinglePointSimulation implementation to
@@ -46,17 +65,34 @@ public class SimulationMediator implements SimulationMediatorInterface
      * Result Models.
      * @param mediator
      */
-    public SimulationMediator(AlgorithmModelInterface singlePointSimulation,
+    public SimulationMediator(
+            ArrayList<InputModelInterface> inputModels,
+            AlgorithmModelInterface singlePointSimulation,
             AlgorithmModelInterface uniformPointSimulation,
             AlgorithmModelInterface gridPointSimulation,
-            OutputViewMediatorInterface mediator,
-            SimulationPropertiesFrame propertiesView)
+            NetworkMediatorInterface networkMediator,
+            PlotMediatorInterface plotMediator,
+            SimulationPropertiesStateInterface simulationPropertiesState,
+            SimulationPropertiesFrame propertiesView,
+            SSMediatorInterface ssMediator)
     {
-        this.uniformPointSimulation = uniformPointSimulation;
-        this.mediator = mediator;
+        this.gridPointSimulation = gridPointSimulation;
+        this.inputModels = inputModels;
+        this.networkMediator = networkMediator;
+        this.plotMediator = plotMediator;
         this.propertiesView = propertiesView;
         this.singlePointSimulation = singlePointSimulation;
-        this.gridPointSimulation = gridPointSimulation;
+        this.simulationPropertiesState = simulationPropertiesState;
+        this.ssMediator = ssMediator;
+        this.uniformPointSimulation = uniformPointSimulation;
+
+        // Cast the InputModels into OpenFileObservers so we can use them
+        // to load the InputModels from external files.
+        fileObservers = new ArrayList<OpenFileObserver>();
+        for (int i = 0; i < this.inputModels.size(); i++)
+        {
+            fileObservers.add((OpenFileObserver) this.inputModels.get(i));
+        }
     }
 
     /**
@@ -66,7 +102,8 @@ public class SimulationMediator implements SimulationMediatorInterface
     @Override
     public void onLoadSimulationInputModel()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        OpenSpreadsheetDirectoryController importModel = new OpenSpreadsheetDirectoryController(fileObservers);
+        importModel.getDirectoryChooser();
     }
 
     /**
@@ -87,39 +124,39 @@ public class SimulationMediator implements SimulationMediatorInterface
     @Override
     public void onRunSimulation()
     {
-        if (((SSMediator) mediator).getSimulationPropertiesState().isTargetModel())
+        if (simulationPropertiesState.isDiagnosticSimulation())
         {
             singlePointSimulation.execute();
         }
-        if (((SSMediator) mediator).getSimulationPropertiesState().isPointGeneratedModel())
+        if (simulationPropertiesState.isMonteCarloSimulation())
         {
-            if (((SSMediator) mediator).getSimulationPropertiesState().isCaRng())
+            if (simulationPropertiesState.isCaRng())
             {
-                ((UniformMultiPointSimulation) uniformPointSimulation).setPointGenerator(new CellularAutomatonPointGenerator());
+                ((MonteCarloSimulation) uniformPointSimulation).setPointGenerator(new CellularAutomatonPointGenerator());
                 uniformPointSimulation.execute();
             }
-            if (((SSMediator) mediator).getSimulationPropertiesState().isCmwcRng())
+            if (simulationPropertiesState.isCmwcRng())
             {
-                ((UniformMultiPointSimulation) uniformPointSimulation).setPointGenerator(new CMWC4096PointGenerator());
+                ((MonteCarloSimulation) uniformPointSimulation).setPointGenerator(new CMWC4096PointGenerator());
                 uniformPointSimulation.execute();
             }
-            if (((SSMediator) mediator).getSimulationPropertiesState().isRandomRng())
+            if (simulationPropertiesState.isRandomRng())
             {
-                ((UniformMultiPointSimulation) uniformPointSimulation).setPointGenerator(new JavaRandomPointGenerator());
+                ((MonteCarloSimulation) uniformPointSimulation).setPointGenerator(new JavaRandomPointGenerator());
                 uniformPointSimulation.execute();
             }
-            if (((SSMediator) mediator).getSimulationPropertiesState().isMtRng())
+            if (simulationPropertiesState.isMtRng())
             {
-                ((UniformMultiPointSimulation) uniformPointSimulation).setPointGenerator(new MersenneTwisterPointGenerator());
+                ((MonteCarloSimulation) uniformPointSimulation).setPointGenerator(new MersenneTwisterPointGenerator());
                 uniformPointSimulation.execute();
             }
-            if (((SSMediator) mediator).getSimulationPropertiesState().isXORRng())
+            if (simulationPropertiesState.isXORRng())
             {
-                ((UniformMultiPointSimulation) uniformPointSimulation).setPointGenerator(new XORShiftPointGenerator());
+                ((MonteCarloSimulation) uniformPointSimulation).setPointGenerator(new XORShiftPointGenerator());
                 uniformPointSimulation.execute();
             }
         }
-        if (((SSMediator) mediator).getSimulationPropertiesState().isGridGeneratedModel())
+        if (simulationPropertiesState.isPixelGridSimulation())
         {
             gridPointSimulation.execute();
         }
@@ -128,6 +165,45 @@ public class SimulationMediator implements SimulationMediatorInterface
     @Override
     public void onSaveSimulationInputModel()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ArrayList<double[][]> models = new ArrayList<double[][]>();
+
+        for (int i = 0; i < inputModels.size(); i++)
+        {
+            models.add(this.inputModels.get(i).getModelInput());
+        }
+
+        SaveDirectoryControllerInterface saveDirectoryController = new SaveSpreadsheetDirectoryController(models, fileNames);
+    }
+
+    @Override
+    public void onClearSimulation()
+    {
+        for (int i = 0; i < this.inputModels.size(); i++)
+        {
+            inputModels.get(i).setModelInput(new double[0][0]);
+            inputModels.get(i).setModelInputReady(false);
+        }
+
+        double[][] w2 = new double[0][0];
+        double[][] w1 = new double[0][0];
+        double[][] w0 = new double[0][0];
+
+        this.ssMediator.onClearModelResult();
+        this.plotMediator.onClearUI();
+        this.networkMediator.setNetwork(w2, w1, w0);
+        this.simulationViewState.onPropertiesUnloaded();
+        this.simulationViewState.onSimulationUnloaded();
+        this.simulationPropertiesState.onMonteCarloSimulation();
+        this.simulationTypeState.onMonteCarloSimulationView();
+    }
+
+    public void setSimulationTypeState(SimulationTypeViewStateInterface simulationTypeState)
+    {
+        this.simulationTypeState = simulationTypeState;
+    }
+
+    public void setSimulationViewState(SimulationViewInputStateInterface simulationViewState)
+    {
+        this.simulationViewState = simulationViewState;
     }
 }

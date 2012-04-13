@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.input.model;
 
 import java.util.ArrayList;
-import mavn.input.model.observer.W0ModelObserver;
+import mavn.input.model.observer.W0InputModelObserver;
 import simulyn.input.model.InputModelInterface;
 
 /**
@@ -36,14 +36,14 @@ public class W0InputModel extends InputModelInterface
      */
     public W0InputModel()
     {
-        modelInputObservers = new ArrayList<W0ModelObserver>();
+        modelInputObservers = new ArrayList<W0InputModelObserver>();
     }
 
     /**
      * Register Observer.
      * @param o the W0Observer.
      */
-    public void registerObserver(W0ModelObserver o)
+    public void registerObserver(W0InputModelObserver o)
     {
         modelInputObservers.add(o);
     }
@@ -52,7 +52,7 @@ public class W0InputModel extends InputModelInterface
      * Remove Observer.
      * @param o the W0Observer.
      */
-    public void removeObserver(W0ModelObserver o)
+    public void removeObserver(W0InputModelObserver o)
     {
         int i = modelInputObservers.indexOf(o);
         if (i >= 0)
@@ -69,7 +69,7 @@ public class W0InputModel extends InputModelInterface
     {
         for (int i = 0; i < modelInputObservers.size(); i++)
         {
-            W0ModelObserver matrixObserver = (W0ModelObserver) modelInputObservers.get(i);
+            W0InputModelObserver matrixObserver = (W0InputModelObserver) modelInputObservers.get(i);
             matrixObserver.updateW0ModelInput(matrix);
         }
     }

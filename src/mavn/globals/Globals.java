@@ -24,18 +24,11 @@ package mavn.globals;
  * @author Kaleb
  */
 public class Globals
-{
-    
+{  
     public static int NUM_DARTS = 1000;
     public static double SEED = 0;
     
     public static int RESOLUTION = 1;
-
-    public final static int TARGET_CONTROLLER = 0;
-    public final static int THETA_CONTROLLER = 1;
-    public final static int W0_CONTROLLER = 2;
-    public final static int W1_CONTROLLER = 3;
-    public final static int W2_CONTROLLER = 4;
 
     public final static int TARGET_MODEL = 0;
     public final static int THETA_MODEL = 1;
@@ -43,42 +36,9 @@ public class Globals
     public final static int W1_MODEL = 3;
     public final static int W2_MODEL = 4;
 
-
     public final static int TARGET_PANEL = 0;
     public final static int THETA_PANEL = 1;
     public final static int W0_PANEL = 2;
     public final static int W1_PANEL = 3;
     public final static int W2_PANEL = 4;
-    
-
-    public final static int AND_LAYER_MODEL = 0;
-    public final static int OR_LAYER_MODEL = 1;
-    public final static int OUTPUT_LAYER_MODEL = 2;
-    public final static int SIMULATION_RESULT = 3;
-    public final static int SHAPES_RATIO_RESULT = 4;
-    public final static int IMAGE_RATIO_RESULT = 5;
-
-    public final static int DART_RESULT_MODEL = 0;
-
-    public final static int TARGET_STATE = 0;
-    public final static int THETA_STATE = 1;
-    public final static int W0_STATE = 2;
-    public final static int W1_STATE = 3;
-    public final static int W2_STATE = 4;
-
-    public final static int RESULTS_CONTROLLER = 0;
-    public final static int RESULTS_STATE = 0;
-
-    public final static int CELLULAR_AUTOMATON_DARTGUN = 0;
-    public final static int CMWC4096_DARTGUN = 1;
-    public final static int JAVA_RNG_DARTGUN = 2;
-    public final static int MT_DARTGUN = 3;
-    public final static int XOR_DARTGUN = 4;
-
-    public final static int SINGLE_POINT_ALGORITHM = 0;
-    public final static int CELLULAR_AUTOMATON_ALGORITHM = 1;
-    public final static int CMWC4096_ALGORITHM = 2;
-    public final static int JAVA_RNG_ALGORITHM = 3;
-    public final static int MT_ALGORITHM = 4;
-    public final static int XOR_ALGORITHM = 5;
 }

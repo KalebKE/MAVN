@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+PointHitOutputModel -- a class within the Machine Artificial Vision Network
+(Machine Artificial Vision Network).
+Copyright (C) 2012, Kaleb Kircher.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.plot.model;
 
@@ -10,7 +25,10 @@ import mavn.algorithm.model.point.observer.PointHitAlgorithmModelObserver;
 import mavn.plot.model.observer.PointHitOutputModelObserver;
 
 /**
- *
+ * Point Hit Output Model stores the Output Model State from Points that hit
+ * shapes within the image during the simulation. It is both a Observer of
+ * the simulation's Algorithm Model and a Subject with its own Observers,
+ * typically Output Mediators who render the State and then push it to the View.
  * @author Kaleb
  */
 public class PointHitOutputModel extends PointHitOutputModelInterface implements
@@ -26,8 +44,8 @@ public class PointHitOutputModel extends PointHitOutputModelInterface implements
     }
 
     /**
-     * Register observer.
-     * @param o the TargetObserver
+     * Register the Point Hit Output Model Observer observer.
+     * @param o the Point Hit Output Model Observer
      */
     public void registerObserver(PointHitOutputModelObserver o)
     {
@@ -35,8 +53,8 @@ public class PointHitOutputModel extends PointHitOutputModelInterface implements
     }
 
     /**
-     * Remove observer.
-     * @param o the TargetObserver.
+     * Remove the Point Hit Output Model Observer observer.
+     * @param o the Point Hit Output Model Observer.
      */
     public void removeObserver(PointHitOutputModelObserver o)
     {
@@ -48,7 +66,7 @@ public class PointHitOutputModel extends PointHitOutputModelInterface implements
     }
 
     /**
-     * Notify all observers.
+     * Notify all Point Hit Output Model Observers.
      */
     @Override
     public void notifyPointHitObservers()
@@ -60,6 +78,10 @@ public class PointHitOutputModel extends PointHitOutputModelInterface implements
         }
     }
 
+    /**
+     * Hook to Observe the Algorithm Model Subject.
+     * @param point the Point that hit a shape within the image.
+     */
     @Override
     public void updatePointHit(Point point)
     {

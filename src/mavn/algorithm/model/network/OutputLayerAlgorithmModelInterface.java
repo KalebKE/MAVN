@@ -30,6 +30,12 @@ import mavn.algorithm.model.network.observer.OutputLayerAlgorithmModelObserver;
  */
 public interface OutputLayerAlgorithmModelInterface
 {
+
+    /**
+     * Notify Output Layer Algorithm Model Interface.
+     */
+    public void notifyOutputLayerObservers();
+
     /**
      * Register a OutputLayerAlgorithmModelInterface.
      * @param o the OutputLayerAlgorithmModelInterface
@@ -41,9 +47,4 @@ public interface OutputLayerAlgorithmModelInterface
      * @param o the DartObserver
      */
     public void removeObserver(OutputLayerAlgorithmModelObserver o);
-
-    /**
-     * Notify Output Layer Algorithm Model Interface.
-     */
-    public void notifyOutputLayerObservers();
 }

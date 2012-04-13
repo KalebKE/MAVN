@@ -31,6 +31,11 @@ public interface OrLayerAlgorithmModelInterface
 {
 
     /**
+     * Notify Or Layer Algorithm Model Observers.
+     */
+    public void notifyOrLayerObservers();
+
+    /**
      * Register a OrLayerAlgorithmModelObserver.
      * @param o the OrLayerAlgorithmModelObserver
      */
@@ -41,9 +46,4 @@ public interface OrLayerAlgorithmModelInterface
      * @param o the OrLayerAlgorithmModelObserver
      */
     public void removeObserver(OrLayerAlgorithmModelObserver o);
-
-    /**
-     * Notify Or Layer Algorithm Model Observers.
-     */
-    public void notifyOrLayerObservers();
 }

@@ -20,12 +20,12 @@ package mavn.algorithm.properties.view.state;
 
 import javax.swing.SpinnerNumberModel;
 import mavn.algorithm.properties.view.SimulationPropertiesFrame;
-import mavn.simulation.view.state.input.SimulationViewInputStateInterface;
 
 /**
- * A implentation of the applications State pattern. This class is responsible
- * for managing the state of the applications properties. It helps make the
- * GUI more intuitive and helps other classes in the application decide what to do.
+ * A implentation of the Simulations State Pattern. This class is responsible
+ * for managing the State of the Simulation's Properties. Essentially, it helps
+ * make the GUI more intuitive for the user and helps other classes in the
+ * application decide what to do.
  * @author Kaleb
  */
 public class SimulationPropertiesState implements SimulationPropertiesStateInterface
@@ -33,10 +33,10 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
 
     private boolean caRng;
     private boolean cmwcRng;
-    private boolean point;
-    private boolean grid;
+    private boolean monteCarloSimulation;
+    private boolean pixelGridSimulation;
     private boolean mtRng;
-    private boolean target;
+    private boolean diagnosticSimulation;
     private boolean randomSeed;
     private boolean randomRng;
     private boolean xORRng;
@@ -44,15 +44,136 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     private SpinnerNumberModel seedSpinnerModel;
     private SpinnerNumberModel pointSpinnerModel;
     private SpinnerNumberModel gridSpinnerModel;
-    private SimulationViewInputStateInterface outputViewState;
 
     /**
-     * Initialize the state.
-     * @param propertiesView the View this class is reponsible for.
+     * Initialize the SimulationPropertiesState.
      */
     public SimulationPropertiesState()
     {
         super();
+    }
+
+    /**
+     * Get the Spinner Model for the Pixel Grid Simulation.
+     * @return a Spinner Model containing the desired resolution for the
+     * Pixel Grid Simulation.
+     */
+    @Override
+    public SpinnerNumberModel getPixelGridSpinnerModel()
+    {
+        return gridSpinnerModel;
+    }
+
+    /**
+     * Get the Spinner Model for the Monte Carlo Simulation.
+     * @return SpinnerNumberModel representing the number of Points to be fired
+     * during the simulation.
+     */
+    @Override
+    public SpinnerNumberModel getMonteCarloSpinnerModel()
+    {
+        return pointSpinnerModel;
+    }
+
+    /**
+     * Get the Seed Model.
+     * @return SpinnerNumberModel representing the random number seed that should
+     * be used during the simulation.
+     */
+    @Override
+    public SpinnerNumberModel getSeedModel()
+    {
+        return seedSpinnerModel;
+    }
+
+    /**
+     * Check if CA RNG is desired.
+     * @return boolean indicating CA RNG is desired.
+     */
+    @Override
+    public boolean isCaRng()
+    {
+        return caRng;
+    }
+
+    /**
+     * Check if CMWC RNG is desired.
+     * @return boolean indicating CMWC RNG  is desired.
+     */
+    @Override
+    public boolean isCmwcRng()
+    {
+        return cmwcRng;
+    }
+
+    /**
+     * Check to see if the Diagnostic Simulation is enabled.
+     * @return boolean indicating if a single dart target is desired.
+     */
+    @Override
+    public boolean isDiagnosticSimulation()
+    {
+        return diagnosticSimulation;
+    }
+
+    /**
+     * Check to see if the Monte Carlo Simulation is enabled.
+     * @return boolean indicating if the Monte Carlo Simulation is enabled.
+     */
+    @Override
+    public boolean isMonteCarloSimulation()
+    {
+        return monteCarloSimulation;
+    }
+
+    /**
+     * Check if Mt Rng is desired.
+     * @return boolean indicating Mt Rng is desired.
+     */
+    @Override
+    public boolean isMtRng()
+    {
+        return mtRng;
+    }
+
+    /**
+     * Check to see if the Pixel Grid Simulation is enabled.
+     * @return boolean indicating if the Pixel Grid Simulation is enabled.
+     */
+    @Override
+    public boolean isPixelGridSimulation()
+    {
+        return pixelGridSimulation;
+    }
+
+    /**
+     * Check if java.util.random RNG is desired.
+     * @return boolean indicating java.util.random RNG is desired.
+     */
+    @Override
+    public boolean isRandomRng()
+    {
+        return randomRng;
+    }
+
+    /**
+     * Check if a random seed is desired.
+     * @return boolean indicating if a random seed is desired.
+     */
+    @Override
+    public boolean isRandomSeed()
+    {
+        return randomSeed;
+    }
+
+    /**
+     * Check if XORRng is desired.
+     * @return boolean indicating XORRng is desired.
+     */
+    @Override
+    public boolean isXORRng()
+    {
+        return xORRng;
     }
 
     /**
@@ -91,114 +212,6 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
         mtRng = false;
     }
 
-    @Override
-    public SpinnerNumberModel getGridSpinnerModel()
-    {
-        return gridSpinnerModel;
-    }
-
-    /**
-     * Get the Dart Model.
-     * @return SpinnerNumberModel representing the number of darts to be fired
-     * during the simulation.
-     */
-    @Override
-    public SpinnerNumberModel getPointGeneratorModel()
-    {
-        return pointSpinnerModel;
-    }
-
-    /**
-     * Get the Seed Model.
-     * @return SpinnerNumberModel representing the random number seed that should
-     * be used during the simulation.
-     */
-    @Override
-    public SpinnerNumberModel getSeedModel()
-    {
-        return seedSpinnerModel;
-    }
-
-    /**
-     * Check if CA RNG is desired.
-     * @return boolean indicating CA RNG is desired.
-     */
-    @Override
-    public boolean isCaRng()
-    {
-        return caRng;
-    }
-
-    /**
-     * Check if CMWC RNG is desired.
-     * @return boolean indicating CMWC RNG  is desired.
-     */
-    @Override
-    public boolean isCmwcRng()
-    {
-        return cmwcRng;
-    }
-
-    /**
-     * Check to see if the DartGun is desired.
-     * @return boolean indicating if a DartGun is desired.
-     */
-    @Override
-    public boolean isPointGeneratedModel()
-    {
-        return point;
-    }
-
-    /**
-     * Check if Mt Rng is desired.
-     * @return boolean indicating Mt Rng is desired.
-     */
-    @Override
-    public boolean isMtRng()
-    {
-        return mtRng;
-    }
-
-    /**
-     * Check if java.util.random RNG is desired.
-     * @return boolean indicating java.util.random RNG is desired.
-     */
-    @Override
-    public boolean isRandomRng()
-    {
-        return randomRng;
-    }
-
-    /**
-     * Check if a random seed is desired.
-     * @return boolean indicating if a random seed is desired.
-     */
-    @Override
-    public boolean isRandomSeed()
-    {
-        return randomSeed;
-    }
-
-    /**
-     * Check to see if a single dart target is desired.
-     * @return boolean indicating if a single dart target is desired.
-     */
-    @Override
-    public boolean isTargetModel()
-    {
-        return target;
-    }
-
-    /**
-     * Check if XORRng is desired.
-     * @return boolean indicating XORRng is desired.
-     */
-    @Override
-    public boolean isXORRng()
-    {
-        return xORRng;
-    }
-
     /**
      * Indicate that mtRNG is desired.
      */
@@ -217,12 +230,10 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
         mtRng = true;
     }
 
-    @Override
-    public void setOutputViewState(SimulationViewInputStateInterface outputViewState)
-    {
-        this.outputViewState = outputViewState;
-    }
-
+    /**
+     * Set the Simulation Properties Frame.
+     * @param propertiesView
+     */
     public void setView(SimulationPropertiesFrame propertiesView)
     {
         this.propertiesFrameview = propertiesView;
@@ -253,15 +264,14 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
     }
 
     /**
-     * Indicate that the Target Model should be used instead of the
-     * DartGun.
+     * Indicate that the Diagnostic Simulation should be enabled.
      */
     @Override
     public void onDiagnosticSimulation()
     {
-        propertiesFrameview.getTargetCheckBox().setSelected(true);
-        propertiesFrameview.getUseUniformPointGeneratorCheckBox().setSelected(false);
-        propertiesFrameview.getGridPointCheckBox().setSelected(false);
+        propertiesFrameview.getDiagnosticSimulationCheckBox().setSelected(true);
+        propertiesFrameview.getMonteCarloSimulationCheckBox().setSelected(false);
+        propertiesFrameview.getPixelGridSimulationCheckBox().setSelected(false);
         propertiesFrameview.getMTRngRadio().setEnabled(false);
         propertiesFrameview.getRandomRadio().setEnabled(false);
         propertiesFrameview.getNumPointsLabel().setEnabled(false);
@@ -277,20 +287,20 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
         propertiesFrameview.getResolutionSpinner().setEnabled(false);
         propertiesFrameview.getResolutionLabel().setEnabled(false);
 
-        target = true;
-        point = false;
-        grid = false;
+        diagnosticSimulation = true;
+        monteCarloSimulation = false;
+        pixelGridSimulation = false;
     }
 
     /**
-     * Indicate that the DartGun should be used instead of the Target Model.
+     * Indicate that the Monte Carolo Simulation should be enabled.
      */
     @Override
     public void onMonteCarloSimulation()
     {
-        propertiesFrameview.getUseUniformPointGeneratorCheckBox().setSelected(true);
-        propertiesFrameview.getTargetCheckBox().setSelected(false);
-        propertiesFrameview.getGridPointCheckBox().setSelected(false);
+        propertiesFrameview.getMonteCarloSimulationCheckBox().setSelected(true);
+        propertiesFrameview.getDiagnosticSimulationCheckBox().setSelected(false);
+        propertiesFrameview.getPixelGridSimulationCheckBox().setSelected(false);
         propertiesFrameview.getMTRngRadio().setEnabled(true);
         propertiesFrameview.getRandomRadio().setEnabled(true);
         propertiesFrameview.getNumPointsLabel().setEnabled(true);
@@ -306,9 +316,38 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
         propertiesFrameview.getResolutionSpinner().setEnabled(false);
         propertiesFrameview.getResolutionLabel().setEnabled(false);
 
-        target = false;
-        point = true;
-        grid = false;
+        diagnosticSimulation = false;
+        monteCarloSimulation = true;
+        pixelGridSimulation = false;
+    }
+
+    /**
+     * Indicate that the Pixel Grid Simulation should be enabled.
+     */
+    @Override
+    public void onPixelGridSimulation()
+    {
+        propertiesFrameview.getResolutionSpinner().setEnabled(true);
+        propertiesFrameview.getResolutionLabel().setEnabled(true);
+
+        propertiesFrameview.getPixelGridSimulationCheckBox().setSelected(true);
+        propertiesFrameview.getMonteCarloSimulationCheckBox().setSelected(false);
+        propertiesFrameview.getDiagnosticSimulationCheckBox().setSelected(false);
+        propertiesFrameview.getMTRngRadio().setEnabled(false);
+        propertiesFrameview.getRandomRadio().setEnabled(false);
+        propertiesFrameview.getNumPointsLabel().setEnabled(false);
+        propertiesFrameview.getNumPointsSpinner().setEnabled(false);
+        propertiesFrameview.getRandomSeedRadio().setEnabled(false);
+        propertiesFrameview.getSeedSpinner().setEnabled(false);
+        propertiesFrameview.getSeedSpinnerLabel().setEnabled(false);
+        propertiesFrameview.getSpecifiedSeedRadio().setEnabled(false);
+        propertiesFrameview.getXORShiftRngRadio().setEnabled(false);
+        propertiesFrameview.getCmwcRngRadio().setEnabled(false);
+        propertiesFrameview.getCaRngRadio().setEnabled(false);
+
+        diagnosticSimulation = false;
+        monteCarloSimulation = false;
+        pixelGridSimulation = true;
     }
 
     /**
@@ -353,37 +392,5 @@ public class SimulationPropertiesState implements SimulationPropertiesStateInter
         xORRng = true;
         cmwcRng = false;
         mtRng = false;
-    }
-
-    @Override
-    public void onPixelGridSimulation()
-    {
-        propertiesFrameview.getResolutionSpinner().setEnabled(true);
-        propertiesFrameview.getResolutionLabel().setEnabled(true);
-
-        propertiesFrameview.getGridPointCheckBox().setSelected(true);
-        propertiesFrameview.getUseUniformPointGeneratorCheckBox().setSelected(false);
-        propertiesFrameview.getTargetCheckBox().setSelected(false);
-        propertiesFrameview.getMTRngRadio().setEnabled(false);
-        propertiesFrameview.getRandomRadio().setEnabled(false);
-        propertiesFrameview.getNumPointsLabel().setEnabled(false);
-        propertiesFrameview.getNumPointsSpinner().setEnabled(false);
-        propertiesFrameview.getRandomSeedRadio().setEnabled(false);
-        propertiesFrameview.getSeedSpinner().setEnabled(false);
-        propertiesFrameview.getSeedSpinnerLabel().setEnabled(false);
-        propertiesFrameview.getSpecifiedSeedRadio().setEnabled(false);
-        propertiesFrameview.getXORShiftRngRadio().setEnabled(false);
-        propertiesFrameview.getCmwcRngRadio().setEnabled(false);
-        propertiesFrameview.getCaRngRadio().setEnabled(false);
-
-        target = false;
-        point = false;
-        grid = true;
-    }
-
-    @Override
-    public boolean isGridGeneratedModel()
-    {
-        return grid;
     }
 }

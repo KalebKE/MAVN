@@ -135,11 +135,11 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="useUniformPointGeneratorCheckBox" min="-2" max="-2" attributes="0"/>
+                              <Component id="monteCarloSimulationCheckBox" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="gridPointCheckBox" min="-2" max="-2" attributes="0"/>
+                              <Component id="pixelGridSimulationCheckBox" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="targetCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="diagnosticSimulationCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="33" max="32767" attributes="0"/>
                   </Group>
@@ -149,39 +149,39 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="useUniformPointGeneratorCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="gridPointCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="monteCarloSimulationCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="pixelGridSimulationCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="targetCheckBox" min="-2" max="-2" attributes="0"/>
+                      <Component id="diagnosticSimulationCheckBox" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JCheckBox" name="targetCheckBox">
+            <Component class="javax.swing.JCheckBox" name="diagnosticSimulationCheckBox">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Single Point (Test Point)"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="targetCheckBoxActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="diagnosticSimulationCheckBoxActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="useUniformPointGeneratorCheckBox">
+            <Component class="javax.swing.JCheckBox" name="monteCarloSimulationCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Random Point (Monte Carlo)"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="useUniformPointGeneratorCheckBoxActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="monteCarloSimulationCheckBoxActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="gridPointCheckBox">
+            <Component class="javax.swing.JCheckBox" name="pixelGridSimulationCheckBox">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Grid Point (Resolution)"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="gridPointCheckBoxActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pixelGridSimulationCheckBoxActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

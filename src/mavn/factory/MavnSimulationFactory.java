@@ -21,9 +21,9 @@ package mavn.factory;
 
 import java.util.ArrayList;
 import mavn.globals.Globals;
-import mavn.algorithm.model.multiplePointSimulation.GridMultiPointSimulation;
-import mavn.algorithm.model.multiplePointSimulation.MultiplePointModelInterface;
-import mavn.algorithm.model.multiplePointSimulation.UniformMultiPointSimulation;
+import mavn.algorithm.model.multiplePointSimulation.PixelGridSimulation;
+import mavn.algorithm.model.multiplePointSimulation.MultiplePointSimulationInterface;
+import mavn.algorithm.model.multiplePointSimulation.MonteCarloSimulation;
 import mavn.algorithm.model.multiplePointSimulation.observer.MultiplePointAlgorithmModelObserver;
 import mavn.algorithm.model.network.AndLayerAlgorithmModelInterface;
 import mavn.algorithm.model.network.OrLayerAlgorithmModelInterface;
@@ -38,7 +38,7 @@ import mavn.algorithm.model.point.generator.JavaRandomPointGenerator;
 import mavn.algorithm.model.point.observer.PointGeneratorAlgorithmModelObserver;
 import mavn.algorithm.model.point.observer.PointHitAlgorithmModelObserver;
 import mavn.algorithm.model.point.observer.PointMissAlgorithmModelObserver;
-import mavn.algorithm.model.singlePointSimulation.SinglePointSimulation;
+import mavn.algorithm.model.singlePointSimulation.DiagnosticSimulation;
 import mavn.algorithm.model.timer.TimerAlgorithmModelInterface;
 import mavn.algorithm.model.timer.observer.TimerAlgorithmModelObserver;
 import mavn.algorithm.properties.view.SimulationPropertiesFrame;
@@ -47,21 +47,20 @@ import mavn.input.model.ThetaInputModel;
 import mavn.input.model.W0InputModel;
 import mavn.input.model.W1InputModel;
 import mavn.input.model.W2InputModel;
-import mavn.algorithm.properties.view.state.PointGeneratorState;
 import mavn.algorithm.properties.view.state.SimulationPropertiesState;
 import mavn.simulation.mediator.SimulationMediator;
-import mavn.input.model.observer.TargetModelObserver;
-import mavn.input.model.observer.ThetaModelObserver;
-import mavn.input.model.observer.W0ModelObserver;
-import mavn.input.model.observer.W1ModelObserver;
-import mavn.input.model.observer.W2ModelObserver;
+import mavn.input.model.observer.TargetInputModelObserver;
+import mavn.input.model.observer.ThetaInputModelObserver;
+import mavn.input.model.observer.W0InputModelObserver;
+import mavn.input.model.observer.W1InputModelObserver;
+import mavn.input.model.observer.W2InputModelObserver;
 import mavn.input.view.changeEvent.InputModelChangeEvent;
 import mavn.input.view.InputViewTargetModel;
 import mavn.input.view.InputViewThetaModel;
 import mavn.input.view.InputViewW0Model;
 import mavn.input.view.InputViewW1Model;
 import mavn.input.view.InputViewW2Model;
-import mavn.input.view.action.InputViewAction;
+import mavn.input.view.action.InputModelViewAction;
 import mavn.input.view.layout.InputViewGridLayoutPanel;
 import mavn.input.view.state.InputViewState;
 import mavn.network.mediator.NetworkMediator;
@@ -71,7 +70,6 @@ import mavn.network.model.AndLayerOutputModel;
 import mavn.network.model.OrLayerOutputModel;
 import mavn.network.model.OutputLayerOutputModel;
 import mavn.spreadsheet.mediator.SSMediator;
-import mavn.spreadsheet.mediator.SSMediatorInterface;
 import mavn.spreadsheet.model.ImageRatioOutputModel;
 import mavn.spreadsheet.model.ShapesRatioOutputModel;
 import mavn.spreadsheet.model.SimulationOutputModel;
@@ -121,10 +119,20 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
         initNetworkOutputModels();
         initPointOutputModels();
         initModelInputControllers();
-        initOutputMediator();
+        initSimulationProperties();
+        initSSMediator();
         initNetworkMediator();
         initPlotMediator();
-        initModelViews();
+        initSimulationMediator();
+        initSimulationActions();
+        initControlBarViews();
+        initOutputModelViews();
+        initInputModelChangeEvent();
+        initInputModelViewState();
+        initInputModelActions();
+        initInputModelViews();
+        initSimulationView();
+        initViewState();
         view.setOutputView();
         // Display the view.
         this.view.setVisible(true);
@@ -160,21 +168,25 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
         w2Controller = new InputController(w2Model);
     }
 
-    public void initOutputMediator()
+    public void initSimulationProperties()
     {
-        pointGeneratorState = new PointGeneratorState();
+        simulationPropertiesState = new SimulationPropertiesState();
+        simulationPropertiesFrame = new SimulationPropertiesFrame(simulationPropertiesState);
+        ((SimulationPropertiesState) simulationPropertiesState).setView(simulationPropertiesFrame);
+    }
 
-        propertiesState = new SimulationPropertiesState();
-        propertiesFrame = new SimulationPropertiesFrame(
-                pointGeneratorState, propertiesState);
-        ((SimulationPropertiesState) propertiesState).setView(propertiesFrame);
+    public void initSimulationMediator()
+    {
+        simulationMediator = new SimulationMediator(inputModels, singlePointSimulation,
+                uniformPointSimulation, gridPointSimulation, (NetworkMediator) networkMediator,
+                (PlotMediator) plotMediator, simulationPropertiesState, simulationPropertiesFrame,
+                (SSMediator) ssMediator);
+    }
 
+    public void initSSMediator()
+    {
         ssMediator = new SSMediator(targetInputModel, plotOutputModel,
-                shapesRatioOutputModel, imageRatioOutputModel, propertiesState);
-
-        simulationMediator = new SimulationMediator(singlePointSimulation,
-                uniformPointSimulation, gridPointSimulation, ssMediator, propertiesFrame);
-
+                shapesRatioOutputModel, imageRatioOutputModel, simulationPropertiesState);
     }
 
     public void initPlotMediator()
@@ -189,15 +201,12 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
                 orLayerModelResult, outputLayerModelResult);
     }
 
-    @Override
-    public void initModelViews()
+    public void initSimulationActions()
     {
-        simulationBarAction = new SimulationBarAction(inputModels,
-                (NetworkMediatorInterface) networkMediator,
-                (PlotMediator) plotMediator, (SSMediator) ssMediator);
+        simulationBarAction = new SimulationBarAction(simulationMediator);
 
         propertiesBarAction = new PropertiesBarAction(simulationMediator,
-                propertiesState);
+                simulationPropertiesState);
 
         modelOuputBarAction = new OutputBarAction((SSMediator) ssMediator);
         newtorkViewBarAction = new NetworkBarAction((NetworkMediator) networkMediator);
@@ -206,7 +215,10 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
         runSimulationAction = new RunSimulationBarAction(
                 (NetworkMediator) networkMediator, (PlotMediator) plotMediator, simulationMediator,
                 (SSMediator) ssMediator);
+    }
 
+    public void initControlBarViews()
+    {
         outputControlBar = new ControlBar(simulationBarAction,
                 propertiesBarAction, modelOuputBarAction, viewBarAction,
                 newtorkViewBarAction, plotViewBarAction, runSimulationAction);
@@ -216,38 +228,53 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
                 plotViewBarAction, runSimulationAction);
 
         simulationInputState = new SimulationViewInputState((ControlBar) outputControlBar, (ControlBar) inputControlBar);
-        propertiesState.setOutputViewState(simulationInputState);
-        ((SimulationPropertiesFrame) propertiesFrame).setOutputState(simulationInputState);
+        ((SimulationPropertiesFrame) simulationPropertiesFrame).setSimulationViewState(simulationInputState);
+    }
 
+    public void initOutputModelViews()
+    {
         outputLayoutPanel = new ModelOutputDefaultLayoutView(outputControlBar,
                 ((SSMediator) ssMediator).getView(), ((PlotMediatorInterface) plotMediator).getView(),
                 ((NetworkMediatorInterface) networkMediator).getView());
+    }
 
+    public void initInputModelChangeEvent()
+    {
         modelChanged = new InputModelChangeEvent(inputModels, (NetworkMediatorInterface) networkMediator, simulationInputState);
+    }
 
+    public void initInputModelViewState()
+    {
         targetState = new InputViewState();
         thetaState = new InputViewState();
         w0State = new InputViewState();
         w1State = new InputViewState();
         w2State = new InputViewState();
+    }
 
-        targetPanelAction = new InputViewAction(targetController, targetInputModel);
-        thetaPanelAction = new InputViewAction(thetaController, thetaModel);
-        w0PanelAction = new InputViewAction(w0Controller, w0Model);
-        w1PanelAction = new InputViewAction(w1Controller, w1Model);
-        w2PanelAction = new InputViewAction(w2Controller, w2Model);
+    public void initInputModelActions()
+    {
+        targetPanelAction = new InputModelViewAction(targetController, targetInputModel);
+        thetaPanelAction = new InputModelViewAction(thetaController, thetaModel);
+        w0PanelAction = new InputModelViewAction(w0Controller, w0Model);
+        w1PanelAction = new InputModelViewAction(w1Controller, w1Model);
+        w2PanelAction = new InputModelViewAction(w2Controller, w2Model);
+    }
 
+    @Override
+    public void initInputModelViews()
+    {
         targetPanel = new InputViewTargetModel(targetPanelAction, targetController, targetInputModel, targetState, modelChanged);
         thetaPanel = new InputViewThetaModel(thetaPanelAction, thetaController, thetaModel, thetaState, modelChanged);
         w0Panel = new InputViewW0Model(w0PanelAction, w0Controller, w0Model, w0State, modelChanged);
         w1Panel = new InputViewW1Model(w1PanelAction, w1Controller, w1Model, w1State, modelChanged);
         w2Panel = new InputViewW2Model(w2PanelAction, w2Controller, w2Model, w2State, modelChanged);
 
-        ((InputViewAction) targetPanelAction).setView(targetPanel);
-        ((InputViewAction) thetaPanelAction).setView(thetaPanel);
-        ((InputViewAction) w0PanelAction).setView(w0Panel);
-        ((InputViewAction) w1PanelAction).setView(w1Panel);
-        ((InputViewAction) w2PanelAction).setView(w2Panel);
+        ((InputModelViewAction) targetPanelAction).setView(targetPanel);
+        ((InputModelViewAction) thetaPanelAction).setView(thetaPanel);
+        ((InputModelViewAction) w0PanelAction).setView(w0Panel);
+        ((InputModelViewAction) w1PanelAction).setView(w1Panel);
+        ((InputModelViewAction) w2PanelAction).setView(w2Panel);
 
         ((InputViewState) targetState).setView(targetPanel);
         ((InputViewState) thetaState).setView(thetaPanel);
@@ -269,30 +296,38 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
         ((W2InputModel) w2Model).registerObserver((InputViewW2Model) w2Panel);
 
         inputView = new InputViewGridLayoutPanel(inputViews, inputControlBar);
+    }
+
+    public void initSimulationView()
+    {
         view = new SimControlView(newtorkViewBarAction, modelOuputBarAction,
                 simulationBarAction, plotViewBarAction, propertiesBarAction,
                 runSimulationAction, viewBarAction, inputView,
                 outputLayoutPanel);
         modelChanged.setView(view);
         ((ViewBarAction) viewBarAction).setView(view);
-        ((SimulationBarAction) simulationBarAction).setOutputViewState(simulationInputState);
+        ((SimulationMediator) simulationMediator).setSimulationViewState(simulationInputState);
         ((SimulationViewInputState) simulationInputState).setView(view);
         ((SimulationViewInputState) simulationInputState).init();
-        propertiesState.onMonteCarloSimulation();
+        simulationPropertiesState.onMonteCarloSimulation();
+    }
 
+    public void initViewState()
+    {
         plotMediatorViewState = new PlotMediatorViewState((ControlBar) inputControlBar, (ControlBar) outputControlBar, view);
         ((PlotMediator) plotMediator).setPlotViewState(plotMediatorViewState);
 
         simulationTypeViewState = new SimulationTypeViewState((ControlBar) inputControlBar, (ControlBar) outputControlBar, view);
         ((PropertiesBarAction) propertiesBarAction).setSimulationViewState(simulationTypeViewState);
         view.setSimulationTypeState(simulationTypeViewState);
+        ((SimulationMediator)this.simulationMediator).setSimulationTypeState(simulationTypeViewState);
 
         ssMediatorViewState = new SimulationViewOutputState((ControlBar) inputControlBar, (ControlBar) outputControlBar, view);
         ((SSMediator) ssMediator).setModelResultState(ssMediatorViewState);
 
         networkViewState = new NetworkMediatorViewState((ControlBar) inputControlBar, (ControlBar) outputControlBar, view);
-        ((NetworkMediator)networkMediator).setNetworkViewState(networkViewState);
-        ((NetworkMediator)networkMediator).animateNetwork(true);
+        ((NetworkMediator) networkMediator).setNetworkViewState(networkViewState);
+        ((NetworkMediator) networkMediator).animateNetwork(true);
     }
 
     /**
@@ -331,50 +366,50 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
         super.shapesRatioOutputModel = new ShapesRatioOutputModel();
         super.imageRatioOutputModel = new ImageRatioOutputModel();
 
-        ((SinglePointSimulation) this.singlePointSimulation).registerObserver((SimulationOutputModel) this.plotOutputModel);
+        ((DiagnosticSimulation) this.singlePointSimulation).registerObserver((SimulationOutputModel) this.plotOutputModel);
 
-        ((MultiplePointModelInterface) this.uniformPointSimulation).registerObserver((MultiplePointAlgorithmModelObserver) this.plotOutputModel);
+        ((MultiplePointSimulationInterface) this.uniformPointSimulation).registerObserver((MultiplePointAlgorithmModelObserver) this.plotOutputModel);
         ((PointAlgorithmModelInterface) this.uniformPointSimulation).registerObserver((PointGeneratorAlgorithmModelObserver) this.pointOutputModel);
         ((PointHitAlgorithmModelInterface) this.uniformPointSimulation).registerObserver((PointHitAlgorithmModelObserver) this.pointHitOutputModel);
         ((PointMissAlgorithmModelInterface) this.uniformPointSimulation).registerObserver((PointMissAlgorithmModelObserver) this.pointMissOutputModel);
         ((TimerAlgorithmModelInterface) this.uniformPointSimulation).registerObserver((TimerAlgorithmModelObserver) this.timerOutputModel);
         // have the result model observe changes to the simulation model
-        ((UniformMultiPointSimulation) this.uniformPointSimulation).registerObserver((ShapesRatioOutputModel) this.shapesRatioOutputModel);
+        ((MonteCarloSimulation) this.uniformPointSimulation).registerObserver((ShapesRatioOutputModel) this.shapesRatioOutputModel);
         // have the result model observe changes to the simulation model
-        ((UniformMultiPointSimulation) this.uniformPointSimulation).registerObserver((ImageRatioOutputModel) this.imageRatioOutputModel);
+        ((MonteCarloSimulation) this.uniformPointSimulation).registerObserver((ImageRatioOutputModel) this.imageRatioOutputModel);
 
-        ((MultiplePointModelInterface) this.gridPointSimulation).registerObserver((MultiplePointAlgorithmModelObserver) this.plotOutputModel);
+        ((MultiplePointSimulationInterface) this.gridPointSimulation).registerObserver((MultiplePointAlgorithmModelObserver) this.plotOutputModel);
         ((PointAlgorithmModelInterface) this.gridPointSimulation).registerObserver((PointGeneratorAlgorithmModelObserver) this.pointOutputModel);
         ((PointHitAlgorithmModelInterface) this.gridPointSimulation).registerObserver((PointHitAlgorithmModelObserver) this.pointHitOutputModel);
         ((PointMissAlgorithmModelInterface) this.gridPointSimulation).registerObserver((PointMissAlgorithmModelObserver) this.pointMissOutputModel);
         // have the result model observe changes to the simulation model
-        ((GridMultiPointSimulation) this.gridPointSimulation).registerObserver((ShapesRatioOutputModel) this.shapesRatioOutputModel);
+        ((PixelGridSimulation) this.gridPointSimulation).registerObserver((ShapesRatioOutputModel) this.shapesRatioOutputModel);
         ((TimerAlgorithmModelInterface) this.gridPointSimulation).registerObserver((TimerAlgorithmModelObserver) this.timerOutputModel);
         // have the result model observe changes to the simulation model
-        ((GridMultiPointSimulation) this.gridPointSimulation).registerObserver((ImageRatioOutputModel) this.imageRatioOutputModel);
+        ((PixelGridSimulation) this.gridPointSimulation).registerObserver((ImageRatioOutputModel) this.imageRatioOutputModel);
     }
 
     public void initAlgorithmModels()
     {
-        singlePointSimulation = new SinglePointSimulation();
-        uniformPointSimulation = new UniformMultiPointSimulation(new JavaRandomPointGenerator());
-        gridPointSimulation = new GridMultiPointSimulation();
+        singlePointSimulation = new DiagnosticSimulation();
+        uniformPointSimulation = new MonteCarloSimulation(new JavaRandomPointGenerator());
+        gridPointSimulation = new PixelGridSimulation();
 
-        ((TargetInputModel) targetInputModel).registerObserver((TargetModelObserver) singlePointSimulation);
-        ((ThetaInputModel) thetaModel).registerObserver((ThetaModelObserver) singlePointSimulation);
-        ((W0InputModel) w0Model).registerObserver((W0ModelObserver) singlePointSimulation);
-        ((W1InputModel) w1Model).registerObserver((W1ModelObserver) singlePointSimulation);
-        ((W2InputModel) w2Model).registerObserver((W2ModelObserver) singlePointSimulation);
+        ((TargetInputModel) targetInputModel).registerObserver((TargetInputModelObserver) singlePointSimulation);
+        ((ThetaInputModel) thetaModel).registerObserver((ThetaInputModelObserver) singlePointSimulation);
+        ((W0InputModel) w0Model).registerObserver((W0InputModelObserver) singlePointSimulation);
+        ((W1InputModel) w1Model).registerObserver((W1InputModelObserver) singlePointSimulation);
+        ((W2InputModel) w2Model).registerObserver((W2InputModelObserver) singlePointSimulation);
 
-        ((ThetaInputModel) thetaModel).registerObserver((ThetaModelObserver) uniformPointSimulation);
-        ((W0InputModel) w0Model).registerObserver((W0ModelObserver) uniformPointSimulation);
-        ((W1InputModel) w1Model).registerObserver((W1ModelObserver) uniformPointSimulation);
-        ((W2InputModel) w2Model).registerObserver((W2ModelObserver) uniformPointSimulation);
+        ((ThetaInputModel) thetaModel).registerObserver((ThetaInputModelObserver) uniformPointSimulation);
+        ((W0InputModel) w0Model).registerObserver((W0InputModelObserver) uniformPointSimulation);
+        ((W1InputModel) w1Model).registerObserver((W1InputModelObserver) uniformPointSimulation);
+        ((W2InputModel) w2Model).registerObserver((W2InputModelObserver) uniformPointSimulation);
 
-        ((ThetaInputModel) thetaModel).registerObserver((ThetaModelObserver) gridPointSimulation);
-        ((W0InputModel) w0Model).registerObserver((W0ModelObserver) gridPointSimulation);
-        ((W1InputModel) w1Model).registerObserver((W1ModelObserver) gridPointSimulation);
-        ((W2InputModel) w2Model).registerObserver((W2ModelObserver) gridPointSimulation);
+        ((ThetaInputModel) thetaModel).registerObserver((ThetaInputModelObserver) gridPointSimulation);
+        ((W0InputModel) w0Model).registerObserver((W0InputModelObserver) gridPointSimulation);
+        ((W1InputModel) w1Model).registerObserver((W1InputModelObserver) gridPointSimulation);
+        ((W2InputModel) w2Model).registerObserver((W2InputModelObserver) gridPointSimulation);
     }
 
     @Override

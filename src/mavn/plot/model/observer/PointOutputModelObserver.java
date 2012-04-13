@@ -1,6 +1,6 @@
 /*
-DartsObserver -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
-Copyright (C) 2012, Kaleb Kircher.
+PointOutputModelObserver -- a class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network)Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -22,16 +22,18 @@ import java.util.ArrayList;
 import mavn.algorithm.model.point.Point;
 
 /**
- * A hook for classes that want to be notified of when the results of the
- * dart simulation have changed.
+ * Point Output Model Observers are classes that want to Observer the
+ * Algorithm Model Subject and be updated with the Points that Hit and Missed
+ * a shape in the image in after the simulation has run. 
  * @author Kaleb
  */
 public interface PointOutputModelObserver
 {
     /**
-     * Hook for observers to be notified of dart simulations.
-     * @param hit the number of dart hits
-     * @param miss the number of dart misses
+     * Hook for observers to be notified of the Points that hit and missed
+     * shapes within the image during the simulation..
+     * @param hit the Points that hit shapes
+     * @param miss the Points that missed shapes
      */
     public void updatePoints(ArrayList<Point> hit, ArrayList<Point> miss);
 }

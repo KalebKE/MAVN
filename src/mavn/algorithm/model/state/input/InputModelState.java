@@ -26,7 +26,7 @@ import simulyn.algorithm.model.state.AlgorithmModelStateInterface;
  * AlgorithmModelInterface implementations. It uses a State Pattern to manage
  * the state of AlgorithmModelInterface implementations. If you have a very
  * simple algorithm, implementing this class may not be necessary. However,
- * if you are dealing with a very complex algorithm with a lot of state that is
+ * if you are dealing with a very complex algorithm with a lot of State that is
  * being set, pushed to the Observers and then set again, you will want to
  * implement AlgoirthmModelStateInterface to manage your algorithms state.
  *

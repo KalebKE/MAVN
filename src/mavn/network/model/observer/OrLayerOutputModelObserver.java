@@ -1,5 +1,6 @@
 /*
-ResultsObserver -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+OrLayerOutputModelObserver -- a class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -19,14 +20,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.network.model.observer;
 
 /**
- * A hook for classes that want to observe updates to the simulation results.
+ * A hook for classes that want to Observe updates from the Algorithm Subject's
+ * simulation network Or Layer output.
  * @author Kaleb
  */
 public interface OrLayerOutputModelObserver
 {
     /**
-     * Hook for classes to observe updates to the simulation results. 
-     * @param results the simulation results.
+     * Hook for classes to Observe updates to the Or Layer output.
+     * @param orLayerResult the Or Layer output.
      */
     public void updateOrLayerModelResult(double[][] orLayerResult);
 }

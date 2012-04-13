@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import mavn.algorithm.model.point.generator.PointGeneratorInterface;
 import mavn.algorithm.properties.view.SimulationPropertiesFrame;
-import mavn.algorithm.properties.view.state.PointGeneratorStateInterface;
 import mavn.algorithm.properties.view.state.SimulationPropertiesStateInterface;
 import mavn.input.view.changeEvent.InputModelChangeEvent;
 import mavn.input.view.layout.InputViewGridLayoutPanel;
@@ -150,8 +149,6 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
     protected PointGeneratorInterface mtPointGenerator;
     protected PointGeneratorInterface xOrPointGenerator;
 
-    protected PointGeneratorStateInterface pointGeneratorState;
-
     // Model Algorithm Dart Gun Result
     protected PointOutputModelInterface pointOutputModel;
     protected PointHitOutputModelInterface pointHitOutputModel;
@@ -159,8 +156,8 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
 
        // Model Views
     protected SimControlView view;
-    protected SimulationPropertiesStateInterface propertiesState;
-    protected SimulationPropertiesFrame propertiesFrame;
+    protected SimulationPropertiesStateInterface simulationPropertiesState;
+    protected SimulationPropertiesFrame simulationPropertiesFrame;
 
     protected SimulationTypeViewStateInterface simulationTypeViewState;
 

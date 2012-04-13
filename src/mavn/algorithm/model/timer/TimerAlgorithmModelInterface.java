@@ -1,6 +1,6 @@
 /*
-PointModelInterface -- 
-An Interface within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+TimerAlgorithmModelInterface -- An Interface within the Machine Artificial
+Vision Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -22,20 +22,15 @@ package mavn.algorithm.model.timer;
 import mavn.algorithm.model.timer.observer.TimerAlgorithmModelObserver;
 
 /**
- * An interface for classes that create Points for MAVN Multiple Point Simulations.
+ * An interface for classes that create Timer Points for MAVN Multiple Point Simulations.
  * Points are represented by a Java Point containing an X and Y coordinate
- * for a two dimensional plane. These Points are fired at an image containing
- * shapes on the two dimensional plane. The Points are created by a Random Number
- * Generator and are intended to be used in a Monte Carlo type simulation
- * where many random Points are fired at the image and the ratio of points
- * that hit shapes to darts that misses shapes is determined.
+ * for a two dimensional plane. These Timer Points determine how long it took
+ * each pair of inputs to run through the simulation's algorithm.
  *
- * DartModelInterface is intended to be a Subject in an Observer pattern.
- * Observers can implement PointGeneratorModelObserver to hook into
- * PointModelInterface implementations to be notified when new State is availble.
- *
- * This interface should be implemented by any class that uses PointGeneraterInterface's
- * and needs to push the State to Observers.
+ * TimerAlgorithmModelInterface is intended to be a Subject in an Observer pattern.
+ * Observers can implement TimerInputModelObserver to hook into
+ * TimerAlgorithmModelInterface implementations. They will the be notified when
+ * new State is availble.
  * @author Kaleb
  */
 public interface TimerAlgorithmModelInterface

@@ -1,5 +1,6 @@
 /*
-TargetState -- an class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+InputViewState -- a class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -23,9 +24,7 @@ import simulyn.ui.components.BlinkerButton;
 import simulyn.ui.components.inputModelPanel.InputViewAbstract;
 
 /**
- * Implements the View's state control for the Target Model.
- * This class is an implementation of the applications
- * State Pattern.
+ * Implements the View's State control for the Input Models.
  * @author Kaleb
  */
 public class InputViewState implements InputViewStateInterface
@@ -44,7 +43,7 @@ public class InputViewState implements InputViewStateInterface
     }
 
     /**
-     * Indicate that the Target Model matrix has been loaded.
+     * Indicate that the Input Model matrix has been loaded.
      */
     @Override
     public void inputModelReady(boolean ready)
@@ -60,7 +59,7 @@ public class InputViewState implements InputViewStateInterface
     }
 
     /**
-     * Check to see if the Target Model matrix has been loaded.
+     * Check to see if the Input Model matrix has been loaded.
      * @return boolean indicating the Target Model matrix has been loaded.
      */
     @Override
@@ -69,6 +68,10 @@ public class InputViewState implements InputViewStateInterface
         return matrixLoaded;
     }
 
+    /**
+     * Set the Input Model View.
+     * @param view
+     */
     public void setView(InputViewAbstract view)
     {
         this.view = view;

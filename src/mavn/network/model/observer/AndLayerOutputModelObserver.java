@@ -1,5 +1,6 @@
 /*
-ResultsObserver -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+AndLayerOutputModelObserver -- a class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -19,14 +20,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.network.model.observer;
 
 /**
- * A hook for classes that want to observe updates to the simulation results.
+ * A hook for classes that want to Observe updates from the Algorithm Subject's
+ * simulation network And Layer output.
  * @author Kaleb
  */
 public interface AndLayerOutputModelObserver
 {
     /**
-     * Hook for classes to observe updates to the simulation results. 
-     * @param results the simulation results.
+     * Hook for classes to Observe updates to the And Layer output.
+     * @param andLayerResult the And Layer output.
      */
     public void updateAndLayerModelResult(double[][] andLayerResult);
 }

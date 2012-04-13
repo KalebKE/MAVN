@@ -73,5 +73,5 @@ public interface SimulationFactoryInterface
      * Initialize the main View that the user will see when they first
      * see the application.
      */
-    public void initModelViews();
+    public void initInputModelViews();
 }

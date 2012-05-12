@@ -82,7 +82,7 @@ public class PointMissOutputModel extends PointMissOutputModelInterface implemen
      * @param point the Point that missed a shape within the image.
      */
     @Override
-    public void updatePointMiss(Point point)
+    public void updatePointMissAlgorithmModel(Point point)
     {
         this.setPointMiss(point);
     }

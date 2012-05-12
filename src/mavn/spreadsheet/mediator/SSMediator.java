@@ -1,5 +1,6 @@
 /*
-ResultTableMediator -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+SSMediator -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -62,12 +63,11 @@ import simulyn.ui.components.modelRenderer.SimulynDefaultTableRenderer;
  * But we don't know how the UI's might be used in the future. This is why
  * the MVM is used.
  *
- * ResultTableMediator is a implementation of the Simulyn Framework that
- * provides a coupling between MAVN's Result Models, Input Models, and Result Views.
- * It manages a Result UI View that is designed to allow the user
- * to run a simulation once the Input Model has been loaded into the simluation.
- * It provides the logic for the View's Actions and renders the Model Results with a
- * TableModel used to back a JTable within the View.
+ * SSMediator is a implementation that
+ * provides a coupling between MAVN's Output Models and Spreadsheet View.
+ * It provides the logic for the View's Actions and renders the Output Models
+ * with a TableModel used to back a JTable within the View.
+ *
  * @author Kaleb
  */
 public class SSMediator implements OutputViewMediatorInterface,
@@ -102,6 +102,7 @@ public class SSMediator implements OutputViewMediatorInterface,
 
     /**
      * Initialize a new ResultTableMediator.
+     *@param targetModel the Input Target Model is used for Diagnostic Simulations.
      *
      * @param simulationModelResult the Simulation Result Model implementation to be
      * used by the Mediator. It Observes the SinglePointSimulations and
@@ -119,6 +120,9 @@ public class SSMediator implements OutputViewMediatorInterface,
      * MultiplePointSimluations for new Model Results and then Transforms the
      * results into a ratio of point misses/hits from the image. It is also a
      * Subject Obsererved by this class for new Model Results.
+     *
+     * @param simulationPropertiesState the Simulation Properties State to
+     * ensure the correct Output Models are rendered.
      */
     public SSMediator(InputModelInterface targetModel,
             OutputModelInterface simulationModelResult,
@@ -155,31 +159,43 @@ public class SSMediator implements OutputViewMediatorInterface,
         this.ssMediatorOutputModelState = new SSMediatorOutputModelState(this);
     }
 
-    public SimulationViewOutputStateInterface getModelResultState()
+    /**
+     * Get the Spreadsheet Mediator View State.
+     * @return the ssMediatorViewState.
+     */
+    public SimulationViewOutputStateInterface getSSMediatorViewState()
     {
         return ssMediatorViewState;
     }
 
+    /**
+     * Get the Simulation Properties State.
+     * @return the simulationPropertiesState.
+     */
     public SimulationPropertiesStateInterface getSimulationPropertiesState()
     {
         return simulationPropertiesState;
     }
 
-    @Override
-    public JPanel getView()
-    {
-        return view;
-    }
-
     /**
      * Get the TableModel used to back the JTable in the View. This method
      * is usually called by the MediatorStateInterface classes are responsible
-     * for managing the TableModel's State. 
+     * for managing the TableModel's State.
      * @return the DefaultTableModel used to back the JTable in the View.
      */
     public DefaultTableModel getTableModel()
     {
         return (DefaultTableModel) view.getTable().getModel();
+    }
+
+    /**
+     * Get the Spreadsheet Mediator View.
+     * @return the View.
+     */
+    @Override
+    public JPanel getView()
+    {
+        return view;
     }
 
     /**
@@ -195,7 +211,7 @@ public class SSMediator implements OutputViewMediatorInterface,
         };
         this.setTableModel(new DefaultTableModel(names, 20));
         // Indicate that Simulation Model Results are now available.
-        this.getModelResultState().resultAvailable(false);
+        this.getSSMediatorViewState().outputAvailable(false);
         this.updateUI();
     }
 
@@ -294,7 +310,7 @@ public class SSMediator implements OutputViewMediatorInterface,
      * @param modelInput the State of Target Model Input Subjects.
      */
     @Override
-    public void updateTargetModelInput(double[][] modelInput)
+    public void updateTargetInputModel(double[][] modelInput)
     {
         // Set the modelInput to the Mediators State so it can be worked with locally.
         ((SimulationTargetInputModelState) ssMediatorInputModelState).setTargetInputModel(modelInput);
@@ -306,9 +322,11 @@ public class SSMediator implements OutputViewMediatorInterface,
     @Override
     public void updateUI()
     {
+        // Set the rendered Table Model for the View.
         view.setModel(tableModel);
         // Indicate that Simulation Model Results are now available.
-        ssMediatorViewState.resultAvailable(true);
+        ssMediatorViewState.outputAvailable(true);
+        // Prepare a new Table Model.
         this.tableModel = new DefaultTableModel();
     }
 

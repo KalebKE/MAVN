@@ -145,7 +145,7 @@ public class PixelGridSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < dartObservers.size(); i++)
         {
             PointGeneratorAlgorithmModelObserver dartObserver = (PointGeneratorAlgorithmModelObserver) dartObservers.get(i);
-            dartObserver.updatePoints(outputModelResultState.getHit(), outputModelResultState.getMiss());
+            dartObserver.updatePointGeneratorAlgorithmModel(outputModelResultState.getHit(), outputModelResultState.getMiss());
         }
     }
 
@@ -158,7 +158,7 @@ public class PixelGridSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < shapesRatioObservers.size(); i++)
         {
             ShapesRatioAlgorithmModelObserver resultObserver = (ShapesRatioAlgorithmModelObserver) shapesRatioObservers.get(i);
-            resultObserver.updateShapesRatioModelResult(outputModelResultState.getShapesRatio());
+            resultObserver.updateShapesRatioAlgorithmModelResult(outputModelResultState.getShapesRatio());
         }
     }
 
@@ -171,7 +171,7 @@ public class PixelGridSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < imageRatioObservers.size(); i++)
         {
             ImageRatioAlgorithmModelObserver resultObserver = (ImageRatioAlgorithmModelObserver) imageRatioObservers.get(i);
-            resultObserver.updateImageRatioModelResult(outputModelResultState.getImageRatio());
+            resultObserver.updateImageRatioAlgorithmModel(outputModelResultState.getImageRatio());
         }
     }
 
@@ -184,7 +184,7 @@ public class PixelGridSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < resultObservers.size(); i++)
         {
             MultiplePointAlgorithmModelObserver resultObserver = (MultiplePointAlgorithmModelObserver) resultObservers.get(i);
-            resultObserver.updateMultiplePointModelResult(outputLayerModelState.getOutputLayerOutput());
+            resultObserver.updateMultiplePointAlgorithmModelOutput(outputLayerModelState.getOutputLayerOutput());
         }
     }
 
@@ -207,7 +207,7 @@ public class PixelGridSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < pointMissObservers.size(); i++)
         {
             PointMissAlgorithmModelObserver observer = (PointMissAlgorithmModelObserver) pointMissObservers.get(i);
-            observer.updatePointMiss(outputModelResultState.getMiss().get(outputModelResultState.getMiss().size() - 1));
+            observer.updatePointMissAlgorithmModel(outputModelResultState.getMiss().get(outputModelResultState.getMiss().size() - 1));
         }
     }
 
@@ -243,7 +243,7 @@ public class PixelGridSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < pointHitObservers.size(); i++)
         {
             PointHitAlgorithmModelObserver observer = (PointHitAlgorithmModelObserver) pointHitObservers.get(i);
-            observer.updatePointHit(outputModelResultState.getHit().get(outputModelResultState.getHit().size() - 1));
+            observer.updatePointHitAlgorithmModel(outputModelResultState.getHit().get(outputModelResultState.getHit().size() - 1));
         }
     }
 
@@ -462,7 +462,7 @@ public class PixelGridSimulation implements AlgorithmModelInterface,
      * @param modelInput the new Theta Input Model State.
      */
     @Override
-    public void updateThetaModelInput(double[][] modelInput)
+    public void updateThetaInputModel(double[][] modelInput)
     {
         this.inputModelState.setTheta(modelInput);
     }
@@ -472,7 +472,7 @@ public class PixelGridSimulation implements AlgorithmModelInterface,
      * @param modelInput the new W0 Input Model State.
      */
     @Override
-    public void updateW0ModelInput(double[][] modelInput)
+    public void updateW0InputModel(double[][] modelInput)
     {
         this.inputModelState.setW0(modelInput);
     }
@@ -482,7 +482,7 @@ public class PixelGridSimulation implements AlgorithmModelInterface,
      * @param modelInput the new W1 Input Model State.
      */
     @Override
-    public void updateW1ModelInput(double[][] modelInput)
+    public void updateW1InputModel(double[][] modelInput)
     {
         this.inputModelState.setW1(modelInput);
     }
@@ -492,7 +492,7 @@ public class PixelGridSimulation implements AlgorithmModelInterface,
      * @param modelInput the new W2 Input Model State.
      */
     @Override
-    public void updateW2ModelInput(double[][] modelInput)
+    public void updateW2InputModel(double[][] modelInput)
     {
         this.inputModelState.setW2(modelInput);
     }

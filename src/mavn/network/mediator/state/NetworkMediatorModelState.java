@@ -1,5 +1,5 @@
 /*
-NetworkMediatorModelState -- a class within the Machine Artificial Vision
+NetworkMediatorModelState -- A class within the Machine Artificial Vision
 Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 

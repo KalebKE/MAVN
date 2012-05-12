@@ -1,5 +1,5 @@
 /*
-MavnView -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network).
+SimControlView -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher, Dennis Steele.
 
 This program is free software; you can redistribute it and/or
@@ -81,7 +81,7 @@ public class SimControlView extends JFrame
 
     }
 
-    public void initActions()
+    private void initActions()
     {
         this.importModelMenuItem.addActionListener(simulationAction);
         this.importModelMenuItem.setActionCommand("importSimulationAction");
@@ -146,19 +146,9 @@ public class SimControlView extends JFrame
         return animateNetworkMenuItem;
     }
 
-    public void setAnimateNetworkMenuItem(JCheckBoxMenuItem animateNetworkMenuItem)
-    {
-        this.animateNetworkMenuItem = animateNetworkMenuItem;
-    }
-
     public JMenuItem getClearNetworkMenuItem()
     {
         return clearNetworkMenuItem;
-    }
-
-    public void setClearNetworkMenuItem(JMenuItem clearNetworkMenuItem)
-    {
-        this.clearNetworkMenuItem = clearNetworkMenuItem;
     }
 
     public JMenuItem getClearOutputMenuItem()
@@ -166,19 +156,9 @@ public class SimControlView extends JFrame
         return clearOutputMenuItem;
     }
 
-    public void setClearOutputMenuItem(JMenuItem clearOutputMenuItem)
-    {
-        this.clearOutputMenuItem = clearOutputMenuItem;
-    }
-
     public JMenuItem getClearPlotterMenuItem()
     {
         return clearPlotterMenuItem;
-    }
-
-    public void setClearPlotterMenuItem(JMenuItem clearPlotterMenuItem)
-    {
-        this.clearPlotterMenuItem = clearPlotterMenuItem;
     }
 
     public JMenuItem getCloseSimulationMenuItem()
@@ -186,19 +166,9 @@ public class SimControlView extends JFrame
         return closeSimulationMenuItem;
     }
 
-    public void setCloseSimulationMenuItem(JMenuItem closeSimulationMenuItem)
-    {
-        this.closeSimulationMenuItem = closeSimulationMenuItem;
-    }
-
     public JCheckBoxMenuItem getDiagnosticPointMenuItem()
     {
         return diagnosticPointMenuItem;
-    }
-
-    public void setDiagnosticPointMenuItem(JCheckBoxMenuItem diagnosticPointMenuItem)
-    {
-        this.diagnosticPointMenuItem = diagnosticPointMenuItem;
     }
 
     public JMenuItem getEditPropertiesMenuItem()
@@ -206,19 +176,9 @@ public class SimControlView extends JFrame
         return editPropertiesMenuItem;
     }
 
-    public void setEditPropertiesMenuItem(JMenuItem editPropertiesMenuItem)
-    {
-        this.editPropertiesMenuItem = editPropertiesMenuItem;
-    }
-
     public JMenuItem getExitMenuItem()
     {
         return exitMenuItem;
-    }
-
-    public void setExitMenuItem(JMenuItem exitMenuItem)
-    {
-        this.exitMenuItem = exitMenuItem;
     }
 
     public JMenuItem getImportModelMenuItem()
@@ -226,19 +186,9 @@ public class SimControlView extends JFrame
         return importModelMenuItem;
     }
 
-    public void setImportModelMenuItem(JMenuItem importModelMenuItem)
-    {
-        this.importModelMenuItem = importModelMenuItem;
-    }
-
     public JCheckBoxMenuItem getMonteCarloMenuItem()
     {
         return monteCarloMenuItem;
-    }
-
-    public void setMonteCarloMenuItem(JCheckBoxMenuItem monteCarloMenuItem)
-    {
-        this.monteCarloMenuItem = monteCarloMenuItem;
     }
 
     public JCheckBoxMenuItem getPixelResolutionMenuItem()
@@ -246,9 +196,9 @@ public class SimControlView extends JFrame
         return pixelResolutionMenuItem;
     }
 
-    public void setPixelResolutionMenuItem(JCheckBoxMenuItem pixelResolutionMenuItem)
+    public JCheckBoxMenuItem getRenderPointsMenuItem()
     {
-        this.pixelResolutionMenuItem = pixelResolutionMenuItem;
+        return renderPointsMenuItem;
     }
 
     public JCheckBoxMenuItem getRenderNetworkMenuItem()
@@ -256,29 +206,9 @@ public class SimControlView extends JFrame
         return renderNetworkMenuItem;
     }
 
-    public void setRenderNetworkMenuItem(JCheckBoxMenuItem renderNetworkMenuItem)
-    {
-        this.renderNetworkMenuItem = renderNetworkMenuItem;
-    }
-
-    public JCheckBoxMenuItem getRenderPointsMenuItem()
-    {
-        return renderPointsMenuItem;
-    }
-
-    public void setRenderPointsMenuItem(JCheckBoxMenuItem renderPointsMenuItem)
-    {
-        this.renderPointsMenuItem = renderPointsMenuItem;
-    }
-
     public JCheckBoxMenuItem getRenderTimeMenuItem()
     {
         return renderTimeMenuItem;
-    }
-
-    public void setRenderTimeMenuItem(JCheckBoxMenuItem renderTimeMenuItem)
-    {
-        this.renderTimeMenuItem = renderTimeMenuItem;
     }
 
     public JMenuItem getResetSimulationMenuItem()
@@ -286,19 +216,9 @@ public class SimControlView extends JFrame
         return resetSimulationMenuItem;
     }
 
-    public void setResetSimulationMenuItem(JMenuItem resetSimulationMenuItem)
-    {
-        this.resetSimulationMenuItem = resetSimulationMenuItem;
-    }
-
     public JMenuItem getRunSimulationMenuItem()
     {
         return runSimulationMenuItem;
-    }
-
-    public void setRunSimulationMenuItem(JMenuItem runSimulationMenuItem)
-    {
-        this.runSimulationMenuItem = runSimulationMenuItem;
     }
 
     public JMenuItem getSaveModelMenuItem()
@@ -306,24 +226,94 @@ public class SimControlView extends JFrame
         return saveModelMenuItem;
     }
 
-    public void setSaveModelMenuItem(JMenuItem saveModelMenuItem)
-    {
-        this.saveModelMenuItem = saveModelMenuItem;
-    }
-
     public JMenuItem getSaveOutputMenuItem()
     {
         return saveOutputMenuItem;
     }
 
-    public void setSaveOutputMenuItem(JMenuItem saveOutputMenuItem)
-    {
-        this.saveOutputMenuItem = saveOutputMenuItem;
-    }
-
     public JCheckBoxMenuItem getViewInputMenuItem()
     {
         return viewInputMenuItem;
+    }
+
+    public void setClearOutputMenuItem(JMenuItem clearOutputMenuItem)
+    {
+        this.clearOutputMenuItem = clearOutputMenuItem;
+    }
+
+    public void setClearPlotterMenuItem(JMenuItem clearPlotterMenuItem)
+    {
+        this.clearPlotterMenuItem = clearPlotterMenuItem;
+    }
+
+    public void setCloseSimulationMenuItem(JMenuItem closeSimulationMenuItem)
+    {
+        this.closeSimulationMenuItem = closeSimulationMenuItem;
+    }
+
+    public void setDiagnosticPointMenuItem(JCheckBoxMenuItem diagnosticPointMenuItem)
+    {
+        this.diagnosticPointMenuItem = diagnosticPointMenuItem;
+    }
+
+    public void setEditPropertiesMenuItem(JMenuItem editPropertiesMenuItem)
+    {
+        this.editPropertiesMenuItem = editPropertiesMenuItem;
+    }
+
+    public void setExitMenuItem(JMenuItem exitMenuItem)
+    {
+        this.exitMenuItem = exitMenuItem;
+    }
+
+    public void setImportModelMenuItem(JMenuItem importModelMenuItem)
+    {
+        this.importModelMenuItem = importModelMenuItem;
+    }
+
+    public void setMonteCarloMenuItem(JCheckBoxMenuItem monteCarloMenuItem)
+    {
+        this.monteCarloMenuItem = monteCarloMenuItem;
+    }
+
+    public void setPixelResolutionMenuItem(JCheckBoxMenuItem pixelResolutionMenuItem)
+    {
+        this.pixelResolutionMenuItem = pixelResolutionMenuItem;
+    }
+
+    public void setRenderNetworkMenuItem(JCheckBoxMenuItem renderNetworkMenuItem)
+    {
+        this.renderNetworkMenuItem = renderNetworkMenuItem;
+    }
+
+    public void setRenderPointsMenuItem(JCheckBoxMenuItem renderPointsMenuItem)
+    {
+        this.renderPointsMenuItem = renderPointsMenuItem;
+    }
+
+    public void setRenderTimeMenuItem(JCheckBoxMenuItem renderTimeMenuItem)
+    {
+        this.renderTimeMenuItem = renderTimeMenuItem;
+    }
+
+    public void setResetSimulationMenuItem(JMenuItem resetSimulationMenuItem)
+    {
+        this.resetSimulationMenuItem = resetSimulationMenuItem;
+    }
+
+    public void setRunSimulationMenuItem(JMenuItem runSimulationMenuItem)
+    {
+        this.runSimulationMenuItem = runSimulationMenuItem;
+    }
+
+    public void setSaveModelMenuItem(JMenuItem saveModelMenuItem)
+    {
+        this.saveModelMenuItem = saveModelMenuItem;
+    }
+
+    public void setSaveOutputMenuItem(JMenuItem saveOutputMenuItem)
+    {
+        this.saveOutputMenuItem = saveOutputMenuItem;
     }
 
     public void setViewInputMenuItem(JCheckBoxMenuItem viewInputMenuItem)
@@ -334,6 +324,16 @@ public class SimControlView extends JFrame
     public JCheckBoxMenuItem getViewOutputMenuItem()
     {
         return viewOutputMenuItem;
+    }
+
+    public void setAnimateNetworkMenuItem(JCheckBoxMenuItem animateNetworkMenuItem)
+    {
+        this.animateNetworkMenuItem = animateNetworkMenuItem;
+    }
+
+    public void setClearNetworkMenuItem(JMenuItem clearNetworkMenuItem)
+    {
+        this.clearNetworkMenuItem = clearNetworkMenuItem;
     }
 
     public void setViewOutputMenuItem(JCheckBoxMenuItem viewOutputMenuItem)
@@ -357,8 +357,6 @@ public class SimControlView extends JFrame
     {
         this.simulationTypeState = simulationTypeState;
     }
-
-    
 
     /** This method is called from within the constructor to
      * initialize the form.

@@ -25,11 +25,11 @@ import mavn.input.model.observer.W2InputModelObserver;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
 import simulyn.input.view.state.InputViewStateInterface;
-import simulyn.ui.components.inputModelPanel.InputViewAbstract;
+import simulyn.ui.components.inputModel.InputViewAbstract;
 import simulyn.ui.components.spreadsheetTable.SimTable;
 
 /**
- * InputViewW0Model is the View for the W2 Input Model within MAVN.
+ * InputViewW2Model is the View for the W2 Input Model within MAVN.
  * The W2 Input Model defines the W2 (transfer edges) for the Input Layer.
  * InputViewTargetModel Observes the W2InputModel Subject through the
  * W2ModelObserver interface. When the W2InputModel receives new State,
@@ -48,11 +48,14 @@ public class InputViewW2Model extends InputViewAbstract implements W2InputModelO
 {
 
     /**
-     * Initialize the InputViewAbtract.
-     * @param inputController the Input Controller Interface you want to associate
-     * with this View.
-     * @param inputModel the Input Model Interface you want to associate with this View.
-     * @param inputModelChanged the Input Model Manager for the application.
+     * Initialize the InputViewW2Model.
+     * @param action the Action Listener responsible for managing the Actions
+     * for the InputViewAbstract implementation.
+     * @param inputModel the Input Model Interface that will back the
+     * InputViewAbstract implementation.
+     * @param inputViewState the state of the Input View implementation.
+     * @param inputModelChanged the Model Change Event Listener for the Input
+     * Models.
      */
     public InputViewW2Model(ActionListener action, InputControllerInterface inputController,
             InputModelInterface inputModel,
@@ -65,11 +68,11 @@ public class InputViewW2Model extends InputViewAbstract implements W2InputModelO
     }
 
     /**
-     * Hook for the InputThetaModel Subject.
+     * Hook for the W2InputModel Subject.
      * @param modelInput the new model.
      */
     @Override
-    public void updateW2ModelInput(double[][] modelInput)
+    public void updateW2InputModel(double[][] modelInput)
     {
         if (modelInput.length == 0)
         {

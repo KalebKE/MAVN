@@ -25,7 +25,7 @@ package mavn.algorithm.model.math;
 public class SHL
 {
     /**
-     * >0 = 1, <0 = -1
+     * >=0 = 1, <0 = -1
      * @param matrix
      * @return
      */

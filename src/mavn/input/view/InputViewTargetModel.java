@@ -25,7 +25,7 @@ import mavn.input.view.changeEvent.InputModelChangeEvent;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
 import simulyn.input.view.state.InputViewStateInterface;
-import simulyn.ui.components.inputModelPanel.InputViewAbstract;
+import simulyn.ui.components.inputModel.InputViewAbstract;
 import simulyn.ui.components.spreadsheetTable.SimTable;
 
 /**
@@ -33,8 +33,8 @@ import simulyn.ui.components.spreadsheetTable.SimTable;
  * The Target Input Model defines the single test Target Point for the simulations
  * input models.
  * InputViewTargetModel Observes the TargetInputModel Subject through the
- * TargetModelObserver interface. When the TargetInputModel receives new State,
- * it notifies it's Observers of the change. This updates the State within
+ * TargetAlgorithmModelObserver interface. When the TargetInputModel receives new State,
+ * it notifies its Observers of the change. This updates the State within
  * the InputViewTargetModel and its Rendering View, which is responsible for
  * displaying the State itself. 
  * InputViewAbstract implementations are intended to manage the Input Model Views
@@ -49,11 +49,14 @@ public class InputViewTargetModel extends InputViewAbstract implements TargetInp
 {
 
     /**
-     * Initialize the InputViewAbtract.
-     * @param inputController the Input Controller Interface you want to associate
-     * with this View.
-     * @param inputModel the Input Model Interface you want to associate with this View.
-     * @param inputModelChanged the Input Model Manager for the application.
+     * Initialize the InputTargetModel.
+     * @param action the Action Listener responsible for managing the Actions
+     * for the InputViewAbstract implementation.
+     * @param inputModel the Input Model Interface that will back the
+     * InputViewAbstract implementation.
+     * @param inputViewState the state of the Input View implementation.
+     * @param inputModelChanged the Model Change Event Listener for the Input
+     * Models.
      */
     public InputViewTargetModel(ActionListener action, InputControllerInterface inputController,
             InputModelInterface inputModel,
@@ -66,11 +69,11 @@ public class InputViewTargetModel extends InputViewAbstract implements TargetInp
     }
 
     /**
-     * Hook for the InputTargetModel Subject. 
+     * Hook for the TargetInputModel Subject.
      * @param modelInput the new model. 
      */
     @Override
-    public void updateTargetModelInput(double[][] modelInput)
+    public void updateTargetInputModel(double[][] modelInput)
     {
         if (modelInput.length == 0)
         {

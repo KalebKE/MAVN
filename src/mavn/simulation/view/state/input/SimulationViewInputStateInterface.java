@@ -1,5 +1,6 @@
 /*
-OutputStateInterface -- an interface within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+SimulationViewInputStateInterface -- An interface within the Machine Artificial
+Vision Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or

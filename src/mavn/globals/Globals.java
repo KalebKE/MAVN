@@ -1,5 +1,6 @@
 /*
-Globals -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+Globals -- a class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -19,8 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.globals;
 
 /**
- * Global for the application. This class is usually used for defining
- * the locations of individual objects in their interface collections. 
+ * Global for the application.
  * @author Kaleb
  */
 public class Globals

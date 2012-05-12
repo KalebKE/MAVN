@@ -25,7 +25,7 @@ import mavn.input.model.observer.ThetaInputModelObserver;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
 import simulyn.input.view.state.InputViewStateInterface;
-import simulyn.ui.components.inputModelPanel.InputViewAbstract;
+import simulyn.ui.components.inputModel.InputViewAbstract;
 import simulyn.ui.components.spreadsheetTable.SimTable;
 
 /**
@@ -48,11 +48,14 @@ public class InputViewThetaModel extends InputViewAbstract implements ThetaInput
 {
 
     /**
-     * Initialize the InputViewAbtract.
-     * @param inputController the Input Controller Interface you want to associate
-     * with this View.
-     * @param inputModel the Input Model Interface you want to associate with this View.
-     * @param inputModelChanged the Input Model Manager for the application.
+     * Initialize the InputViewThetaModel.
+     * @param action the Action Listener responsible for managing the Actions
+     * for the InputViewAbstract implementation.
+     * @param inputModel the Input Model Interface that will back the
+     * InputViewAbstract implementation.
+     * @param inputViewState the state of the Input View implementation.
+     * @param inputModelChanged the Model Change Event Listener for the Input
+     * Models.
      */
     public InputViewThetaModel(ActionListener action, InputControllerInterface inputController,
             InputModelInterface inputModel, InputViewStateInterface inputViewState,
@@ -64,11 +67,11 @@ public class InputViewThetaModel extends InputViewAbstract implements ThetaInput
     }
 
     /**
-     * Hook for the InputThetaModel Subject.
+     * Hook for the ThetaInputModel Subject.
      * @param modelInput the new model.
      */
     @Override
-    public void updateThetaModelInput(double[][] modelInput)
+    public void updateThetaInputModel(double[][] modelInput)
     {
         if (modelInput.length == 0)
         {

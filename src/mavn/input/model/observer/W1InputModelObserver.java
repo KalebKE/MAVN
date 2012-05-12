@@ -30,5 +30,5 @@ public interface W1InputModelObserver
      * simulations W1 data.
      * @param matrix the matrix containing the data.
      */
-    public void updateW1ModelInput(double[][] modelInput);
+    public void updateW1InputModel(double[][] modelInput);
 }

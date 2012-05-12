@@ -25,14 +25,14 @@ import javax.swing.SwingWorker;
 import mavn.algorithm.model.point.generator.PointGeneratorInterface;
 import mavn.globals.Globals;
 import mavn.algorithm.model.math.CalcTheta;
-import mavn.algorithm.model.math.MatrixMultiply;
+import mavn.algorithm.model.math.MatrixMath;
 import mavn.algorithm.model.math.SHL;
 import mavn.algorithm.model.multiplePointSimulation.state.MultiPointSimulationInputModelState;
 import mavn.algorithm.model.state.output.NetworkLayerOutputModelStateAbstract;
 import mavn.algorithm.model.multiplePointSimulation.state.MonteCarloPointOutputModelState;
 import mavn.algorithm.model.point.Point;
 import mavn.algorithm.model.timer.Timer;
-import mavn.util.math.FindMax;
+import simulyn.math.FindMax;
 
 /**
  * MonteCarloSimulationWorker is a part of a Command Pattern that spawns off
@@ -90,7 +90,7 @@ public class MonteCarloSimulationWorker extends SwingWorker
     {
         outputModelResultState.setImageBounds(FindMax.getMaxValue(this.inputModelState.getTheta()));
 
-        MatrixMultiply matrixMath = new MatrixMultiply();
+        MatrixMath matrixMath = new MatrixMath();
         SHL shl = new SHL();
         CalcTheta theta = new CalcTheta();
 
@@ -133,7 +133,7 @@ public class MonteCarloSimulationWorker extends SwingWorker
             {
                 timer.start();
                 // Get a local instance of the point created by the Dart Gun.
-                Point point = pointGenerator.fireDart(outputModelResultState.getImageBounds());
+                Point point = pointGenerator.generatePoint(outputModelResultState.getImageBounds());
                 // Convert that point into a double array so the algorithm can work with it.
                 double[][] points =
                 {

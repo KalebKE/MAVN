@@ -1,5 +1,5 @@
 /*
-PointModelInterface -- 
+PointAlgorithmModelInterface --
 An Interface within the Machine Artificial Vision Network(Machine Artificial Vision Network)
 Copyright (C) 2012, Kaleb Kircher.
 
@@ -30,12 +30,7 @@ import mavn.algorithm.model.point.observer.PointGeneratorAlgorithmModelObserver;
  * where many random Points are fired at the image and the ratio of points
  * that hit shapes to darts that misses shapes is determined.
  *
- * DartModelInterface is intended to be a Subject in an Observer pattern.
- * Observers can implement PointGeneratorModelObserver to hook into
- * PointModelInterface implementations to be notified when new State is availble.
- *
- * This interface should be implemented by any class that uses PointGeneraterInterface's
- * and needs to push the State to Observers.
+ * PointAlgorithmModelInterface is intended to be a Subject for one or many Observer patterns.
  * @author Kaleb
  */
 public interface PointAlgorithmModelInterface

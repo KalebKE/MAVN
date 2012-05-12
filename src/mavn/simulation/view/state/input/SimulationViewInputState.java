@@ -1,5 +1,6 @@
 /*
-ResultsState -- an class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+SimulationViewInputState -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -22,8 +23,9 @@ import mavn.simulation.view.controlBar.ControlBar;
 import mavn.simulation.view.SimControlView;
 
 /**
- * A class that maintains all of the state required for the simulations output.
- * This class is an implementation of the applications State Pattern.
+ * SimulationViewInputState maintains all of the View State required for the
+ * simulations Input Models. It enables and disables certain UI functionality
+ * based on the Input Models State.
  * @author Kaleb
  */
 public class SimulationViewInputState implements SimulationViewInputStateInterface
@@ -31,14 +33,14 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
 
     private boolean propertiesLoaded;
     private boolean simulationLoaded;
-
     private ControlBar outputViewBar;
     private ControlBar inputViewBar;
     private SimControlView view;
 
     /**
-     * Initialize the state.
-     * @param view the view the class manages the state for.
+     * Initialize a SimulationViewInputState.
+     * @param outputViewBar the Output View Control Bar.
+     * @param inputViewBar the Input View Control Bar.
      */
     public SimulationViewInputState(ControlBar outputViewBar, ControlBar inputViewBar)
     {
@@ -48,6 +50,9 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         propertiesLoaded = false;
     }
 
+    /**
+     * Initialize the Input States.
+     */
     public void init()
     {
         this.onPropertiesUnloaded();
@@ -112,11 +117,6 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         inputViewBar.getClearModelOutputButton().setEnabled(false);
 
         propertiesLoaded = false;
-    }
-
-    public void setView(SimControlView view)
-    {
-        this.view = view;
     }
 
     /**
@@ -243,5 +243,14 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         inputViewBar.getSaveModelOutputButton().setEnabled(false);
 
         simulationLoaded = false;
+    }
+
+    /**
+     * Set the Simulation Control View.
+     * @param view the SimControlView.
+     */
+    public void setView(SimControlView view)
+    {
+        this.view = view;
     }
 }

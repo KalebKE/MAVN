@@ -33,6 +33,11 @@ public interface ShapesRatioAlgorithmModelInterface
 {
 
     /**
+     * Notify the Shapes Ratio Algorithm Model Interface.
+     */
+    public void notifyShapesRatioModelObservers();
+
+    /**
      * Register a ShapesRatioAlgorithmModelInterface.
      * @param o the ShapesRatioAlgorithmModelInterface
      */
@@ -43,9 +48,4 @@ public interface ShapesRatioAlgorithmModelInterface
      * @param o the ShapesRatioAlgorithmModelInterface
      */
     public void removeObserver(ShapesRatioAlgorithmModelObserver o);
-
-    /**
-     * Notify the Shapes Ratio Algorithm Model Interface.
-     */
-    public void notifyShapesRatioModelObservers();
 }

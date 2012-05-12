@@ -1,5 +1,5 @@
 /*
-CMWC4096RngDartGun -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+CMWC4096PointGenerator -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ import mavn.algorithm.model.point.Point;
 import org.uncommons.maths.random.CMWC4096RNG;
 
 /**
- * A DartGunInterface implementation that uses CMWC4096 RNG to generate points.
+ * A PointGeneratorInterface implementation that uses CMWC4096 RNG to generate points.
  * A Java implementation of a Complementary-Multiply-With-Carry (CMWC) RNG as
  * described by George Marsaglia. It has an extremely long period (2^131104)
  * and performance comparable to the Mersenne Twister (though the Mersenne
@@ -44,15 +44,15 @@ public class CMWC4096PointGenerator implements PointGeneratorInterface
     }
 
     /**
-     * Fire a random dart. Imagine throwing a dart at a
+     * Generate a random Point. Imagine throwing a dart at a
      * two dimensional plane with X and Y axis. This method
      * produces the point where the dart landed by generating
      * two random numbers using the CMWC4096RNG. 
      * @param bounds the maximum X and Y axis points.
-     * @return the X and Y points where the dart landed
+     * @return the X and Y coordinates where the Point landed
      */
     @Override
-    public Point fireDart(double bounds)
+    public Point generatePoint(double bounds)
     {
         Point point = new Point();
 

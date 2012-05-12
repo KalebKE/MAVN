@@ -1,5 +1,5 @@
 /*
-PlotMediatorStateView -- a class within the Machine Artificial Vision Network
+PlotMediatorStateView -- A class within the Machine Artificial Vision Network
 (Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
@@ -23,7 +23,7 @@ import mavn.simulation.view.SimControlView;
 import mavn.simulation.view.controlBar.ControlBar;
 
 /**
- * PlotMediatorViewState manages the simulation-level View State related
+ * PlotMediatorViewState manages the simulation View State related
  * to the Plot Mediator. This includes setting state on the Simulation Control
  * Bars and within the Simulation Control View itself.
  * @author Kaleb

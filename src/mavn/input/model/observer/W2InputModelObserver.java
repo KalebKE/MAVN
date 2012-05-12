@@ -31,5 +31,5 @@ public interface W2InputModelObserver
      * simulations W2 data.
      * @param matrix the matrix containing the data.
      */
-    public void updateW2ModelInput(double[][] modelInput);
+    public void updateW2InputModel(double[][] modelInput);
 }

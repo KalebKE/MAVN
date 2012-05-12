@@ -1,5 +1,6 @@
 /*
-DartsObserver -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+PointGeneratorAlgorithmModelObserver -- A class within the Machine Artificial
+Vision Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -22,16 +23,20 @@ import java.util.ArrayList;
 import mavn.algorithm.model.point.Point;
 
 /**
- * A hook for classes that want to be notified of when the results of the
- * dart simulation have changed.
+ * A hook for classes that want to Observe the Point Generator Algorithm
+ * Model Subject. Point Generator Algorithm Models know each Point that
+ * hit a shape in the image and each Point that missed a shape in the image.
+ * It is updated once when the simulation has finished. State is pushed to the
+ * Observer by the Subject.
  * @author Kaleb
  */
 public interface PointGeneratorAlgorithmModelObserver
 {
     /**
-     * Hook for observers to be notified of dart simulations.
-     * @param hit the number of dart hits
-     * @param miss the number of dart misses
+     * Hook for clases to Observe updates to the Point Generator Algorithm Model
+     * Subject.
+     * @param hitPointList the Points that hit shapes in the image.
+     * @param missPointList the Points that missed shapes in the image.
      */
-    public void updatePoints(ArrayList<Point> hit, ArrayList<Point> miss);
+    public void updatePointGeneratorAlgorithmModel(ArrayList<Point> hitPointList, ArrayList<Point> missPointList);
 }

@@ -1,5 +1,5 @@
 /*
-MtRngDartGun -- a class within the Machine Artificial Vision
+MersenneTwisterPointGenerator -- A class within the Machine Artificial Vision
 Network(Machine Artificial Vision Network)
 Copyright (C) 2012, Kaleb Kircher.
 
@@ -24,7 +24,7 @@ import mavn.algorithm.model.point.Point;
 import org.uncommons.maths.random.MersenneTwisterRNG;
 
 /**
- * A DartGunInterface implementation that uses MersenneTwisterRNG to generate points.
+ * A PointGeneratorInterface implementation that uses MersenneTwisterRNG to generate points.
  *
  * Java port of the fast and reliable Mersenne Twister RNG originally developed
  * by Makoto Matsumoto and Takuji Nishimura. It is faster than java.util.Random,
@@ -46,15 +46,15 @@ public class MersenneTwisterPointGenerator implements PointGeneratorInterface
     }
 
     /**
-     * Fire a random dart. Imagine throwing a dart at a
+     * Generate a random Point. Imagine throwing a dart at a
      * two dimensional plane with X and Y axis. This method
-     * produces the point where the dart landed by generating
-     * two random numbers using the MersenneTwisterRNG.
+     * produces the Point where the dart landed by generating
+     * two random numbers (X and Y) using the MersenneTwisterRNG.
      * @param bounds the maximum X and Y axis points.
-     * @return the X and Y points where the dart landed
+     * @return the X and Y Point where the dart landed.
      */
     @Override
-    public Point fireDart(double bounds)
+    public Point generatePoint(double bounds)
     {
         Point point = new Point();
 

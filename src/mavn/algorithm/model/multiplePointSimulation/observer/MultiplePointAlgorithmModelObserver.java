@@ -28,5 +28,5 @@ public interface MultiplePointAlgorithmModelObserver
      * Hook for classes to observe updates to the simulation results. 
      * @param results the simulation results.
      */
-    public void updateMultiplePointModelResult(double[][] modelResult);
+    public void updateMultiplePointAlgorithmModelOutput(double[][] modelResult);
 }

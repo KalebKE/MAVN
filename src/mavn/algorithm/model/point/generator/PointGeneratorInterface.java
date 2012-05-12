@@ -1,6 +1,6 @@
 /*
-DartGunInterface -- a interface within the Machine Artificial Vision
-Network(Machine Artificial Vision Network)
+PointGeneratorInterface -- An interface within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -24,16 +24,16 @@ import mavn.algorithm.model.point.Point;
 
 
 /**
- * Implementations of DartGunInterface define how the points for the
- * dart are generated. 
+ * Implementations of PointGeneratorInterface define how the random Points for the
+ * Multiple Point Simulations are generated.
  * @author Kaleb Kircher
  */
 public interface PointGeneratorInterface
 {
     /**
-     * Implement how the points for the dart are generated. 
+     * Implement the random Point generator.
      * @param bounds the X and Y axis bounds.
-     * @return X and Y axis points where the dart landed.
+     * @return X and Y axis Point where the dart landed.
      */
-    public Point fireDart(double bounds);
+    public Point generatePoint(double bounds);
 }

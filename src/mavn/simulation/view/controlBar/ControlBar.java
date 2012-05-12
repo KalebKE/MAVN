@@ -1,15 +1,26 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+ControlBar -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
+Copyright (C) 2012, Kaleb Kircher.
 
-/*
- * ControlBar.java
- *
- * Created on Mar 26, 2012, 1:21:21 PM
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simulation.view.controlBar;
 
+import simulyn.ui.components.ControlToggleButton;
+import simulyn.ui.components.ControlButton;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
@@ -19,7 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
 /**
- *
+ * The Control Bar for the MAVN Simulation.
  * @author Kaleb
  */
 public class ControlBar extends javax.swing.JPanel
@@ -52,7 +63,16 @@ public class ControlBar extends javax.swing.JPanel
     private JToggleButton scatterPlotButton;
     private JToggleButton linePlotButton;
 
-    /** Creates new form ControlBar */
+    /**
+     * Initialize a Control Bar.
+     * @param simulationBarAction the Simulation Bar ActionListener.
+     * @param propertiesBarAction the Properties Bar ActionListener.
+     * @param modelOuputBarAction the Output Bar ActionListner.
+     * @param viewBarAction the View Bar ActionListener.
+     * @param newtorkViewBarAction the Network Bar ActionListener.
+     * @param plotViewBarAction the Plot Bar ActionListener.
+     * @param runSimulationAction the Run Simulation Bar ActionListener.
+     */
     public ControlBar(ActionListener simulationBarAction, ActionListener propertiesBarAction,
             ActionListener modelOuputBarAction, ActionListener viewBarAction,
             ActionListener newtorkViewBarAction, ActionListener plotViewBarAction,
@@ -181,7 +201,7 @@ public class ControlBar extends javax.swing.JPanel
         return targetSimulationButton;
     }
 
-    public void initButtons()
+    private void initButtons()
     {
 
         importSimulationButton = new ControlButton(getIcon("/icons/importSimulation.png"));
@@ -250,7 +270,7 @@ public class ControlBar extends javax.swing.JPanel
         runSimulationControlBar.add(resetSimulationButton);
     }
 
-    public void initActions()
+    private void initActions()
     {
         // Simulation Bar Actions
         importSimulationButton.addActionListener(this.simulationBarAction);
@@ -305,6 +325,11 @@ public class ControlBar extends javax.swing.JPanel
         resetSimulationButton.setActionCommand("resetSimulationAction");
     }
 
+    /**
+     * Get an Image Icon from the path.
+     * @param iconPath the path of the desired image.
+     * @return an Image Icon from the path.
+     */
     public ImageIcon getIcon(String iconPath)
     {
         // Set Icon for button

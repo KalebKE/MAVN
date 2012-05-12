@@ -1,5 +1,6 @@
 /*
-MavnControllerAbstract-- an abstract class within the Machine Artificial Vision Network(Machine Artificial Vision Network).
+AbstractSimulationFactory-- A abstract class within the Machine Artificial
+Vision Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher
 
 This program is free software; you can redistribute it and/or
@@ -43,18 +44,20 @@ import simulyn.algorithm.model.AlgorithmModelInterface;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
 import simulyn.input.view.state.InputViewStateInterface;
-import simulyn.mediator.SimulationMediatorInterface;
 import simulyn.output.model.OutputModelInterface;
 import simulyn.output.view.mediator.OutputViewMediatorInterface;
-import simulyn.ui.components.inputModelPanel.InputViewAbstract;
+import simulyn.simulation.mediator.SimulationMediatorInterface;
+import simulyn.ui.components.inputModel.InputViewAbstract;
+
 
 /**
- * MavnControllerAbstract is a special implementation of the MavnControllerInterface.
- * The abstraction is designed to allow the MAVN application to flexibly manage the
- * Input and Output Modules within the MVC architecture. These Modules are usually
- * concerned with controlling other MVC's that support MAVN, managing input and output, managing state and
- * managing the applications algorithms. Any class that needs access
- * to the Modules can do so with an implementation of MavnControllerAbstract.
+ * MavnControllerAbstract is a special implementation of the
+ * SimulationFactoryInterface.
+ * The abstraction is designed to allow the MAVN application to flexibly manage 
+ * the Input, Algorithm and Output Modules within the MVC architecture. These
+ * Modules are usually concerned with controlling other MVC's that support
+ * MAVN, managing input and output, managing state and managing the applications
+ * algorithms. 
  * @author Kaleb
  */
 public abstract class AbstractSimulationFactory implements SimulationFactoryInterface
@@ -80,9 +83,9 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
     protected ArrayList<InputModelInterface> inputModels;
     protected ArrayList<InputViewAbstract> inputViews;
 
-    protected AlgorithmModelInterface singlePointSimulation;
-    protected AlgorithmModelInterface uniformPointSimulation;
-    protected AlgorithmModelInterface gridPointSimulation;
+    protected AlgorithmModelInterface diagnosticSimulation;
+    protected AlgorithmModelInterface monteCarloSimulation;
+    protected AlgorithmModelInterface pixelGridSimulation;
 
     protected ItemListener outputMediatorEvent;
 
@@ -94,10 +97,10 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
     protected InputControllerInterface w2Controller;
 
     // Model Input Models
-    protected InputModelInterface w2Model;
-    protected InputModelInterface w1Model;
-    protected InputModelInterface w0Model;
-    protected InputModelInterface thetaModel;
+    protected InputModelInterface w2InputModel;
+    protected InputModelInterface w1InputModel;
+    protected InputModelInterface w0InputModel;
+    protected InputModelInterface thetaInputModel;
     protected InputModelInterface targetInputModel;
 
     // Model Input Change Event

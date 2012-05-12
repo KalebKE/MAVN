@@ -31,7 +31,7 @@ import mavn.algorithm.model.singlePointSimulation.DiagnosticSimulation;
  * Since different MAVN Simulations may need to have their Network Layer State
  * managed differently, NetworkLayerOutputModelStateAbstract provides
  * most of the key implementation and allows child implementations to decide
- * how to deal with it.
+ * how to deal with the specifics.
  * @author Kaleb
  */
 public class SinglePointLayerOutputModelState extends NetworkLayerOutputModelStateAbstract

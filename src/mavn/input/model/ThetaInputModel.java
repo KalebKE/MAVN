@@ -23,9 +23,15 @@ import mavn.input.model.observer.ThetaInputModelObserver;
 import simulyn.input.model.InputModelInterface;
 
 /**
- * All updates to the Theta Matrix should be made through ThetaModel using
- * setMatrix(double[][] matrix). This will notify all observers of the change
- * and provide them with the new model. 
+ * Theta Input Model keeps track of the current Theta Input for the simulation.
+ * The Theta Input can come from an external file or be defined within the
+ * simulation by the user.
+ * The Theta Input essentially represents the boundary edge locations for the
+ * shapes within the image. It is added to the result of the Target Input
+ * multiplied by the W2 Input which represents the edge directions. 
+ * All updates to the Theta Input Model should be made through ThetaInputModel using
+ * setMatrix(double[][] matrix). This will notify all Observers of the change
+ * and provide them with the new model state.
  * @author Kaleb
  */
 public class ThetaInputModel extends InputModelInterface
@@ -40,7 +46,7 @@ public class ThetaInputModel extends InputModelInterface
     }
 
     /**
-     * Register Observer.
+     * Register the ThetaInputModelObserver Observer.
      * @param o the ThetaObserver
      */
     public void registerObserver(ThetaInputModelObserver o)
@@ -49,7 +55,7 @@ public class ThetaInputModel extends InputModelInterface
     }
 
     /**
-     * Remove Observer.
+     * Remove the ThetaInputModelObserver Observer.
      * @param o the ThetaObserver
      */
     public void removeObserver(ThetaInputModelObserver o)
@@ -62,7 +68,7 @@ public class ThetaInputModel extends InputModelInterface
     }
 
     /**
-     * Notify all observers.
+     * Notify all ThetaInputModelObserver observers.
      */
     @Override
     public void notifyObservers()
@@ -70,7 +76,7 @@ public class ThetaInputModel extends InputModelInterface
         for (int i = 0; i < modelInputObservers.size(); i++)
         {
             ThetaInputModelObserver matrixObserver = (ThetaInputModelObserver) modelInputObservers.get(i);
-            matrixObserver.updateThetaModelInput(matrix);
+            matrixObserver.updateThetaInputModel(matrix);
         }
     }
 }

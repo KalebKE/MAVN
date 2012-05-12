@@ -21,7 +21,7 @@ package mavn.input.view.state;
 
 import simulyn.input.view.state.InputViewStateInterface;
 import simulyn.ui.components.BlinkerButton;
-import simulyn.ui.components.inputModelPanel.InputViewAbstract;
+import simulyn.ui.components.inputModel.InputViewAbstract;
 
 /**
  * Implements the View's State control for the Input Models.

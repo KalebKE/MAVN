@@ -23,7 +23,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import mavn.globals.Globals;
-import simulyn.ui.components.inputModelPanel.InputViewAbstract;
+import simulyn.ui.components.inputModel.InputViewAbstract;
 
 /**
  * A special JPanel that provides the layout for the Input Model Views.

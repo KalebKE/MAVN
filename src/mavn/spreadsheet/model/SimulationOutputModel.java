@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+SimulationOutputModel -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
+Copyright (C) 2012, Kaleb Kircher.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.spreadsheet.model;
 
@@ -11,7 +26,8 @@ import mavn.spreadsheet.model.observer.OutputModelObserver;
 import simulyn.output.model.OutputModelInterface;
 
 /**
- *
+ * The Output Model for the simulation Network Output. The Network Output can
+ * depend on the type of simulation that is being used. 
  * @author Kaleb
  */
 public class SimulationOutputModel extends OutputModelInterface implements
@@ -67,12 +83,22 @@ public class SimulationOutputModel extends OutputModelInterface implements
         }
     }
 
+    /**
+     * The hook to Observe the Multiple Point Simulation Algorithm Model Subjects.
+     * @param imageRatio the number of Points that hit shapes in the
+     * image versus the total number of Points that landed on the image.
+     */
     @Override
-    public void updateMultiplePointModelResult(double[][] modelResult)
+    public void updateMultiplePointAlgorithmModelOutput(double[][] modelResult)
     {
         this.setModelResult(modelResult);
     }
 
+    /**
+     * The hook to Observe the Single Point Simulation Algorithm Model Subjects.
+     * @param imageRatio the number of Points that hit shapes in the
+     * image versus the total number of Points that landed on the image.
+     */
     @Override
     public void updateSinglePointModelOutput(double[][] modelResult)
     {

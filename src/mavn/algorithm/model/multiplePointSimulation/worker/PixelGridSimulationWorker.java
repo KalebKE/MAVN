@@ -24,14 +24,14 @@ import java.util.ArrayList;
 import javax.swing.SwingWorker;
 import mavn.globals.Globals;
 import mavn.algorithm.model.math.CalcTheta;
-import mavn.algorithm.model.math.MatrixMultiply;
+import mavn.algorithm.model.math.MatrixMath;
 import mavn.algorithm.model.math.SHL;
 import mavn.algorithm.model.multiplePointSimulation.state.PixelGridPointOutputModelState;
 import mavn.algorithm.model.multiplePointSimulation.state.MultiPointSimulationInputModelState;
 import mavn.algorithm.model.state.output.NetworkLayerOutputModelStateAbstract;
 import mavn.algorithm.model.point.Point;
 import mavn.algorithm.model.timer.Timer;
-import mavn.util.math.FindMax;
+import simulyn.math.FindMax;
 
 /**
  * PixelSimulationWorker is a part of a Command Pattern that spawns off
@@ -92,7 +92,7 @@ public class PixelGridSimulationWorker extends SwingWorker
         resolution = Globals.RESOLUTION;
         bounds = (int) this.outputModelResultState.getBounds();
 
-        MatrixMultiply matrixMath = new MatrixMultiply();
+        MatrixMath matrixMath = new MatrixMath();
         SHL shl = new SHL();
         CalcTheta theta = new CalcTheta();
 

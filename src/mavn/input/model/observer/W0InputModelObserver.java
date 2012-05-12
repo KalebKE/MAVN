@@ -1,5 +1,6 @@
 /*
-W0Observer -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+W0InputModelObserver -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -19,8 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.input.model.observer;
 
 /**
- * W0Observer provides a common interface for all classes that need to
- * be notified of updates to the simulations Theta dat to hook into.
+ * W0InputModelObserver provides a common interface for all classes that need to
+ * be notified of updates to the simulations W0 Input Model..
  * @author Kaleb
  */
 public interface W0InputModelObserver
@@ -28,8 +29,8 @@ public interface W0InputModelObserver
 
     /**
      * The hook for classes that need to observe updates to the
-     * simulations W0 data.
-     * @param matrix the matrix containing the data.
+     * simulations W0 Input Model.
+     * @param modelInput the matrix containing the W0 Input Model.
      */
-    public void updateW0ModelInput(double[][] modelInput);
+    public void updateW0InputModel(double[][] modelInput);
 }

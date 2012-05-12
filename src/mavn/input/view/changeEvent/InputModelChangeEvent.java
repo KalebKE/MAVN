@@ -26,7 +26,7 @@ import java.util.Iterator;
 import mavn.globals.Globals;
 import mavn.network.mediator.NetworkMediatorInterface;
 import mavn.simulation.view.state.input.SimulationViewInputStateInterface;
-import mavn.util.math.Transpose;
+import simulyn.math.Transpose;
 import mavn.simulation.view.SimControlView;
 import simulyn.input.model.InputModelInterface;
 

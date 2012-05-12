@@ -23,7 +23,13 @@ import mavn.input.model.observer.W0InputModelObserver;
 import simulyn.input.model.InputModelInterface;
 
 /**
- * All updates to the W0 Matrix should be made through W0Model using
+ * The W0 Input Model keeps track of the current W0 Input for the simulation.
+ * The W0 Input can come from an external file or be defined within the
+ * simulation by the user.
+ * The W0 Input essentially represents the edge connections between nodes from
+ * the OR Layer to the Output Layer. It also required to dynamically produce
+ * the ORing function for the AND Layer Outputs.
+ * All updates to the W0 Input Model should be made through W0InputModel using
  * setMatrix(double[][] matrix). This will notify all observers of the change
  * and provide them with the new model. 
  * @author Kaleb
@@ -70,7 +76,7 @@ public class W0InputModel extends InputModelInterface
         for (int i = 0; i < modelInputObservers.size(); i++)
         {
             W0InputModelObserver matrixObserver = (W0InputModelObserver) modelInputObservers.get(i);
-            matrixObserver.updateW0ModelInput(matrix);
+            matrixObserver.updateW0InputModel(matrix);
         }
     }
 }

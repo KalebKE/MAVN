@@ -23,9 +23,15 @@ import mavn.input.model.observer.W1InputModelObserver;
 import simulyn.input.model.InputModelInterface;
 
 /**
- * All updates to the W1 Matrix should be made through W1Model using
+ * The W1 Input Model keeps track of the current W1 Input for the simulation.
+ * The W1 Input can come from an external file or be defined within the
+ * simulation by the user.
+ * The W1 Input essentially represents the edge connections between nodes from
+ * the AND Layer to the OR Layer. It also required to dynamically produce
+ * the ANDing function for the Input Layer Outputs.
+ * All updates to the W1 Input Model should be made through W0InputModel using
  * setMatrix(double[][] matrix). This will notify all observers of the change
- * and provide them with the new model. 
+ * and provide them with the new model.
  * @author Kaleb
  */
 public class W1InputModel extends InputModelInterface
@@ -55,7 +61,7 @@ public class W1InputModel extends InputModelInterface
         for (int i = 0; i < modelInputObservers.size(); i++)
         {
             W1InputModelObserver matrixObserver = (W1InputModelObserver) modelInputObservers.get(i);
-            matrixObserver.updateW1ModelInput(matrix);
+            matrixObserver.updateW1InputModel(matrix);
         }
     }
 }

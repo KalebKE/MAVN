@@ -1,5 +1,5 @@
 /*
-PlotMediatorInterface -- an Interface within the Machine Artificial Vision Network
+PlotMediatorInterface -- An Interface within the Machine Artificial Vision Network
 (Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 

@@ -153,7 +153,7 @@ public class MonteCarloSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < pointObservers.size(); i++)
         {
             PointGeneratorAlgorithmModelObserver dartObserver = (PointGeneratorAlgorithmModelObserver) pointObservers.get(i);
-            dartObserver.updatePoints(outputModelResultState.getHitPointList(), outputModelResultState.getMissPointList());
+            dartObserver.updatePointGeneratorAlgorithmModel(outputModelResultState.getHitPointList(), outputModelResultState.getMissPointList());
         }
     }
 
@@ -166,7 +166,7 @@ public class MonteCarloSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < shapesRatioObservers.size(); i++)
         {
             ShapesRatioAlgorithmModelObserver resultObserver = (ShapesRatioAlgorithmModelObserver) shapesRatioObservers.get(i);
-            resultObserver.updateShapesRatioModelResult(outputModelResultState.getShapesPointRatio());
+            resultObserver.updateShapesRatioAlgorithmModelResult(outputModelResultState.getShapesPointRatio());
         }
     }
 
@@ -179,7 +179,7 @@ public class MonteCarloSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < imageRatioObservers.size(); i++)
         {
             ImageRatioAlgorithmModelObserver resultObserver = (ImageRatioAlgorithmModelObserver) imageRatioObservers.get(i);
-            resultObserver.updateImageRatioModelResult(outputModelResultState.getImagePointRatio());
+            resultObserver.updateImageRatioAlgorithmModel(outputModelResultState.getImagePointRatio());
         }
     }
 
@@ -192,7 +192,7 @@ public class MonteCarloSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < resultObservers.size(); i++)
         {
             MultiplePointAlgorithmModelObserver resultObserver = (MultiplePointAlgorithmModelObserver) resultObservers.get(i);
-            resultObserver.updateMultiplePointModelResult(outputLayerModelState.getOutputLayerOutput());
+            resultObserver.updateMultiplePointAlgorithmModelOutput(outputLayerModelState.getOutputLayerOutput());
         }
     }
 
@@ -245,7 +245,7 @@ public class MonteCarloSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < pointHitObservers.size(); i++)
         {
             PointHitAlgorithmModelObserver observer = (PointHitAlgorithmModelObserver) pointHitObservers.get(i);
-            observer.updatePointHit(outputModelResultState.getHitPointList().get(outputModelResultState.getHitPointList().size() - 1));
+            observer.updatePointHitAlgorithmModel(outputModelResultState.getHitPointList().get(outputModelResultState.getHitPointList().size() - 1));
         }
     }
 
@@ -259,7 +259,7 @@ public class MonteCarloSimulation implements AlgorithmModelInterface,
         for (int i = 0; i < pointMissObservers.size(); i++)
         {
             PointMissAlgorithmModelObserver observer = (PointMissAlgorithmModelObserver) pointMissObservers.get(i);
-            observer.updatePointMiss(outputModelResultState.getMissPointList().get(outputModelResultState.getMissPointList().size() - 1));
+            observer.updatePointMissAlgorithmModel(outputModelResultState.getMissPointList().get(outputModelResultState.getMissPointList().size() - 1));
         }
     }
 
@@ -539,7 +539,7 @@ public class MonteCarloSimulation implements AlgorithmModelInterface,
      * @param modelInput the new Theta Input Model State.
      */
     @Override
-    public void updateThetaModelInput(double[][] modelInput)
+    public void updateThetaInputModel(double[][] modelInput)
     {
         this.inputModelState.setTheta(modelInput);
     }
@@ -549,7 +549,7 @@ public class MonteCarloSimulation implements AlgorithmModelInterface,
      * @param modelInput the new W0 Input Model State.
      */
     @Override
-    public void updateW0ModelInput(double[][] modelInput)
+    public void updateW0InputModel(double[][] modelInput)
     {
         this.inputModelState.setW0(modelInput);
     }
@@ -559,7 +559,7 @@ public class MonteCarloSimulation implements AlgorithmModelInterface,
      * @param modelInput the new W1 Input Model State.
      */
     @Override
-    public void updateW1ModelInput(double[][] modelInput)
+    public void updateW1InputModel(double[][] modelInput)
     {
         this.inputModelState.setW1(modelInput);
     }
@@ -569,7 +569,7 @@ public class MonteCarloSimulation implements AlgorithmModelInterface,
      * @param modelInput the new W2 Input Model State.
      */
     @Override
-    public void updateW2ModelInput(double[][] modelInput)
+    public void updateW2InputModel(double[][] modelInput)
     {
         this.inputModelState.setW2(modelInput);
     }

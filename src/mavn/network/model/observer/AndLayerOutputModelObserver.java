@@ -1,5 +1,5 @@
 /*
-AndLayerOutputModelObserver -- a class within the Machine Artificial Vision
+AndLayerOutputModelObserver -- A class within the Machine Artificial Vision
 Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 

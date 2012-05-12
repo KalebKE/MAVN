@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+SimulationViewOutputState -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
+Copyright (C) 2012, Kaleb Kircher.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simulation.view.state.output;
 
@@ -8,17 +23,27 @@ import mavn.simulation.view.controlBar.ControlBar;
 import mavn.simulation.view.SimControlView;
 
 /**
- *
+ * SimulationViewOutputState manages the Output View State for the simluation.
+ * It enables and disables certain UI functionality based on the Output Model
+ * State.
  * @author Kaleb
  */
 public class SimulationViewOutputState implements SimulationViewOutputStateInterface
 {
-    private boolean resultAvailable;
+
+    private boolean outputAvailable;
     private ControlBar outputViewBar;
     private ControlBar inputViewBar;
     private SimControlView view;
 
-    public SimulationViewOutputState(ControlBar outputViewBar, ControlBar inputViewBar, SimControlView view)
+    /**
+     * Initialize a SimulationViewOutputState.
+     * @param outputViewBar the Output View Control Bar.
+     * @param inputViewBar the Input View Control Bar.
+     * @param view the Simulation Control View.
+     */
+    public SimulationViewOutputState(ControlBar outputViewBar,
+            ControlBar inputViewBar, SimControlView view)
     {
         this.outputViewBar = outputViewBar;
         this.inputViewBar = inputViewBar;
@@ -26,10 +51,19 @@ public class SimulationViewOutputState implements SimulationViewOutputStateInter
     }
 
     /**
-     * Indicate that the simulation has been run.
+     * Check if there is Output available.
+     * @return
+     */
+    public boolean isOutputAvailable()
+    {
+        return outputAvailable;
+    }
+
+    /**
+     * Indicate that Output from the simulation is available.
      */
     @Override
-    public void resultAvailable(boolean available)
+    public void outputAvailable(boolean available)
     {
         if (available)
         {
@@ -50,7 +84,7 @@ public class SimulationViewOutputState implements SimulationViewOutputStateInter
             inputViewBar.getClearModelOutputButton().setEnabled(true);
             inputViewBar.getResetSimulationButton().setEnabled(true);
 
-            resultAvailable = true;
+            outputAvailable = true;
         }
         if (!available)
         {
@@ -69,12 +103,7 @@ public class SimulationViewOutputState implements SimulationViewOutputStateInter
             inputViewBar.getSaveModelOutputButton().setEnabled(false);
             inputViewBar.getClearModelOutputButton().setEnabled(false);
 
-            resultAvailable = false;
+            outputAvailable = false;
         }
-    }
-
-    public boolean isResultAvailable()
-    {
-        return resultAvailable;
     }
 }

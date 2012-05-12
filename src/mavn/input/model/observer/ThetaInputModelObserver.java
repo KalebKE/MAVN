@@ -1,5 +1,6 @@
 /*
-ThetaObserver -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+ThetaInputModelObserver -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -19,8 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.input.model.observer;
 
 /**
- * ThetaObserver provides a common interface for all classes that need to
- * be notified of updates to the simulations Theta data to hook into.
+ * ThetaInputModelObserver provides a common interface for all classes that need to
+ * be notified of updates to the simulations Theta Input Model.
  * @author Kaleb
  */
 public interface ThetaInputModelObserver
@@ -28,8 +29,8 @@ public interface ThetaInputModelObserver
 
     /**
      * The hook for classes that need to observe updates to the
-     * simulations Theta data.
-     * @param matrix the matrix containing the data.
+     * simulations Theta Input Model.
+     * @param modelInput the matrix containing the Theta Input Model.
      */
-    public void updateThetaModelInput(double[][] modelInput);
+    public void updateThetaInputModel(double[][] modelInput);
 }

@@ -1,5 +1,6 @@
 /*
-TargetObserver -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+TargetInputModelObserver -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -19,16 +20,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.input.model.observer;
 
 /**
- * TargetObserver provides a common interface for all classes that need to
- * be notified of updates to the simulations Target data to hook into.
+ * TargetInputModelObserver provides a common interface for all classes that need to
+ * be notified of updates to the simulations Target Input Model.
  * @author Kaleb
  */
 public interface TargetInputModelObserver
 {
     /**
      * The hook for classes that need to observe updates to the
-     * simulations Target data.
-     * @param matrix the matrix containing the data.
+     * simulations Target Input Model.
+     * @param modelInput the matrix containing Target Input Model.
      */
-    public void updateTargetModelInput(double[][] modelInput);
+    public void updateTargetInputModel(double[][] modelInput);
 }

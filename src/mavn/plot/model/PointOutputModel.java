@@ -81,7 +81,7 @@ public class PointOutputModel extends PointOutputModelInterface implements
      * @param point the Points that hit and missed a shape within the image.
      */
     @Override
-    public void updatePoints(ArrayList<Point> hit, ArrayList<Point> miss)
+    public void updatePointGeneratorAlgorithmModel(ArrayList<Point> hit, ArrayList<Point> miss)
     {
         this.setPointsOutput(hit, miss);
     }

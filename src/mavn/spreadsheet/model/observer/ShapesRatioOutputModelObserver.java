@@ -1,5 +1,6 @@
 /*
-ResultsObserver -- a class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+ShapesRatioOutputModelObserver -- An interface class within the Machine
+Artificial Vision Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -19,14 +20,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.spreadsheet.model.observer;
 
 /**
- * A hook for classes that want to observe updates to the simulation results.
+ * A hook for classes that want to Observe updates to the Shapes Ratio
+ * Output Model.
  * @author Kaleb
  */
 public interface ShapesRatioOutputModelObserver
 {
+
     /**
-     * Hook for classes to observe updates to the simulation results. 
-     * @param results the simulation results.
+     * A hook for classes that want to Observe updates to the Shapes Ratio
+     * Output Model.
+     * @param shapesRatioResult the shapes ratio result.
      */
     public void updateShapesRatioModelResult(double[][] shapesRatioResult);
 }

@@ -23,7 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
-import simulyn.ui.components.inputModelPanel.InputViewAbstract;
+import simulyn.ui.components.inputModel.InputViewAbstract;
 import simulyn.ui.components.spreadsheetTable.SimTable;
 
 

@@ -25,7 +25,7 @@ import mavn.input.model.observer.W0InputModelObserver;
 import simulyn.input.controller.InputControllerInterface;
 import simulyn.input.model.InputModelInterface;
 import simulyn.input.view.state.InputViewStateInterface;
-import simulyn.ui.components.inputModelPanel.InputViewAbstract;
+import simulyn.ui.components.inputModel.InputViewAbstract;
 import simulyn.ui.components.spreadsheetTable.SimTable;
 
 /**
@@ -48,11 +48,14 @@ public class InputViewW0Model extends InputViewAbstract implements W0InputModelO
 {
 
     /**
-     * Initialize the InputViewAbtract.
-     * @param inputController the Input Controller Interface you want to associate
-     * with this View.
-     * @param inputModel the Input Model Interface you want to associate with this View.
-     * @param inputModelChanged the Input Model Manager for the application.
+     * Initialize the InputViewW0Model.
+     * @param action the Action Listener responsible for managing the Actions
+     * for the InputViewAbstract implementation.
+     * @param inputModel the Input Model Interface that will back the
+     * InputViewAbstract implementation.
+     * @param inputViewState the state of the Input View implementation.
+     * @param inputModelChanged the Model Change Event Listener for the Input
+     * Models.
      */
     public InputViewW0Model(ActionListener action, InputControllerInterface inputController,
             InputModelInterface inputModel,
@@ -65,11 +68,11 @@ public class InputViewW0Model extends InputViewAbstract implements W0InputModelO
     }
 
     /**
-     * Hook for the InputThetaModel Subject.
+     * Hook for the W0InputModel Subject.
      * @param modelInput the new model.
      */
     @Override
-    public void updateW0ModelInput(double[][] modelInput)
+    public void updateW0InputModel(double[][] modelInput)
     {
         if (modelInput.length == 0)
         {

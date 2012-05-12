@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+DiagnosticSimulationTableWorker -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
+Copyright (C) 2012, Kaleb Kircher.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.spreadsheet.mediator.worker;
 
@@ -11,27 +26,37 @@ import mavn.algorithm.model.point.Point;
 import mavn.spreadsheet.mediator.SSMediator;
 
 /**
- *
+ * A DiagnosticSimulationTableWorker renders the Spreadsheet View
+ * for Diagnostic Simulations. This prevents the UI from hanging while the
+ * result renders.
  * @author Kaleb
  */
 public class DiagnosticSimulationTableWorker extends SwingWorker
 {
 
-    private double[][] modelResult;
-    private SSMediator controller;
+    private double[][] modelOutput;
+    private SSMediator mediator;
     private Point point;
 
-    public DiagnosticSimulationTableWorker(double[][] modelResult, SSMediator controller, Point point)
+    /**
+     * Initialize a DiagnosticSimulationTableWorker.
+     * @param modelOutput the output from the Output Model that will be rendered.
+     * @param mediator the Spreadsheet Mediator that the Output Model is being
+     * rendered for.
+     * @param point the Point from the Target Input Model used in the simluation.
+     */
+    public DiagnosticSimulationTableWorker(double[][] modelOutput,
+            SSMediator mediator, Point point)
     {
-        this.modelResult = modelResult;
-        this.controller = controller;
+        this.modelOutput = modelOutput;
+        this.mediator = mediator;
         this.point = point;
     }
 
     @Override
     protected Object doInBackground() throws Exception
     {
-        double[][] data = modelResult;
+        double[][] data = modelOutput;
 
         Object[][] d = new Object[data.length][];
 
@@ -67,8 +92,8 @@ public class DiagnosticSimulationTableWorker extends SwingWorker
         DefaultTableModel model = new DefaultTableModel(d, columnNames);
         model.setNumRows(15);
         model.setColumnCount(1);
-        controller.setTableModel(model);
-        controller.updateUI();
+        mediator.setTableModel(model);
+        mediator.updateUI();
 
         return null;
     }

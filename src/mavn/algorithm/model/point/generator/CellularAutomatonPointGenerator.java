@@ -1,5 +1,5 @@
 /*
-CellularAutomatonRngDartGun -- a class within the Machine Artificial Vision
+CellularAutomatonPointGenerator -- a class within the Machine Artificial Vision
 Network(Machine Artificial Vision Network)
 Copyright (C) 2012, Kaleb Kircher.
 
@@ -23,7 +23,7 @@ import mavn.algorithm.model.point.Point;
 import org.uncommons.maths.random.CellularAutomatonRNG;
 
 /**
- * A DartGunInterface implementation that uses Cellular Automaton RNG to generate points.
+ * A PointGeneratorInterface implementation that uses Cellular Automaton RNG to generate points.
  * A Java port of Tony Pasqualoni's fast Cellular Automaton RNG.
  * It uses a 256-cell automaton to generate random values.
  * @author Kaleb
@@ -42,15 +42,15 @@ public class CellularAutomatonPointGenerator implements PointGeneratorInterface
     }
 
     /**
-     * Fire a random dart. Imagine throwing a dart at a
+     * Generate a random Point. Imagine throwing a dart at a
      * two dimensional plane with X and Y axis. This method
      * produces the point where the dart landed by generating
      * two random numbers using the CellularAutomatonRNG.
      * @param bounds the maximum X and Y axis points.
-     * @return the X and Y points where the dart landed
+     * @return the X and Y coordinates where the Point landed
      */
     @Override
-    public Point fireDart(double bounds)
+    public Point generatePoint(double bounds)
     {
         Point point = new Point();
 

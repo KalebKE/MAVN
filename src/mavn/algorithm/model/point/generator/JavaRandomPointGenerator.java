@@ -1,5 +1,5 @@
 /*
-JavaRngDartGun -- a class within the Machine Artificial Vision
+JavaRandomPointGenerator -- a class within the Machine Artificial Vision
 Network(Machine Artificial Vision Network)
 Copyright (C) 2012, Kaleb Kircher.
 
@@ -23,7 +23,7 @@ import mavn.algorithm.model.point.Point;
 import java.util.Random;
 
 /**
- * A DartGunInterface implementation that uses java.util.random to generate points.
+ * A PointGeneratorInterface implementation that uses java.util.random to generate Points.
  * It is fast, but fails most tests of randomness. 
  * @author Kaleb Kircher
  */
@@ -41,15 +41,15 @@ public class JavaRandomPointGenerator implements PointGeneratorInterface
     }
 
     /**
-     * Fire a random dart. Imagine throwing a dart at a
+     * Generate a random Point. It is like throwing a dart at a
      * two dimensional plane with X and Y axis. This method
-     * produces the point where the dart landed by generating
-     * two random numbers using the java.util.random RNG.
+     * produces the Point where the dart landed by generating
+     * two random numbers (X and Y) using the java.util.random RNG.
      * @param bounds the maximum X and Y axis points.
-     * @return the X and Y points where the dart landed
+     * @return the X and Y Point where the dart landed
      */
     @Override
-    public Point fireDart(double bounds)
+    public Point generatePoint(double bounds)
     {
         Point point = new Point();
 

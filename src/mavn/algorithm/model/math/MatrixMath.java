@@ -22,7 +22,7 @@ package mavn.algorithm.model.math;
  * Multiply two matrices. Java implementation from
  * Tom Christiansen & Nathan Torkington, Perl Cookbook version.
  */
-public class MatrixMultiply
+public class MatrixMath
 {
     /* Matrix-multiply two arrays together.
      * The arrays MUST be rectangular.

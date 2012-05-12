@@ -1,6 +1,6 @@
 /*
-SinglePointModelWorker --
-A class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
+DiagnosticSimulationWorker -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ package mavn.algorithm.model.singlePointSimulation.worker;
 import java.text.DecimalFormat;
 import javax.swing.SwingWorker;
 import mavn.algorithm.model.math.CalcTheta;
-import mavn.algorithm.model.math.MatrixMultiply;
+import mavn.algorithm.model.math.MatrixMath;
 import mavn.algorithm.model.math.SHL;
 import mavn.algorithm.model.state.input.InputModelState;
 import mavn.algorithm.model.singlePointSimulation.state.SinglePointLayerOutputModelState;
@@ -46,7 +46,7 @@ public class DiagnosticSimulationWorker extends SwingWorker
     private String results;
 
     /**
-     * Initialize a new instance of a SinglePointModelWorker. Note that this
+     * Initialize a new instance of a DiagnosticSimulationWorker. Note that this
      * class extends SwingWorker which is intended to be used *once* per
      * instance.
      * @param inputModelState the Input Model State for the simulation.
@@ -65,7 +65,7 @@ public class DiagnosticSimulationWorker extends SwingWorker
     @Override
     protected Object doInBackground() throws Exception
     {
-        MatrixMultiply matrix = new MatrixMultiply();
+        MatrixMath matrix = new MatrixMath();
         SHL shl = new SHL();
         CalcTheta theta = new CalcTheta();
 

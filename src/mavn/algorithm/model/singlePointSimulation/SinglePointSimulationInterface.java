@@ -1,5 +1,5 @@
 /*
-MavenSinglePointModelInterface --
+SinglePointModelInterface --
 An interface within the Machine Artificial Vision Network(Machine Artificial Vision Network)
 Copyright (C) 2012, Kaleb Kircher, Dennis Steele.
 
@@ -22,7 +22,7 @@ package mavn.algorithm.model.singlePointSimulation;
 import mavn.algorithm.model.singlePointSimulation.observer.SinglePointAlgorithmModelObserver;
 
 /**
- * A MAVN Single Point Model is intended to be used as testing or educational
+ * A Single Point Model is intended to be used as testing or educational
  * tool. It fires a single Point defined by the user in the Target InputModel
  * at the image. While this is powerful tool to ensure that your simulation's model
  * is working correctly and a good way of demonstrating how the MAVN Network
@@ -33,7 +33,7 @@ import mavn.algorithm.model.singlePointSimulation.observer.SinglePointAlgorithmM
  * its State.
  * @author Kaleb
  */
-public interface SinglePointModelInterface
+public interface SinglePointSimulationInterface
 {
 
     /**

@@ -1,6 +1,6 @@
 /*
-SimulationInputModelState -- a class within the Machine Artificial Vision Network
-(Machine Artificial Vision Network).
+SimulationTargetInputModelState -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
 This program is free software; you can redistribute it and/or

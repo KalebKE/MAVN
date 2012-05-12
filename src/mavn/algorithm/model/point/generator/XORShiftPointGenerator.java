@@ -1,5 +1,5 @@
 /*
-XORRngDartGun -- a class within the Machine Artificial Vision
+XORShiftPointGenerator -- a class within the Machine Artificial Vision
 Network(Machine Artificial Vision Network)
 Copyright (C) 2012, Kaleb Kircher.
 
@@ -23,7 +23,7 @@ import mavn.algorithm.model.point.Point;
 import org.uncommons.maths.random.XORShiftRNG;
 
 /**
- * A DartGunInterface implementation that uses XOR Shift RNG to generate points.
+ * A XORShiftPointGenerator implementation that uses XOR Shift RNG to generate points.
  * A Java implementation of the very fast PRNG described by George Marsaglia.
  * It has a period of about 2^160, which although much shorter than the Mersenne
  * Twister's, is still significantly longer than that of java.util.Random.
@@ -42,15 +42,15 @@ public class XORShiftPointGenerator implements PointGeneratorInterface
     }
 
     /**
-     * Fire a random dart. Imagine throwing a dart at a
+     * Generate a random Point. Imagine throwing a dart at a
      * two dimensional plane with X and Y axis. This method
      * produces the point where the dart landed by generating
-     * two random numbers using the XORShiftRNG.
+     * two random numbers (X and Y) using the XORShiftRNG.
      * @param bounds the maximum X and Y axis points.
-     * @return the X and Y points where the dart landed
+     * @return the X and Y Point where the dart landed.
      */
     @Override
-    public Point fireDart(double bounds)
+    public Point generatePoint(double bounds)
     {
         Point point = new Point();
 

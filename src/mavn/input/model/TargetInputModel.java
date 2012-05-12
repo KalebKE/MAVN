@@ -24,9 +24,14 @@ import mavn.input.model.observer.TargetInputModelObserver;
 import simulyn.input.model.InputModelInterface;
 
 /**
+ * Target Input Model keeps track of the current Target Input for the simulation.
+ * The Target Input consists of an X and Y coordinate representing a Point
+ * on an image. This point will either land on a shape in the image, or it won't.
+ * Target Input is only used for Single Point Simulation's and is defined by
+ * the user in an external file or with the Input View.
  * All updates to the Target Input Model should be made through TargetInputModel using
- * setMatrix(double[][] matrix). This will notify all observers of the change
- * and provide them with the new model. 
+ * setMatrix(double[][] matrix). This will notify all Observers of the change
+ * and provide them with the new model state.
  * @author Kaleb
  */
 public class TargetInputModel extends InputModelInterface
@@ -71,7 +76,7 @@ public class TargetInputModel extends InputModelInterface
         for (int i = 0; i < modelInputObservers.size(); i++)
         {
             TargetInputModelObserver matrixObserver = (TargetInputModelObserver) modelInputObservers.get(i);
-            matrixObserver.updateTargetModelInput(matrix);
+            matrixObserver.updateTargetInputModel(matrix);
         }
     }
 }

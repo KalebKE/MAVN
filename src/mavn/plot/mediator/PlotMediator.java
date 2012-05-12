@@ -365,7 +365,7 @@ public class PlotMediator implements OutputViewMediatorInterface,
      * @param modelInput the State of Target Model Input Subjects.
      */
     @Override
-    public void updateTargetModelInput(double[][] modelInput)
+    public void updateTargetInputModel(double[][] modelInput)
     {
         // Set the modelInput to the Mediators State so it can be worked with locally.
         ((SimulationTargetInputModelState) plotMediatorInputModelState).setTargetInputModel(modelInput);

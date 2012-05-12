@@ -22,7 +22,7 @@ package mavn.input.view.layout;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import simulyn.ui.components.inputModelPanel.InputViewAbstract;
+import simulyn.ui.components.inputModel.InputViewAbstract;
 
 /**
  * A special JPanel that provides the layout for the Input Model Views.

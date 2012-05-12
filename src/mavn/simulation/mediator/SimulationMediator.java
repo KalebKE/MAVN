@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+SimulationMediator -- A class within the Machine Artificial Vision
+Network(Machine Artificial Vision Network).
+Copyright (C) 2012, Kaleb Kircher.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simulation.mediator;
 
@@ -24,23 +39,25 @@ import mavn.simulation.view.state.simulator.SimulationTypeViewStateInterface;
 import mavn.spreadsheet.mediator.SSMediatorInterface;
 import simulyn.algorithm.model.AlgorithmModelInterface;
 import simulyn.input.model.InputModelInterface;
-import simulyn.mediator.SimulationMediatorInterface;
+import simulyn.simulation.mediator.SimulationMediatorInterface;
+
 
 /**
- *
+ * SimulationMediator can be thought of as the master mediator for the simulation.
+ * It coordinates the Simulations Controllers/Mediators and allows them
+ * to stay fairly decoupled from each.
  * @author Kaleb
  */
 public class SimulationMediator implements SimulationMediatorInterface
 {
-
     private ArrayList<InputModelInterface> inputModels;
     private ArrayList<OpenFileObserver> fileObservers;
     // Model Algorithm Models are responsible for running the simulation
     // with their algorithm. They use a Command Pattern and a SwingWorker
     // so the GUI won't hang on big computations.
-    private AlgorithmModelInterface singlePointSimulation;
-    private AlgorithmModelInterface uniformPointSimulation;
-    private AlgorithmModelInterface gridPointSimulation;
+    private AlgorithmModelInterface diagnosticSimulation;
+    private AlgorithmModelInterface monteCarloSimluation;
+    private AlgorithmModelInterface pixelGridSimulation;
     private NetworkMediatorInterface networkMediator;
     private PlotMediatorInterface plotMediator;
     private SimulationPropertiesStateInterface simulationPropertiesState;
@@ -53,38 +70,38 @@ public class SimulationMediator implements SimulationMediatorInterface
         "target", "theta", "w0", "w1", "w2"
     };
 
-    /**
-     * @param singlePointSimulation the SinglePointSimulation implementation to
-     * be used by the Mediator. It knows how to run a MAVN SinglePointSimulation.
-     * It is a Subject in a Observer Pattern and is Observed by the Simulation
-     * Result Models.
-     *
-     * @param uniformPointSimulation the MultiplePointSimulatoin implenation to
-     * be used by the Mediator. It knows how to run a MAVN MultiplePointSimulation.
-     * It is a Subject in a Observer Pattern and is Observed by the Simulation
-     * Result Models.
-     * @param mediator
-     */
+   /**
+    * Initialize a new SimulationMediator.
+    * @param inputModels the simulations Input Models.
+    * @param diagnosticSimulation the desired Diagnostic Simulation.
+    * @param monteCarloSimulation the desired Monte Carlo Simulation.
+    * @param pixelGridSimulation the desired Pixel Grid Simulation.
+    * @param networkMediator the Mediator for the Network Output.
+    * @param plotMediator the Mediator for the Plot Output.
+    * @param simulationPropertiesState the Simulation Properties.
+    * @param propertiesView the Simulation Properties View.
+    * @param ssMediator the Mediator for the Plot Output.
+    */
     public SimulationMediator(
             ArrayList<InputModelInterface> inputModels,
-            AlgorithmModelInterface singlePointSimulation,
-            AlgorithmModelInterface uniformPointSimulation,
-            AlgorithmModelInterface gridPointSimulation,
+            AlgorithmModelInterface diagnosticSimulation,
+            AlgorithmModelInterface monteCarloSimulation,
+            AlgorithmModelInterface pixelGridSimulation,
             NetworkMediatorInterface networkMediator,
             PlotMediatorInterface plotMediator,
             SimulationPropertiesStateInterface simulationPropertiesState,
             SimulationPropertiesFrame propertiesView,
             SSMediatorInterface ssMediator)
     {
-        this.gridPointSimulation = gridPointSimulation;
+        this.pixelGridSimulation = pixelGridSimulation;
         this.inputModels = inputModels;
         this.networkMediator = networkMediator;
         this.plotMediator = plotMediator;
         this.propertiesView = propertiesView;
-        this.singlePointSimulation = singlePointSimulation;
+        this.diagnosticSimulation = diagnosticSimulation;
         this.simulationPropertiesState = simulationPropertiesState;
         this.ssMediator = ssMediator;
-        this.uniformPointSimulation = uniformPointSimulation;
+        this.monteCarloSimluation = monteCarloSimulation;
 
         // Cast the InputModels into OpenFileObservers so we can use them
         // to load the InputModels from external files.
@@ -102,7 +119,8 @@ public class SimulationMediator implements SimulationMediatorInterface
     @Override
     public void onLoadSimulationInputModel()
     {
-        OpenSpreadsheetDirectoryController importModel = new OpenSpreadsheetDirectoryController(fileObservers);
+        OpenSpreadsheetDirectoryController importModel =
+                new OpenSpreadsheetDirectoryController(fileObservers);
         importModel.getDirectoryChooser();
     }
 
@@ -119,49 +137,52 @@ public class SimulationMediator implements SimulationMediatorInterface
     /**
      * Provides the logic for when a View Action requests that a new simulation
      * should be run using the current Input Models and the result should be
-     * made available to the Result Models.
+     * made available to the Output Models.
      */
     @Override
     public void onRunSimulation()
     {
         if (simulationPropertiesState.isDiagnosticSimulation())
         {
-            singlePointSimulation.execute();
+            diagnosticSimulation.execute();
         }
         if (simulationPropertiesState.isMonteCarloSimulation())
         {
             if (simulationPropertiesState.isCaRng())
             {
-                ((MonteCarloSimulation) uniformPointSimulation).setPointGenerator(new CellularAutomatonPointGenerator());
-                uniformPointSimulation.execute();
+                ((MonteCarloSimulation) monteCarloSimluation).setPointGenerator(new CellularAutomatonPointGenerator());
+                monteCarloSimluation.execute();
             }
             if (simulationPropertiesState.isCmwcRng())
             {
-                ((MonteCarloSimulation) uniformPointSimulation).setPointGenerator(new CMWC4096PointGenerator());
-                uniformPointSimulation.execute();
+                ((MonteCarloSimulation) monteCarloSimluation).setPointGenerator(new CMWC4096PointGenerator());
+                monteCarloSimluation.execute();
             }
             if (simulationPropertiesState.isRandomRng())
             {
-                ((MonteCarloSimulation) uniformPointSimulation).setPointGenerator(new JavaRandomPointGenerator());
-                uniformPointSimulation.execute();
+                ((MonteCarloSimulation) monteCarloSimluation).setPointGenerator(new JavaRandomPointGenerator());
+                monteCarloSimluation.execute();
             }
             if (simulationPropertiesState.isMtRng())
             {
-                ((MonteCarloSimulation) uniformPointSimulation).setPointGenerator(new MersenneTwisterPointGenerator());
-                uniformPointSimulation.execute();
+                ((MonteCarloSimulation) monteCarloSimluation).setPointGenerator(new MersenneTwisterPointGenerator());
+                monteCarloSimluation.execute();
             }
             if (simulationPropertiesState.isXORRng())
             {
-                ((MonteCarloSimulation) uniformPointSimulation).setPointGenerator(new XORShiftPointGenerator());
-                uniformPointSimulation.execute();
+                ((MonteCarloSimulation) monteCarloSimluation).setPointGenerator(new XORShiftPointGenerator());
+                monteCarloSimluation.execute();
             }
         }
         if (simulationPropertiesState.isPixelGridSimulation())
         {
-            gridPointSimulation.execute();
+            pixelGridSimulation.execute();
         }
     }
 
+    /**
+     * Save the simulation Input Model's. 
+     */
     @Override
     public void onSaveSimulationInputModel()
     {
@@ -175,6 +196,9 @@ public class SimulationMediator implements SimulationMediatorInterface
         SaveDirectoryControllerInterface saveDirectoryController = new SaveSpreadsheetDirectoryController(models, fileNames);
     }
 
+    /**
+     * Clear the simulation Input Models and reset to the default state.
+     */
     @Override
     public void onClearSimulation()
     {
@@ -197,11 +221,19 @@ public class SimulationMediator implements SimulationMediatorInterface
         this.simulationTypeState.onMonteCarloSimulationView();
     }
 
+    /**
+     * Set the SimulationTypeState.
+     * @param simulationTypeState the simulation Type State.
+     */
     public void setSimulationTypeState(SimulationTypeViewStateInterface simulationTypeState)
     {
         this.simulationTypeState = simulationTypeState;
     }
 
+    /**
+     * Set the SimulationViewState.
+     * @param simulationViewState the simulation View State.
+     */
     public void setSimulationViewState(SimulationViewInputStateInterface simulationViewState)
     {
         this.simulationViewState = simulationViewState;

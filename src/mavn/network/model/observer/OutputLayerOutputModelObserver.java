@@ -1,5 +1,5 @@
 /*
-OutputLayerOutputModelObserver -- a class within the Machine Artificial
+OutputLayerOutputModelObserver -- A class within the Machine Artificial
 Vision Network(Machine Artificial Vision Network).
 Copyright (C) 2012, Kaleb Kircher.
 
@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package mavn.network.model.observer;
 
 /**
- * An Observer class for classes that want to Observe updates to the Algorithm
+ * An Observer hook for classes that want to Observe updates to the Algorithm
  * Subject's simulation network Output Layer output.
  * @author Kaleb
  */

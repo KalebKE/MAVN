@@ -83,7 +83,7 @@ public class PointHitOutputModel extends PointHitOutputModelInterface implements
      * @param point the Point that hit a shape within the image.
      */
     @Override
-    public void updatePointHit(Point point)
+    public void updatePointHitAlgorithmModel(Point point)
     {
         this.setPointHit(point);
     }

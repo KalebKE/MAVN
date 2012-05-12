@@ -23,6 +23,11 @@ import mavn.input.model.observer.W2InputModelObserver;
 import simulyn.input.model.InputModelInterface;
 
 /**
+ * The W2 Input Model keeps track of the current W2 Input for the simulation.
+ * The W2 Input can come from an external file or be defined within the
+ * simulation by the user.
+ * The W2 Input essentially represents the boundary edge directions. It is
+ * multiplied by the Target Input and the result is then added to the Theta Input.
  * All updates to the W2 Matrix should be made through W2Model using
  * setMatrix(double[][] matrix). This will notify all observers of the change
  * and provide them with the new model. 
@@ -30,32 +35,47 @@ import simulyn.input.model.InputModelInterface;
  */
 public class W2InputModel extends InputModelInterface
 {
+
+    /**
+     * Initialize the W2InputModel.
+     */
     public W2InputModel()
     {
         modelInputObservers = new ArrayList<W2InputModelObserver>();
     }
 
+    /**
+     * Push new W2 Input Model State to Observers.
+     */
+    @Override
+    public void notifyObservers()
+    {
+        for (int i = 0; i < modelInputObservers.size(); i++)
+        {
+            W2InputModelObserver matrixObserver = (W2InputModelObserver) modelInputObservers.get(i);
+            matrixObserver.updateW2InputModel(matrix);
+        }
+    }
+
+    /**
+     * Register a W2InputModelObserver.
+     * @param o the W2 Input Model Observer.
+     */
     public void registerObserver(W2InputModelObserver o)
     {
         modelInputObservers.add(o);
     }
 
+    /**
+     * Remove a W2InputModelObserver.
+     * @param o the W2 Input Mobel Observer.
+     */
     public void removeObserver(W2InputModelObserver o)
     {
         int i = modelInputObservers.indexOf(o);
         if (i >= 0)
         {
             modelInputObservers.remove(i);
-        }
-    }
-
-    @Override
-    public void notifyObservers()
-    {
-        for (int i = 0; i < modelInputObservers.size(); i++)
-        {
-            W2InputModelObserver matrixObserver = (W2InputModelObserver)modelInputObservers.get(i);
-            matrixObserver.updateW2ModelInput(matrix);
         }
     }
 }

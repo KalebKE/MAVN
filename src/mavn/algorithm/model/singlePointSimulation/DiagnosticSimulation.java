@@ -1,5 +1,5 @@
 /*
-MavenSinglePointModel --
+DiagnosticSimulation --
 A class within the Machine Artificial Vision Network(Machine Artificial Vision Network)
 Copyright (C) 2012, Kaleb Kircher, Dennis Steele.
 
@@ -39,17 +39,16 @@ import mavn.input.model.observer.W2InputModelObserver;
 import simulyn.algorithm.model.AlgorithmModelInterface;
 
 /**
- * A MAVN Single Point Model is intended to be used as testing or educational
- * tool. It fires a single Point defined by the user in the Target InputModel
- * at the image. While this is powerful tool to ensure that your simulation's model
- * is working correctly and a good way of demonstrating how the MAVN Network
- * works, it is not practical for pattern recognition which require a large
- * number of Points to be fired at the image.
+ * A DiagnosticSimulation is intended to be used as a testing or educational
+ * tool. It fires a single Point, defined by the user in the Target Input Model,
+ * at the image. While this is an excellent tool to ensure that your simulation's
+ * Input Model is working correctly, it is not practical for pattern recognition
+ * which require a large number of Points to be fired at the image.
  *
  * @author Kaleb
  */
 public class DiagnosticSimulation implements AlgorithmModelInterface,
-        SinglePointModelInterface,
+        SinglePointSimulationInterface,
         AndLayerAlgorithmModelInterface,
         OrLayerAlgorithmModelInterface,
         OutputLayerAlgorithmModelInterface,
@@ -92,104 +91,10 @@ public class DiagnosticSimulation implements AlgorithmModelInterface,
     {
         if (inputModelState.isInputModelReady())
         {
+            // A Command Pattern is used to spawn off a new thread that actually
+            // runs the simulations algorithms with a Swing Worker implementation.
             simulation = new DiagnosticSimulationWorker(inputModelState, outputModelState);
             simulation.execute();
-        }
-    }
-
-    /**
-     * Register a new MavnSinglePointAlgorithmModelObserver.
-     * @param o the MavnSinglePointAlgorithmModelObserver.
-     */
-    @Override
-    public void registerObserver(SinglePointAlgorithmModelObserver o)
-    {
-        singlePointModelObserver.add(o);
-    }
-
-    /**
-     * Remove a MavnSinglePointAlgorithmModelObserver.
-     * @param o the MavnSinglePointAlgorithmModelObserver.
-     */
-    @Override
-    public void removeObserver(SinglePointAlgorithmModelObserver o)
-    {
-        int i = singlePointModelObserver.indexOf(o);
-        if (i >= 0)
-        {
-            singlePointModelObserver.remove(o);
-        }
-    }
-
-    /**
-     * Register a And Layer Algorithm Model Observer.
-     * @param o the AndLayerAlgorithmModelObserver.
-     */
-    @Override
-    public void registerObserver(AndLayerAlgorithmModelObserver o)
-    {
-        andLayerObservers.add(o);
-    }
-
-    /**
-     * Remove a And Layer Algorithm Model Observer.
-     * @param o the AndLayerAlgorithmModelObserver.
-     */
-    @Override
-    public void removeObserver(AndLayerAlgorithmModelObserver o)
-    {
-        int i = andLayerObservers.indexOf(o);
-        if (i >= 0)
-        {
-            andLayerObservers.remove(o);
-        }
-    }
-
-    /**
-     * Register a Or Layer Algorithm Model Observer.
-     * @param o the OrLayerAlgorithmModelObserver.
-     */
-    @Override
-    public void registerObserver(OrLayerAlgorithmModelObserver o)
-    {
-        orLayerObservers.add(o);
-    }
-
-    /**
-     * Remove a Or Layer Algorithm Model Observer.
-     * @param o the OrLayerAlgorithmModelObserver.
-     */
-    @Override
-    public void removeObserver(OrLayerAlgorithmModelObserver o)
-    {
-        int i = orLayerObservers.indexOf(o);
-        if (i >= 0)
-        {
-            orLayerObservers.remove(o);
-        }
-    }
-
-    /**
-     * Register a Output Layer Algorithm Model Observer.
-     * @param o the OutputLayerAlgorithmModelObserver.
-     */
-    @Override
-    public void registerObserver(OutputLayerAlgorithmModelObserver o)
-    {
-        outputLayerObservers.add(o);
-    }
-
-    /**
-     * Remove a Output Layer Algorithm Model Observer.
-     * @param o the OutputLayerAlgorithmModelObserver.
-     */
-    @Override
-    public void removeObserver(OutputLayerAlgorithmModelObserver o)
-    {
-        int i = outputLayerObservers.indexOf(o);
-        if (i >= 0)
-        {
-            outputLayerObservers.remove(o);
         }
     }
 
@@ -246,11 +151,107 @@ public class DiagnosticSimulation implements AlgorithmModelInterface,
     }
 
     /**
+     * Register a And Layer Algorithm Model Observer.
+     * @param o the AndLayerAlgorithmModelObserver.
+     */
+    @Override
+    public void registerObserver(AndLayerAlgorithmModelObserver o)
+    {
+        andLayerObservers.add(o);
+    }
+
+    /**
+     * Register a Or Layer Algorithm Model Observer.
+     * @param o the OrLayerAlgorithmModelObserver.
+     */
+    @Override
+    public void registerObserver(OrLayerAlgorithmModelObserver o)
+    {
+        orLayerObservers.add(o);
+    }
+
+    /**
+     * Register a Output Layer Algorithm Model Observer.
+     * @param o the OutputLayerAlgorithmModelObserver.
+     */
+    @Override
+    public void registerObserver(OutputLayerAlgorithmModelObserver o)
+    {
+        outputLayerObservers.add(o);
+    }
+
+    /**
+     * Register a new SinglePointAlgorithmModelObserver.
+     * @param o the SinglePointAlgorithmModelObserver.
+     */
+    @Override
+    public void registerObserver(SinglePointAlgorithmModelObserver o)
+    {
+        singlePointModelObserver.add(o);
+    }
+
+    /**
+     * Remove the SinglePointAlgorithmModelObserver.
+     * @param o SinglePointAlgorithmModelObserver.
+     */
+    @Override
+    public void removeObserver(SinglePointAlgorithmModelObserver o)
+    {
+        int i = singlePointModelObserver.indexOf(o);
+        if (i >= 0)
+        {
+            singlePointModelObserver.remove(o);
+        }
+    }
+
+    /**
+     * Remove a And Layer Algorithm Model Observer.
+     * @param o the AndLayerAlgorithmModelObserver.
+     */
+    @Override
+    public void removeObserver(AndLayerAlgorithmModelObserver o)
+    {
+        int i = andLayerObservers.indexOf(o);
+        if (i >= 0)
+        {
+            andLayerObservers.remove(o);
+        }
+    }
+
+    /**
+     * Remove a Or Layer Algorithm Model Observer.
+     * @param o the OrLayerAlgorithmModelObserver.
+     */
+    @Override
+    public void removeObserver(OrLayerAlgorithmModelObserver o)
+    {
+        int i = orLayerObservers.indexOf(o);
+        if (i >= 0)
+        {
+            orLayerObservers.remove(o);
+        }
+    }
+
+    /**
+     * Remove a Output Layer Algorithm Model Observer.
+     * @param o the OutputLayerAlgorithmModelObserver.
+     */
+    @Override
+    public void removeObserver(OutputLayerAlgorithmModelObserver o)
+    {
+        int i = outputLayerObservers.indexOf(o);
+        if (i >= 0)
+        {
+            outputLayerObservers.remove(o);
+        }
+    }
+
+    /**
      * Hook to Observe the Target Input Model Subject for new Input Model State.
      * @param modelInput the Input Model State.
      */
     @Override
-    public void updateTargetModelInput(double[][] modelInput)
+    public void updateTargetInputModel(double[][] modelInput)
     {
         this.inputModelState.setTarget(modelInput);
     }
@@ -260,7 +261,7 @@ public class DiagnosticSimulation implements AlgorithmModelInterface,
      * @param modelInput the Input Model State.
      */
     @Override
-    public void updateThetaModelInput(double[][] modelInput)
+    public void updateThetaInputModel(double[][] modelInput)
     {
         this.inputModelState.setTheta(modelInput);
     }
@@ -270,7 +271,7 @@ public class DiagnosticSimulation implements AlgorithmModelInterface,
      * @param modelInput the Input Model State.
      */
     @Override
-    public void updateW0ModelInput(double[][] modelInput)
+    public void updateW0InputModel(double[][] modelInput)
     {
         this.inputModelState.setW0(modelInput);
     }
@@ -280,7 +281,7 @@ public class DiagnosticSimulation implements AlgorithmModelInterface,
      * @param modelInput the Input Model State.
      */
     @Override
-    public void updateW1ModelInput(double[][] modelInput)
+    public void updateW1InputModel(double[][] modelInput)
     {
         this.inputModelState.setW1(modelInput);
     }
@@ -290,7 +291,7 @@ public class DiagnosticSimulation implements AlgorithmModelInterface,
      * @param modelInput the Input Model State.
      */
     @Override
-    public void updateW2ModelInput(double[][] modelInput)
+    public void updateW2InputModel(double[][] modelInput)
     {
         this.inputModelState.setW2(modelInput);
     }

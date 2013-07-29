@@ -21,6 +21,7 @@ package mavn.simulation.view.state.output;
 
 import mavn.simulation.view.controlBar.ControlBar;
 import mavn.simulation.view.SimControlView;
+import mavn.simulation.view.controlBar.SubControlBar;
 
 /**
  * SimulationViewOutputState manages the Output View State for the simluation.
@@ -34,6 +35,7 @@ public class SimulationViewOutputState implements SimulationViewOutputStateInter
     private boolean outputAvailable;
     private ControlBar outputViewBar;
     private ControlBar inputViewBar;
+    private SubControlBar subViewBar;
     private SimControlView view;
 
     /**
@@ -43,10 +45,11 @@ public class SimulationViewOutputState implements SimulationViewOutputStateInter
      * @param view the Simulation Control View.
      */
     public SimulationViewOutputState(ControlBar outputViewBar,
-            ControlBar inputViewBar, SimControlView view)
+            ControlBar inputViewBar, SimControlView view, SubControlBar subViewBar)
     {
         this.outputViewBar = outputViewBar;
         this.inputViewBar = inputViewBar;
+        this.subViewBar = subViewBar;
         this.view = view;
     }
 
@@ -73,16 +76,14 @@ public class SimulationViewOutputState implements SimulationViewOutputStateInter
             view.getClearOutputMenuItem().setEnabled(true);
 
             // Disable these buttons
-            outputViewBar.getRunSimulationButton().setEnabled(true);
+            subViewBar.getRunSimulationButton().setEnabled(true);
             outputViewBar.getSaveModelOutputButton().setEnabled(true);
             outputViewBar.getClearModelOutputButton().setEnabled(true);
-            outputViewBar.getResetSimulationButton().setEnabled(true);
+            subViewBar.getResetSimulationButton().setEnabled(true);
 
             // Disable these buttons
-            inputViewBar.getRunSimulationButton().setEnabled(true);
             inputViewBar.getSaveModelOutputButton().setEnabled(true);
             inputViewBar.getClearModelOutputButton().setEnabled(true);
-            inputViewBar.getResetSimulationButton().setEnabled(true);
 
             outputAvailable = true;
         }
@@ -94,12 +95,11 @@ public class SimulationViewOutputState implements SimulationViewOutputStateInter
             view.getClearOutputMenuItem().setEnabled(false);
 
             // Disable these buttons
-            outputViewBar.getRunSimulationButton().setEnabled(false);
+            subViewBar.getRunSimulationButton().setEnabled(false);
             outputViewBar.getSaveModelOutputButton().setEnabled(false);
             outputViewBar.getClearModelOutputButton().setEnabled(false);
 
             // Disable these buttons
-            inputViewBar.getRunSimulationButton().setEnabled(false);
             inputViewBar.getSaveModelOutputButton().setEnabled(false);
             inputViewBar.getClearModelOutputButton().setEnabled(false);
 

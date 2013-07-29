@@ -1,21 +1,21 @@
 /*
-MavnController -- a class within the Machine Artificial Vision
-Network(Machine Artificial Vision Network).
-Copyright (C) 2012, Kaleb Kircher
+ MavnController -- a class within the Machine Artificial Vision
+ Network(Machine Artificial Vision Network).
+ Copyright (C) 2012, Kaleb Kircher
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.factory;
 
@@ -82,6 +82,7 @@ import mavn.simulation.view.actions.SimulationBarAction;
 import mavn.simulation.view.actions.ViewBarAction;
 import mavn.simulation.view.controlBar.ControlBar;
 import mavn.output.view.layout.ModelOutputDefaultLayoutView;
+import mavn.output.view.layout.ModelOutputInfographic;
 import mavn.simulation.view.state.input.SimulationViewInputState;
 import mavn.plot.mediator.PlotMediator;
 import mavn.plot.mediator.PlotMediatorInterface;
@@ -90,7 +91,10 @@ import mavn.plot.model.PointHitOutputModel;
 import mavn.plot.model.PointMissOutputModel;
 import mavn.plot.model.PointOutputModel;
 import mavn.plot.model.TimerOutputModel;
+import mavn.simulation.mediator.InfographicMediator;
 import mavn.simulation.view.SimControlView;
+import mavn.simulation.view.controlBar.PropertiesControlBar;
+import mavn.simulation.view.controlBar.SubControlBar;
 import mavn.simulation.view.state.output.SimulationViewOutputState;
 import mavn.simulation.view.state.simulator.SimulationTypeViewState;
 import simulyn.input.controller.InputController;
@@ -99,38 +103,24 @@ import simulyn.ui.components.inputModel.InputViewAbstract;
 
 /**
  * A Factory class for the MAVN application.
+ *
  * @author Kaleb Kircher
  */
 public class MavnSimulationFactory extends AbstractSimulationFactory
 {
 
     /**
-     * Initialize the MavnController and the MAVN application. MavnController will
-     * prepare the state for the application. It will also initialize and display the GUI.
+     * Initialize the MavnController and the MAVN application. MavnController
+     * will prepare the state for the application. It will also initialize and
+     * display the GUI.
      */
     public MavnSimulationFactory()
     {
         inputModels = new ArrayList<InputModelInterface>();
         inputViews = new ArrayList<InputViewAbstract>();
-        initInputModels();
-        initAlgorithmModels();
-        initNetworkOutputModels();
-        initPointOutputModels();
-        initInputModelControllers();
-        initSimulationProperties();
-        initSSMediator();
-        initNetworkMediator();
-        initPlotMediator();
-        initSimulationMediator();
-        initSimulationActions();
-        initControlBarViews();
-        initOutputModelViews();
-        initInputModelChangeEvent();
-        initInputModelViewState();
-        initInputModelActions();
-        initInputModelViews();
-        initSimulationView();
-        initViewState();
+
+        init();
+
         view.setOutputView();
         // Display the view.
         this.view.setVisible(true);
@@ -138,8 +128,8 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
 
     /**
      * Initialize the MAVN Algorithm Models. The Alogirthm Models can be thought
-     * of as the individual simulations. They are responsible for running
-     * the simulations and coordianting all of the supporting classes.
+     * of as the individual simulations. They are responsible for running the
+     * simulations and coordianting all of the supporting classes.
      */
     @Override
     public void initAlgorithmModels()
@@ -170,9 +160,9 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     }
 
     /**
-     * Initialize the Simulation Control Bars. The Control Bars are part
-     * of the UI. They allow the user to control all of the key functionality
-     * of MAVN with one-click of the mouse. 
+     * Initialize the Simulation Control Bars. The Control Bars are part of the
+     * UI. They allow the user to control all of the key functionality of MAVN
+     * with one-click of the mouse.
      */
     @Override
     public void initControlBarViews()
@@ -180,24 +170,27 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
         // Create a new Simulation Control Bar for the Output View.
         outputControlBar = new ControlBar(simulationBarAction,
                 propertiesBarAction, modelOuputBarAction, viewBarAction,
-                newtorkViewBarAction, plotViewBarAction, runSimulationAction);
+                newtorkViewBarAction, plotViewBarAction);
+
+        subControlBar = new SubControlBar(runSimulationAction);
+        propertiesControlBar = new PropertiesControlBar(simulationPropertiesState);
 
         // Create a new Simulation Control Bar for the Input View.
         inputControlBar = new ControlBar(simulationBarAction, propertiesBarAction,
                 modelOuputBarAction, viewBarAction, newtorkViewBarAction,
-                plotViewBarAction, runSimulationAction);
+                plotViewBarAction);
 
         // Add the Control Bars to the Simulation Input State Manager.
-        simulationInputState = new SimulationViewInputState((ControlBar) outputControlBar, (ControlBar) inputControlBar);
+        simulationInputState = new SimulationViewInputState((ControlBar) outputControlBar, (ControlBar) inputControlBar, (SubControlBar) subControlBar);
         // Give the Simulation Propreties State an instance of the Simulation Input State.
         ((SimulationPropertiesFrame) simulationPropertiesFrame).setSimulationViewState(simulationInputState);
     }
 
     /**
      * Initialize the simulation Input Models. The Input Models are responsible
-     * for managing all of the inputs required for the simluations algorithms
-     * to run. The inputs for the algorithms can come from external files or
-     * can be generated within MAVN by the user. The Input Models are part of a
+     * for managing all of the inputs required for the simluations algorithms to
+     * run. The inputs for the algorithms can come from external files or can be
+     * generated within MAVN by the user. The Input Models are part of a
      * Model-View-Controller architecture and push new State to their Observers,
      * usually Input View's.
      */
@@ -225,9 +218,9 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
 
     /**
      * Initialize the simulations Input Model Actions. Input Model Actions
-     * decouple the Input Controllers from the Input Models and Input Views
-     * by using an ActionListener to manage the dependencies and forward
-     * the Actions to the appropriate classes.
+     * decouple the Input Controllers from the Input Models and Input Views by
+     * using an ActionListener to manage the dependencies and forward the
+     * Actions to the appropriate classes.
      */
     @Override
     public void initInputModelActions()
@@ -241,9 +234,9 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
 
     /**
      * Initialize the Input Model Change Event. The Change Event watches the
-     * Input Models and determines if they have been loaded into MAVN. Once
-     * all of the Input Models have been loaded, it notifies other classes
-     * that new simulation state should be enabled.
+     * Input Models and determines if they have been loaded into MAVN. Once all
+     * of the Input Models have been loaded, it notifies other classes that new
+     * simulation state should be enabled.
      */
     @Override
     public void initInputModelChangeEvent()
@@ -252,8 +245,8 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     }
 
     /**
-     * Initialize the Input Model Controllers. The Input Model Controllers
-     * use a Controller pattern to manage the Input View and Input Models in a
+     * Initialize the Input Model Controllers. The Input Model Controllers use a
+     * Controller pattern to manage the Input View and Input Models in a
      * Model-View-Controller architecture.
      */
     @Override
@@ -268,9 +261,9 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     }
 
     /**
-     * Initialize Input Model Views. Input Model Views Render the State
-     * from the Input Models so the user can interact with the State in a
-     * graphical environment (usually a spreadsheet).
+     * Initialize Input Model Views. Input Model Views Render the State from the
+     * Input Models so the user can interact with the State in a graphical
+     * environment (usually a spreadsheet).
      */
     @Override
     public void initInputModelViews()
@@ -310,10 +303,9 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     }
 
     /**
-     * Initialize a new Input Model View State. Input Model View State
-     * manages the Input View State for the simulation. They enable and
-     * disable user functionality based on the Input Models that have
-     * been loaded.
+     * Initialize a new Input Model View State. Input Model View State manages
+     * the Input View State for the simulation. They enable and disable user
+     * functionality based on the Input Models that have been loaded.
      */
     @Override
     public void initInputModelViewState()
@@ -324,11 +316,17 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
         w1State = new InputViewState();
         w2State = new InputViewState();
     }
+    
+        @Override
+    public void initInfographicMediator()
+    {
+        infographicMediator = new InfographicMediator(pointHitOutputModel, pointMissOutputModel);
+    }
 
     /**
-     * Initialize the Network Mediator. The Network Mediator manages the
-     * Network View and Network Output Models by decoupling everything
-     * with a Mediator Pattern.
+     * Initialize the Network Mediator. The Network Mediator manages the Network
+     * View and Network Output Models by decoupling everything with a Mediator
+     * Pattern.
      */
     @Override
     public void initNetworkMediator()
@@ -338,8 +336,8 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     }
 
     /**
-     * Initialize the Network Output Models. The Network Output Models
-     * manage the Network State from the Network Algorithm Models they Observe.
+     * Initialize the Network Output Models. The Network Output Models manage
+     * the Network State from the Network Algorithm Models they Observe.
      */
     @Override
     public void initNetworkOutputModels()
@@ -368,8 +366,8 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     @Override
     public void initOutputModelViews()
     {
-        outputLayoutPanel = new ModelOutputDefaultLayoutView(outputControlBar,
-                ((SSMediator) ssMediator).getView(), ((PlotMediatorInterface) plotMediator).getView(),
+        outputLayoutPanel = new ModelOutputDefaultLayoutView(outputControlBar, subControlBar, propertiesControlBar, ((InfographicMediator)infographicMediator).getOutputInfographic(),
+                ((PlotMediatorInterface) plotMediator).getHistogramPlotView(), ((PlotMediatorInterface) plotMediator).getSegmentRatioPlotView(), ((PlotMediatorInterface) plotMediator).getImageRatioPlotView(), ((PlotMediatorInterface) plotMediator).getImagePlotView(),
                 ((NetworkMediatorInterface) networkMediator).getView());
     }
 
@@ -414,14 +412,14 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     }
 
     /**
-     * Initialize a Plot Mediator. The Plot Mediator manages the Plot Models
-     * and Plot Views by decoupling everything with a Mediator Pattern.
+     * Initialize a Plot Mediator. The Plot Mediator manages the Plot Models and
+     * Plot Views by decoupling everything with a Mediator Pattern.
      */
     @Override
     public void initPlotMediator()
     {
         plotMediator = new PlotMediator(targetInputModel, (NetworkMediatorInterface) networkMediator, plotOutputModel,
-                pointOutputModel, pointHitOutputModel, pointMissOutputModel, timerOutputModel);
+                pointOutputModel, pointHitOutputModel, pointMissOutputModel, timerOutputModel, shapesRatioOutputModel, imageRatioOutputModel);
     }
 
     /**
@@ -439,8 +437,8 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     }
 
     /**
-     * Initialize a Simulation Mediator. A Simulation Mediator mediates all
-     * of the simulations Mediators/Controllers.
+     * Initialize a Simulation Mediator. A Simulation Mediator mediates all of
+     * the simulations Mediators/Controllers.
      */
     @Override
     public void initSimulationMediator()
@@ -473,8 +471,8 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     }
 
     /**
-     * Initialize the Simulation View. The Simulation View is the main
-     * View for the MAVN Simulation.
+     * Initialize the Simulation View. The Simulation View is the main View for
+     * the MAVN Simulation.
      */
     @Override
     public void initSimulationView()
@@ -492,8 +490,8 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
     }
 
     /**
-     * Initialize the Spreadsheet Mediator. The Spreadsheet Mediator manages
-     * the Spreadsheet Output Models and Spreadsheet Output Views by using a
+     * Initialize the Spreadsheet Mediator. The Spreadsheet Mediator manages the
+     * Spreadsheet Output Models and Spreadsheet Output Views by using a
      * Mediator Pattern to decouple everything.
      */
     @Override
@@ -517,11 +515,37 @@ public class MavnSimulationFactory extends AbstractSimulationFactory
         view.setSimulationTypeState(simulationTypeViewState);
         ((SimulationMediator) this.simulationMediator).setSimulationTypeState(simulationTypeViewState);
 
-        ssMediatorViewState = new SimulationViewOutputState((ControlBar) inputControlBar, (ControlBar) outputControlBar, view);
+        ssMediatorViewState = new SimulationViewOutputState((ControlBar) inputControlBar, (ControlBar) outputControlBar, view, (SubControlBar) subControlBar);
         ((SSMediator) ssMediator).setModelResultState(ssMediatorViewState);
 
         networkViewState = new NetworkMediatorViewState((ControlBar) inputControlBar, (ControlBar) outputControlBar, view);
         ((NetworkMediator) networkMediator).setNetworkViewState(networkViewState);
         ((NetworkMediator) networkMediator).animateNetwork(true);
     }
+
+    private void init()
+    {
+        initInputModels();
+        initAlgorithmModels();
+        initNetworkOutputModels();
+        initPointOutputModels();
+        initInputModelControllers();
+        initSimulationProperties();
+        initSSMediator();
+        initNetworkMediator();
+        initPlotMediator();
+        initInfographicMediator();
+        initSimulationMediator();
+        initSimulationActions();
+        initControlBarViews();
+        initOutputModelViews();
+        initInputModelChangeEvent();
+        initInputModelViewState();
+        initInputModelActions();
+        initInputModelViews();
+        initSimulationView();
+        initViewState();
+    }
+
+
 }

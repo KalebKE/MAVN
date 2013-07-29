@@ -122,6 +122,8 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
     protected InputViewStateInterface thetaState;
     
     protected JPanel outputControlBar;
+    protected JPanel subControlBar;
+    protected JPanel propertiesControlBar;
     protected JPanel inputControlBar;
 
     protected ModelOutputDefaultLayoutView outputLayoutPanel;
@@ -142,6 +144,7 @@ public abstract class AbstractSimulationFactory implements SimulationFactoryInte
     protected OutputViewMediatorInterface ssMediator;
     protected OutputViewMediatorInterface networkMediator;
     protected OutputViewMediatorInterface plotMediator;
+    protected OutputViewMediatorInterface infographicMediator;
 
     protected PlotMediatorViewStateInterface plotMediatorViewState;
 

@@ -1,31 +1,33 @@
 /*
-SimulationViewInputState -- A class within the Machine Artificial Vision
-Network(Machine Artificial Vision Network).
-Copyright (C) 2012, Kaleb Kircher.
+ SimulationViewInputState -- A class within the Machine Artificial Vision
+ Network(Machine Artificial Vision Network).
+ Copyright (C) 2012, Kaleb Kircher.
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.simulation.view.state.input;
 
 import mavn.simulation.view.controlBar.ControlBar;
 import mavn.simulation.view.SimControlView;
+import mavn.simulation.view.controlBar.SubControlBar;
 
 /**
  * SimulationViewInputState maintains all of the View State required for the
  * simulations Input Models. It enables and disables certain UI functionality
  * based on the Input Models State.
+ *
  * @author Kaleb
  */
 public class SimulationViewInputState implements SimulationViewInputStateInterface
@@ -34,18 +36,21 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
     private boolean propertiesLoaded;
     private boolean simulationLoaded;
     private ControlBar outputViewBar;
+    private SubControlBar subViewBar;
     private ControlBar inputViewBar;
     private SimControlView view;
 
     /**
      * Initialize a SimulationViewInputState.
+     *
      * @param outputViewBar the Output View Control Bar.
      * @param inputViewBar the Input View Control Bar.
      */
-    public SimulationViewInputState(ControlBar outputViewBar, ControlBar inputViewBar)
+    public SimulationViewInputState(ControlBar outputViewBar, ControlBar inputViewBar, SubControlBar subViewBar)
     {
         this.outputViewBar = outputViewBar;
         this.inputViewBar = inputViewBar;
+        this.subViewBar = subViewBar;
 
         propertiesLoaded = false;
     }
@@ -61,6 +66,7 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
 
     /**
      * Check to see if the simulation properties have been loaded.
+     *
      * @return boolean indicating loaded simulation properties.
      */
     @Override
@@ -71,6 +77,7 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
 
     /**
      * Check to see if a simulation has been loaded.
+     *
      * @return boolean indicating a simulation has been loaded.
      */
     @Override
@@ -85,9 +92,8 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
     @Override
     public void onPropertiesLoaded()
     {
-        // Disable these buttons
-        outputViewBar.getRunSimulationButton().setEnabled(true);
-        inputViewBar.getRunSimulationButton().setEnabled(true);
+
+        subViewBar.getRunSimulationButton().setEnabled(true);
         view.getRunSimulationMenuItem().setEnabled(true);
 
         propertiesLoaded = true;
@@ -105,14 +111,14 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         view.getClearOutputMenuItem().setEnabled(false);
 
         // Disable these buttons
+        subViewBar.getRunSimulationButton().setEnabled(false);
+
         outputViewBar.getSimulationPropertiesButton().setEnabled(true);
-        outputViewBar.getRunSimulationButton().setEnabled(false);
         outputViewBar.getSaveModelOutputButton().setEnabled(false);
         outputViewBar.getClearModelOutputButton().setEnabled(false);
 
         // Disable these buttons
         inputViewBar.getSimulationPropertiesButton().setEnabled(true);
-        inputViewBar.getRunSimulationButton().setEnabled(false);
         inputViewBar.getSaveModelOutputButton().setEnabled(false);
         inputViewBar.getClearModelOutputButton().setEnabled(false);
 
@@ -143,6 +149,8 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         view.getRunSimulationMenuItem().setEnabled(true);
 
         // Disable these buttons
+        subViewBar.getRunSimulationButton().setEnabled(true);
+
         outputViewBar.getSimulationPropertiesButton().setEnabled(true);
         outputViewBar.getSaveSimulationButton().setEnabled(true);
         outputViewBar.getClearSimulationButton().setEnabled(true);
@@ -155,7 +163,7 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         outputViewBar.getScatterPlotButton().setEnabled(true);
         outputViewBar.getRenderSimulationButton().setEnabled(true);
         outputViewBar.getLinePlotButton().setEnabled(true);
-        outputViewBar.getRunSimulationButton().setEnabled(true);
+
 
         outputViewBar.getMonteCarloSimulationButton().getModel().setPressed(true);
         outputViewBar.getMonteCarloSimulationButton().getModel().setSelected(true);
@@ -173,7 +181,6 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         inputViewBar.getScatterPlotButton().setEnabled(true);
         inputViewBar.getRenderSimulationButton().setEnabled(true);
         inputViewBar.getLinePlotButton().setEnabled(true);
-        inputViewBar.getRunSimulationButton().setEnabled(true);
 
         inputViewBar.getMonteCarloSimulationButton().getModel().setPressed(true);
         inputViewBar.getMonteCarloSimulationButton().getModel().setSelected(true);
@@ -206,7 +213,8 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         outputViewBar.getTargetSimulationButton().setEnabled(false);
         outputViewBar.getGridSimulationButton().setEnabled(false);
 
-        outputViewBar.getResetSimulationButton().setEnabled(false);
+        subViewBar.getResetSimulationButton().setEnabled(false);
+        subViewBar.getRunSimulationButton().setEnabled(false);
 
         outputViewBar.getAnimateSimulationButton().setEnabled(false);
         outputViewBar.getClearNetworkButton().setEnabled(false);
@@ -216,7 +224,6 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         outputViewBar.getLinePlotButton().setEnabled(false);
 
         outputViewBar.getSimulationPropertiesButton().setEnabled(false);
-        outputViewBar.getRunSimulationButton().setEnabled(false);
         outputViewBar.getSaveModelOutputButton().setEnabled(false);
         outputViewBar.getSaveModelOutputButton().setEnabled(false);
 
@@ -228,8 +235,6 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         inputViewBar.getTargetSimulationButton().setEnabled(false);
         inputViewBar.getGridSimulationButton().setEnabled(false);
 
-        inputViewBar.getResetSimulationButton().setEnabled(false);
-
         inputViewBar.getAnimateSimulationButton().setEnabled(false);
         inputViewBar.getClearNetworkButton().setEnabled(false);
         inputViewBar.getClearPlotButton().setEnabled(false);
@@ -238,7 +243,6 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
         inputViewBar.getLinePlotButton().setEnabled(false);
 
         inputViewBar.getSimulationPropertiesButton().setEnabled(false);
-        inputViewBar.getRunSimulationButton().setEnabled(false);
         inputViewBar.getSaveModelOutputButton().setEnabled(false);
         inputViewBar.getSaveModelOutputButton().setEnabled(false);
 
@@ -247,6 +251,7 @@ public class SimulationViewInputState implements SimulationViewInputStateInterfa
 
     /**
      * Set the Simulation Control View.
+     *
      * @param view the SimControlView.
      */
     public void setView(SimControlView view)

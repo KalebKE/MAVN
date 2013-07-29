@@ -33,7 +33,7 @@ import mavn.plot.mediator.PlotMediator;
 public class SinglePointModelPlotWorker extends SwingWorker
 {
     private double[][] modelResult;
-    private PlotMediator controller;
+    private PlotMediator mediator;
     private Point point;
 
     /**
@@ -48,7 +48,7 @@ public class SinglePointModelPlotWorker extends SwingWorker
     public SinglePointModelPlotWorker(double[][] modelResult, PlotMediator mediator, Point point)
     {
         this.modelResult = modelResult;
-        this.controller = mediator;
+        this.mediator = mediator;
         this.point = point;
     }
 
@@ -72,14 +72,14 @@ public class SinglePointModelPlotWorker extends SwingWorker
 
         if (data[0][0] == 1)
         {
-            controller.getPlot().addScatterPlot("Hit", Color.red, x, y);
+            mediator.updatePointHit(point);
         }
         if (data[0][0] == -1)
         {
-            controller.getPlot().addScatterPlot("Miss", Color.black, x, y);
+            mediator.updatePointMiss(point);
         }
 
-        controller.updateUI();
+        mediator.updateUI();
 
         return null;
     }

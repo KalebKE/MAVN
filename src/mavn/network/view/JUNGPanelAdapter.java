@@ -81,54 +81,7 @@ public class JUNGPanelAdapter extends JPanel implements Printable
     private AbstractLayout<Number, Number> layout;
     //the visual component and renderer for the graph
     private VisualizationViewer<Number, Number> vv;
-    private String instructions =
-            "<html>"
-            + "<h3>All Modes:</h3>"
-            + "<ul>"
-            + "<li>Right-click an empty area for <b>Create Vertex</b> popup"
-            + "<li>Right-click on a Vertex for <b>Delete Vertex</b> popup"
-            + "<li>Right-click on a Vertex for <b>Add Edge</b> menus <br>(if there are selected Vertices)"
-            + "<li>Right-click on an Edge for <b>Delete Edge</b> popup"
-            + "<li>Mousewheel scales with a crossover value of 1.0.<p>"
-            + "     - scales the graph layout when the combined scale is greater than 1<p>"
-            + "     - scales the graph view when the combined scale is less than 1"
-            + "</ul>"
-            + "<h3>Editing Mode:</h3>"
-            + "<ul>"
-            + "<li>Left-click an empty area to create a new Vertex"
-            + "<li>Left-click on a Vertex and drag to another Vertex to create an Undirected Edge"
-            + "<li>Shift+Left-click on a Vertex and drag to another Vertex to create a Directed Edge"
-            + "</ul>"
-            + "<h3>Picking Mode:</h3>"
-            + "<ul>"
-            + "<li>Mouse1 on a Vertex selects the vertex"
-            + "<li>Mouse1 elsewhere unselects all Vertices"
-            + "<li>Mouse1+Shift on a Vertex adds/removes Vertex selection"
-            + "<li>Mouse1+drag on a Vertex moves all selected Vertices"
-            + "<li>Mouse1+drag elsewhere selects Vertices in a region"
-            + "<li>Mouse1+Shift+drag adds selection of Vertices in a new region"
-            + "<li>Mouse1+CTRL on a Vertex selects the vertex and centers the display on it"
-            + "<li>Mouse1 double-click on a vertex or edge allows you to edit the label"
-            + "</ul>"
-            + "<h3>Transforming Mode:</h3>"
-            + "<ul>"
-            + "<li>Mouse1+drag pans the graph"
-            + "<li>Mouse1+Shift+drag rotates the graph"
-            + "<li>Mouse1+CTRL(or Command)+drag shears the graph"
-            + "<li>Mouse1 double-click on a vertex or edge allows you to edit the label"
-            + "</ul>"
-            + "<h3>Annotation Mode:</h3>"
-            + "<ul>"
-            + "<li>Mouse1 begins drawing of a Rectangle"
-            + "<li>Mouse1+drag defines the Rectangle shape"
-            + "<li>Mouse1 release adds the Rectangle as an annotation"
-            + "<li>Mouse1+Shift begins drawing of an Ellipse"
-            + "<li>Mouse1+Shift+drag defines the Ellipse shape"
-            + "<li>Mouse1+Shift release adds the Ellipse as an annotation"
-            + "<li>Mouse3 shows a popup to input text, which will become"
-            + "<li>a text annotation on the graph at the mouse location"
-            + "</ul>"
-            + "</html>";
+
     Factory<Number> vertexFactory = new VertexFactory();
     Factory<Number> edgeFactory = new EdgeFactory();
     // count the number of verticies
@@ -164,7 +117,7 @@ public class JUNGPanelAdapter extends JPanel implements Printable
 
         vv = new VisualizationViewer<Number, Number>(layout);
 
-        vv.setBackground(Color.white);
+        vv.setBackground(Color.getColor("#333333"));
 
         vv.getRenderContext().setVertexLabelTransformer(MapTransformer.<Number, String>getInstance(
                 LazyMap.<Number, String>decorate(new HashMap<Number, String>(), new ToStringLabeller<Number>())));
@@ -175,7 +128,6 @@ public class JUNGPanelAdapter extends JPanel implements Printable
 
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         this.add(panel);
-
 
         final EditingModalGraphMouse<Number, Number> graphMouse =
                 new EditingModalGraphMouse<Number, Number>(vv.getRenderContext(), vertexFactory, edgeFactory);
@@ -211,26 +163,9 @@ public class JUNGPanelAdapter extends JPanel implements Printable
             }
         });
 
-        JButton help = new JButton("Help");
-        help.addActionListener(new ActionListener()
-        {
-
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                JOptionPane.showMessageDialog(vv, instructions);
-            }
-        });
-
-        AnnotationControls<Number, Number> annotationControls =
-                new AnnotationControls<Number, Number>(graphMouse.getAnnotatingPlugin());
         JPanel controls = new JPanel();
         controls.add(plus);
         controls.add(minus);
-        JComboBox modeBox = graphMouse.getModeComboBox();
-        controls.add(modeBox);
-        controls.add(annotationControls.getAnnotationsToolBar());
-        controls.add(help);
         this.add(controls);
         this.setVisible(true);
     }

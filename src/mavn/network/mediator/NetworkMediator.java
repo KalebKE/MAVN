@@ -30,7 +30,6 @@ import mavn.network.model.OutputLayerOutputModel;
 import mavn.network.model.observer.AndLayerOutputModelObserver;
 import mavn.network.model.observer.OrLayerOutputModelObserver;
 import mavn.network.model.observer.OutputLayerOutputModelObserver;
-import mavn.output.view.layout.ModelOutputDefaultLayoutView;
 import mavn.network.view.MavnNetworkRenderer;
 import simulyn.output.mediators.state.MediatorStateInterface;
 import simulyn.output.model.OutputModelInterface;
@@ -266,7 +265,7 @@ public class NetworkMediator implements AndLayerOutputModelObserver,
                 Thread.sleep(20);
             } catch (InterruptedException ex)
             {
-                Logger.getLogger(ModelOutputDefaultLayoutView.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NetworkMediator.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             networkView.fireNodes(((NetworkMediatorModelState) networkModelState).getNodeOutput());

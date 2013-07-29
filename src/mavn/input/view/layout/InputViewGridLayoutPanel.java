@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package mavn.input.view.layout;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.JPanel;
@@ -32,19 +34,31 @@ import simulyn.ui.components.inputModel.InputViewAbstract;
 public class InputViewGridLayoutPanel extends InputViewLayoutPanelAbstract
 {
 
-    private GridLayout layout;
+    private GridBagLayout layout;
 
     public InputViewGridLayoutPanel(ArrayList<InputViewAbstract> inputPanels, JPanel controlBar)
     {
         super(controlBar);
         this.inputPanels = inputPanels;
-        this.layout = new GridLayout(3, 2);
+        this.layout = new GridBagLayout();
         this.modelPanel.setLayout(layout);
-
-        this.modelPanel.add(inputPanels.get(Globals.W2_PANEL));
-        this.modelPanel.add(inputPanels.get(Globals.THETA_PANEL));
-        this.modelPanel.add(inputPanels.get(Globals.W1_PANEL));
-        this.modelPanel.add(inputPanels.get(Globals.W0_PANEL));
-        this.modelPanel.add(inputPanels.get(Globals.TARGET_PANEL));
+        
+        GridBagConstraints g = new GridBagConstraints();
+        g.fill = GridBagConstraints.HORIZONTAL;
+        g.gridx = 0;
+        g.gridy = 0;
+        this.modelPanel.add(inputPanels.get(Globals.W2_PANEL), g);
+        g.gridx = 0;
+        g.gridy = 1;
+        this.modelPanel.add(inputPanels.get(Globals.THETA_PANEL), g);
+        g.gridx = 0;
+        g.gridy = 2;
+        this.modelPanel.add(inputPanels.get(Globals.W1_PANEL), g);
+        g.gridx = 1;
+        g.gridy = 0;
+        this.modelPanel.add(inputPanels.get(Globals.W0_PANEL), g);
+        g.gridx = 1;
+        g.gridy = 1;
+        this.modelPanel.add(inputPanels.get(Globals.TARGET_PANEL), g);
     }
 }

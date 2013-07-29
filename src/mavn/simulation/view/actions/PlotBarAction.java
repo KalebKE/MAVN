@@ -48,11 +48,11 @@ public class PlotBarAction implements ActionListener
     {
         if (e.getActionCommand().equals("useScatterPlotAction"))
         {
-            this.plotMediator.onScatterPlot();
+
         }
         if (e.getActionCommand().equals("useLinePlotAction"))
         {
-            this.plotMediator.onLinePlot();
+
         }
         if (e.getActionCommand().equals("clearPlotAction"))
         {

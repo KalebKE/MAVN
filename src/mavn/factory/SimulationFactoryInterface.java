@@ -128,6 +128,12 @@ public interface SimulationFactoryInterface
      * and Plot Views by decoupling everything with a Mediator Pattern.
      */
     public void initPlotMediator();
+    
+        /**
+     * Initialize a Infographic Mediator. The Infographic Mediator manages the Infographic  Models
+     * and Infographic Views by decoupling everything with a Mediator Pattern.
+     */
+    public void initInfographicMediator();
 
     /**
      * Initialize the Point Output Models. Point Output Models keep track of the

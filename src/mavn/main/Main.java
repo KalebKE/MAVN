@@ -53,7 +53,7 @@ public class Main
                     javax.swing.UIManager.put("nimbusBase", new Color(51, 51, 51));
                     javax.swing.UIManager.put("nimbusFocus", new Color(51, 51, 51));
                     javax.swing.UIManager.put("nimbusLightBackground", new Color(153, 153, 153));
-                    javax.swing.UIManager.put("nimbusSelectionBackground", new Color(90, 130, 195));
+                    javax.swing.UIManager.put("nimbusSelectionBackground", new Color(153, 153, 153));
                     javax.swing.UIManager.put("text", new Color(238, 238, 238));
                     break;
                 }

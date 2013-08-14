@@ -131,6 +131,17 @@ public class JUNGPanelAdapter extends JPanel implements Printable
 
         final EditingModalGraphMouse<Number, Number> graphMouse =
                 new EditingModalGraphMouse<Number, Number>(vv.getRenderContext(), vertexFactory, edgeFactory);
+        
+          Transformer<Number, Paint> vertexPaint = new Transformer<Number, Paint>()
+        {
+            @Override
+            public Paint transform(Number i)
+            {
+                return Color.getHSBColor(0, 0.73f, 1);
+            }
+        };
+          
+        vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
 
         // the EditingGraphMouse will pass mouse event coordinates to the
         // vertexLocations function to set the locations of the vertices as
@@ -311,7 +322,7 @@ public class JUNGPanelAdapter extends JPanel implements Printable
 
             private final Color[] palette =
             {
-                Color.GREEN, Color.BLACK, Color.RED
+               new Color(51,181,229), Color.BLACK, new Color(255,68,68)
             };
 
             @Override
